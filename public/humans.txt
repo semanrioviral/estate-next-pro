@@ -1,0 +1,12 @@
+/* TEAM */
+    Developer: Antigravity AI
+    Location: Bogotá, Colombia
+
+/* SITE */
+    Last update: 2026/02/11
+    Language: Spanish
+    Doctype: HTML5
+    IDE: Cursor / VS Code
+    Framework: Next.js 16
+    Styling: Tailwind CSS 4
+    Language: TypeScript
