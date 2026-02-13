@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getPropertyBySlug, properties } from "@/data/properties";
+import { getPropertyBySlug, getProperties } from "@/lib/supabase/properties";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,10 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
+    const properties = await getProperties();
     return properties.map((property) => ({
         slug: property.slug,
     }));
@@ -16,7 +19,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
-    const property = getPropertyBySlug(slug);
+    const property = await getPropertyBySlug(slug);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
 
     if (!property) return { title: "Propiedad no encontrada" };
@@ -65,7 +68,7 @@ import { Bed, Bath, Square, MapPin, MessageCircle, Calendar, User, Info, Star } 
 
 export default async function PropertyDetailPage({ params }: Props) {
     const { slug } = await params;
-    const property = getPropertyBySlug(slug);
+    const property = await getPropertyBySlug(slug);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
 
     if (!property) {
@@ -104,7 +107,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                     getAbsoluteUrl(property.imagen_principal),
                     ...property.galeria.map(img => getAbsoluteUrl(img))
                 ],
-                "datePosted": property.createdAt || new Date().toISOString(),
+                "datePosted": property.created_at || new Date().toISOString(),
                 "numberOfRooms": property.habitaciones,
                 "floorSize": {
                     "@type": "QuantitativeValue",
