@@ -57,11 +57,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${poppins.variable} font-sans antialiased min-h-screen bg-zinc-50 dark:bg-black text-zinc-900 dark:text-zinc-50`}>
-        <Navbar />
-        <main className="min-h-screen">
-          {children}
-        </main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
