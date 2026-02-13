@@ -27,7 +27,7 @@ function mapProperty(prop: any): Property {
 }
 
 export async function getProperties() {
-    const supabase = await createClient();
+    const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
         .select(`
@@ -46,7 +46,7 @@ export async function getProperties() {
 }
 
 export async function getPropertiesByCity(city: string) {
-    const supabase = await createClient();
+    const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
         .select(`
@@ -66,7 +66,7 @@ export async function getPropertiesByCity(city: string) {
 }
 
 export async function getPropertiesByTypeAndCity(tipo: string, city: string) {
-    const supabase = await createClient();
+    const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
         .select(`
@@ -87,7 +87,7 @@ export async function getPropertiesByTypeAndCity(tipo: string, city: string) {
 }
 
 export async function getPropertyBySlug(slug: string) {
-    const supabase = await createClient();
+    const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
         .select(`
@@ -106,7 +106,7 @@ export async function getPropertyBySlug(slug: string) {
 }
 
 export async function getFeaturedProperties(limit = 3) {
-    const supabase = await createClient();
+    const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
         .select(`
