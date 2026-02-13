@@ -13,9 +13,22 @@ export async function createClient(useCookies = true) {
         }
     }
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+        console.error('Supabase environment variables are missing');
+        // Return a dummy client or handle as needed for build time
+        return createServerClient(
+            'https://placeholder.supabase.co',
+            'placeholder',
+            { cookies: { getAll() { return []; }, setAll() { } } }
+        );
+    }
+
     return createServerClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        supabaseUrl,
+        supabaseKey,
         {
             cookies: useCookies && cookieStore ? {
                 getAll() {
