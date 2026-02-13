@@ -1,8 +1,9 @@
 import { Metadata } from "next";
-import { properties, Property } from "@/data/properties";
+import { getPropertiesByTypeAndCity } from "@/lib/supabase/properties";
 import PropertyCard from "@/components/PropertyCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { notFound } from "next/navigation";
+import { Property } from "@/lib/supabase/properties";
 
 interface Props {
     params: Promise<{ tipo: string; ciudad: string }>;
@@ -88,9 +89,7 @@ export default async function VentaTipoCiudadPage({ params }: Props) {
         notFound();
     }
 
-    const filteredProperties = properties.filter(
-        (p) => p.tipo === tipoKey && p.ciudad === ciudadKey
-    );
+    const filteredProperties = await getPropertiesByTypeAndCity(tipoKey || '', ciudadKey || '');
 
     const tipoDisplay = TIPO_DISPLAY_MAP[tipo];
     const ciudadDisplay = CIUDAD_DISPLAY_MAP[ciudad];

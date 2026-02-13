@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getPropertiesByCity } from "@/data/properties";
+import { getPropertiesByCity } from "@/lib/supabase/properties";
 import PropertyCard from "@/components/PropertyCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { notFound } from "next/navigation";
@@ -83,7 +83,7 @@ export default async function CiudadPage({ params }: Props) {
         notFound();
     }
 
-    const filteredProperties = getPropertiesByCity(cityName as any);
+    const filteredProperties = await getPropertiesByCity(cityName);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tucasalospatios.com";
 
     const jsonLd = {

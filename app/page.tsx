@@ -85,7 +85,7 @@ export default async function Home() {
             {featuredProperties.map((property, index) => (
               <PropertyCard
                 key={property.id}
-                property={property as any}
+                property={property}
                 priority={index < 3}
               />
             ))}

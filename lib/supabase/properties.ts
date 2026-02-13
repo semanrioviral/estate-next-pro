@@ -45,6 +45,47 @@ export async function getProperties() {
     return data.map(mapProperty) as Property[];
 }
 
+export async function getPropertiesByCity(city: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('properties')
+        .select(`
+            *,
+            property_images (url)
+        `)
+        .eq('ciudad', city)
+        .order('destacado', { ascending: false })
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching properties by city:', error);
+        return [];
+    }
+
+    return data.map(mapProperty) as Property[];
+}
+
+export async function getPropertiesByTypeAndCity(tipo: string, city: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('properties')
+        .select(`
+            *,
+            property_images (url)
+        `)
+        .eq('tipo', tipo)
+        .eq('ciudad', city)
+        .order('destacado', { ascending: false })
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching properties by type and city:', error);
+        return [];
+    }
+
+    return data.map(mapProperty) as Property[];
+}
+
 export async function getPropertyBySlug(slug: string) {
     const supabase = await createClient();
     const { data, error } = await supabase
