@@ -11,8 +11,9 @@ export async function updateSession(request: NextRequest) {
 
     if (!supabaseUrl || !supabaseKey) {
         console.error('Supabase middleware: missing environment variables');
-        // If it's an admin path, don't allow access if variables are missing
-        if (request.nextUrl.pathname.startsWith("/admin")) {
+        // If it's an admin path (but NOT the login page), don't allow access if variables are missing
+        const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
+        if (request.nextUrl.pathname.startsWith("/admin") && !isLoginPage) {
             const url = request.nextUrl.clone();
             url.pathname = "/";
             return NextResponse.redirect(url);
