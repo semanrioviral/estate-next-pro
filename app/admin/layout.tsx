@@ -16,8 +16,8 @@ export default async function AdminLayout({
     } = await supabase.auth.getUser()
 
     if (!user) {
-        // Should be handled by middleware, but extra safety
-        return <>{children}</>
+        // Strict safety: If no user, redirect to login
+        return redirect('/admin/login')
     }
 
     return (

@@ -11,6 +11,12 @@ export async function updateSession(request: NextRequest) {
 
     if (!supabaseUrl || !supabaseKey) {
         console.error('Supabase middleware: missing environment variables');
+        // If it's an admin path, don't allow access if variables are missing
+        if (request.nextUrl.pathname.startsWith("/admin")) {
+            const url = request.nextUrl.clone();
+            url.pathname = "/";
+            return NextResponse.redirect(url);
+        }
         return supabaseResponse;
     }
 
