@@ -1,35 +1,21 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export async function createClient(useCookies = true) {
+export async function createClient(useCookies = true, isAdmin = false) {
     let cookieStore;
 
     if (useCookies) {
         try {
             cookieStore = await cookies();
         } catch (error) {
-            // Fallback for build time where cookies() is not available
             useCookies = false;
         }
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-        console.error('Supabase environment variables are missing', {
-            url: !!supabaseUrl,
-            key: !!supabaseKey,
-            NODE_ENV: process.env.NODE_ENV
-        });
-
-        // Return a dummy client or handle as needed for build time
-        return createServerClient(
-            'https://placeholder.supabase.co',
-            'placeholder',
-            { cookies: { getAll() { return []; }, setAll() { } } }
-        );
-    }
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseKey = isAdmin
+        ? process.env.SUPABASE_SERVICE_ROLE_KEY!
+        : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
     return createServerClient(
         supabaseUrl,
