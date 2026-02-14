@@ -1,27 +1,11 @@
-import { createBrowserClient, createServerClient } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
 /**
- * Cliente para uso exclusivo en el NAVEGADOR (Client Components)
- * Usa solo variables con prefijo NEXT_PUBLIC_
- */
-export function createClient() {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-    if (!supabaseUrl || !supabaseKey) {
-        throw new Error("NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY son requeridas en el cliente");
-    }
-
-    return createBrowserClient(supabaseUrl, supabaseKey);
-}
-
-/**
  * Cliente para uso exclusivo en el SERVIDOR (Server Components, Actions, Route Handlers)
- * Puede usar cookies para mantener la sesión.
  * @param isAdmin Si es true, usa el SERVICE_ROLE_KEY (solo servidor)
  */
-export async function createServerSupabaseClient(isAdmin = false) {
+export async function createClient(isAdmin = false) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey = isAdmin
         ? process.env.SUPABASE_SERVICE_ROLE_KEY!
@@ -57,8 +41,9 @@ export async function createServerSupabaseClient(isAdmin = false) {
 
 /**
  * Cliente ligero para el Middleware (Servidor Edge)
+ * Recibe el request y response directamente para evitar usar next/headers
  */
-export function createMiddlewareSupabaseClient(request: any, response: any) {
+export function createMiddlewareClient(request: any, response: any) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 

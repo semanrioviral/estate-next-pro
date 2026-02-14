@@ -1,4 +1,4 @@
-import { createMiddlewareSupabaseClient } from "../supabase";
+import { createMiddlewareClient } from "../supabase-server";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
@@ -21,7 +21,7 @@ export async function updateSession(request: NextRequest) {
         return supabaseResponse;
     }
 
-    const supabase = createMiddlewareSupabaseClient(request, supabaseResponse);
+    const supabase = createMiddlewareClient(request, supabaseResponse);
 
     // IMPORTANT: Avoid writing any logic between createServerClient and
     // supabase.auth.getUser(). A simple mistake could make it very hard to debug
