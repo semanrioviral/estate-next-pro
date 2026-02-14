@@ -33,17 +33,7 @@ const TIPO_DISPLAY_MAP: Record<string, string> = {
     lotes: "Lotes",
 };
 
-export function generateStaticParams() {
-    const tipos = ["casas", "apartamentos", "lotes"];
-    const ciudades = ["cucuta", "los-patios", "villa-del-rosario"];
-
-    return tipos.flatMap((tipo) =>
-        ciudades.map((ciudad) => ({
-            tipo,
-            ciudad,
-        }))
-    );
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { tipo, ciudad } = await params;

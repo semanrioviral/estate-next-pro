@@ -32,13 +32,7 @@ const CITY_SEO_DATA: Record<string, { title: string; description: string; text: 
     }
 };
 
-export function generateStaticParams() {
-    return [
-        { ciudad: "cucuta" },
-        { ciudad: "los-patios" },
-        { ciudad: "villa-del-rosario" }
-    ];
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { ciudad } = await params;

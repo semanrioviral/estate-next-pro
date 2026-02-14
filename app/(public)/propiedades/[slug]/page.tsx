@@ -8,14 +8,7 @@ interface Props {
     params: Promise<{ slug: string }>;
 }
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-    const properties = await getProperties();
-    return properties.map((property) => ({
-        slug: property.slug,
-    }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { slug } = await params;
