@@ -1,4 +1,4 @@
-import { createClient } from './server';
+import { createServerSupabaseClient as createClient } from '../supabase';
 
 export type Property = {
     id: string;

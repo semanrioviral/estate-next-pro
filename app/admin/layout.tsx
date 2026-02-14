@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { createServerSupabaseClient as createClient } from '@/lib/supabase'
 import { LayoutDashboard, Home, Send, Users, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from './actions'
