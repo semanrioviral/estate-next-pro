@@ -4,13 +4,14 @@ import { handleUpdateProperty } from "@/app/admin/actions";
 import { notFound } from "next/navigation";
 
 interface EditPropertyPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export default async function EditarPropiedad({ params }: EditPropertyPageProps) {
-    const property = await getPropertyById(params.id);
+    const { id } = await params;
+    const property = await getPropertyById(id);
 
     if (!property) {
         return notFound();
@@ -19,7 +20,7 @@ export default async function EditarPropiedad({ params }: EditPropertyPageProps)
     // Wrap handleUpdateProperty to include the ID
     const onUpdate = async (formData: FormData, imageUrls: string[]) => {
         "use server";
-        const res = await handleUpdateProperty(params.id, formData, imageUrls);
+        const res = await handleUpdateProperty(id, formData, imageUrls);
         return res as unknown as { error?: string, success?: boolean, slug?: string };
     };
 
