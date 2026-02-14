@@ -191,7 +191,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                 <div className="lg:col-span-2 space-y-10">
                     {/* Modern Gallery Slider */}
                     <PropertyGallery
-                        images={[property.imagen_principal, ...property.galeria]}
+                        images={[property.imagen_principal, ...(property.galeria || [])]}
                         title={property.titulo}
                     />
 
