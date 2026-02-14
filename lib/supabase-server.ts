@@ -6,12 +6,33 @@ import { cookies } from "next/headers";
  * @param isAdmin Si es true, usa el SERVICE_ROLE_KEY (solo servidor)
  */
 export async function createClient(isAdmin = false) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = isAdmin
-        ? process.env.SUPABASE_SERVICE_ROLE_KEY!
-        : process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        ? process.env.SUPABASE_SERVICE_ROLE_KEY
+        : (process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+
+    // Validación defensiva: No fallar durante el build si faltan variables
+    const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build' || process.env.NODE_ENV === 'production' && !process.env.VERCEL;
 
     if (!supabaseUrl || !supabaseKey) {
+        if (isBuildPhase || process.env.NEXT_PHASE === 'phase-production-build') {
+            const dummyResult = { data: [], error: null, count: 0 };
+            const handler: ProxyHandler<any> = {
+                get(target, prop): any {
+                    if (prop === 'then') return (resolve: any) => resolve(dummyResult);
+                    if (prop === 'auth') return {
+                        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+                        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+                        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
+                    };
+                    return new Proxy(() => { }, handler);
+                },
+                apply() {
+                    return new Proxy(() => { }, handler);
+                }
+            };
+            return new Proxy(() => { }, handler) as any;
+        }
         throw new Error("URL y Key de Supabase son requeridas en el servidor");
     }
 
@@ -44,10 +65,14 @@ export async function createClient(isAdmin = false) {
  * Recibe el request y response directamente para evitar usar next/headers
  */
 export function createMiddlewareClient(request: any, response: any) {
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    // Validación defensiva
+    const isBuildPhase = process.env.NEXT_PHASE === 'phase-production-build';
 
     if (!supabaseUrl || !supabaseKey) {
+        if (isBuildPhase) return null as any;
         throw new Error("URL y Key de Supabase son requeridas en el middleware");
     }
 

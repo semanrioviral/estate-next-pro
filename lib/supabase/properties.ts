@@ -28,7 +28,7 @@ function mapProperty(prop: any): Property {
     };
 }
 
-export async function getProperties() {
+export async function getProperties(): Promise<Property[]> {
     const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
@@ -44,10 +44,10 @@ export async function getProperties() {
         return [];
     }
 
-    return data.map(mapProperty) as Property[];
+    return (data || []).map(mapProperty) as Property[];
 }
 
-export async function getPropertiesByCity(city: string) {
+export async function getPropertiesByCity(city: string): Promise<Property[]> {
     const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
@@ -64,10 +64,10 @@ export async function getPropertiesByCity(city: string) {
         return [];
     }
 
-    return data.map(mapProperty) as Property[];
+    return (data || []).map(mapProperty) as Property[];
 }
 
-export async function getPropertiesByTypeAndCity(tipo: string, city: string) {
+export async function getPropertiesByTypeAndCity(tipo: string, city: string): Promise<Property[]> {
     const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
@@ -85,10 +85,10 @@ export async function getPropertiesByTypeAndCity(tipo: string, city: string) {
         return [];
     }
 
-    return data.map(mapProperty) as Property[];
+    return (data || []).map(mapProperty) as Property[];
 }
 
-export async function getPropertyBySlug(slug: string) {
+export async function getPropertyBySlug(slug: string): Promise<Property | null> {
     const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
@@ -107,7 +107,7 @@ export async function getPropertyBySlug(slug: string) {
     return mapProperty(data);
 }
 
-export async function getFeaturedProperties(limit = 3) {
+export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
     const supabase = await createClient(false);
     const { data, error } = await supabase
         .from('properties')
@@ -137,10 +137,10 @@ export async function getFeaturedProperties(limit = 3) {
 
         if (recentError) return [];
 
-        return recentData.map(mapProperty);
+        return (recentData || []).map(mapProperty);
     }
 
-    return data.map(mapProperty);
+    return (data || []).map(mapProperty);
 }
 
 export async function createProperty(
