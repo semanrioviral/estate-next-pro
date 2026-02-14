@@ -4,40 +4,45 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploader from "@/components/admin/ImageUploader";
 import { handleCreateProperty } from "@/app/admin/actions";
-import { ArrowLeft, Save, Building2, MapPin, DollarSign, Layout, Home, Info, Loader2 } from "lucide-react";
+import { ArrowLeft, Save, Building2, MapPin, DollarSign, Layout, Home, Info, Loader2, Star } from "lucide-react";
 import Link from "next/link";
 
 export default function NuevoInmueble() {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [imageUrls, setImageUrls] = useState<string[]>([]);
+    const [status, setStatus] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        console.log("Submit presionado. URLs actuales en el estado:", imageUrls);
+        setStatus({ type: null, message: '' });
 
         if (imageUrls.length === 0) {
-            alert("Debes subir al menos una imagen");
+            setStatus({ type: 'error', message: 'Debes subir al menos una imagen' });
             return;
         }
 
         setLoading(true);
-        console.log("Enviando formulario con:", imageUrls.length, "imágenes");
         const formData = new FormData(e.currentTarget);
 
         try {
             const result = await handleCreateProperty(formData, imageUrls);
+
             if (result?.error) {
-                alert("Error: " + result.error);
-            } else {
-                router.push("/admin/propiedades");
-                router.refresh();
+                setStatus({ type: 'error', message: result.error });
+                setLoading(false);
+            } else if (result?.success) {
+                setStatus({ type: 'success', message: '¡Propiedad publicada con éxito! Redirigiendo...' });
+
+                // Pequeña pausa para que el usuario vea el éxito
+                setTimeout(() => {
+                    router.push("/admin/propiedades");
+                    router.refresh();
+                }, 1500);
             }
         } catch (error) {
             console.error("Submission error:", error);
-            alert("Ocurrió un error inesperado");
-        } finally {
+            setStatus({ type: 'error', message: 'Ocurrió un error inesperado' });
             setLoading(false);
         }
     };
@@ -58,6 +63,20 @@ export default function NuevoInmueble() {
                     <p className="text-zinc-500 font-medium">Completa los datos para publicar una nueva propiedad.</p>
                 </div>
             </div>
+
+            {status.type && (
+                <div
+                    className={`p-6 rounded-3xl border animate-in fade-in slide-in-from-top-4 duration-500 ${status.type === 'success'
+                        ? 'bg-green-50 border-green-100 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'
+                        : 'bg-red-50 border-red-100 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
+                        }`}
+                >
+                    <div className="flex items-center gap-3 font-bold">
+                        {status.type === 'success' ? <Star className="h-5 w-5" /> : <Info className="h-5 w-5" />}
+                        <p className="uppercase tracking-widest text-sm">{status.message}</p>
+                    </div>
+                </div>
+            )}
 
             <form onSubmit={onSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Main Info */}

@@ -63,7 +63,7 @@ export async function handleCreateProperty(formData: FormData, imageUrls: string
         }
 
         console.log('[ACTION] Propiedad y fotos creadas con éxito');
-        return redirect('/admin/propiedades');
+        return { success: true, slug: result.data.slug };
     } catch (err: any) {
         console.error('[ACTION] Excepción en handleCreateProperty:', err);
         return { error: err.message || 'Ocurrió un error inesperado al procesar la solicitud.' };
