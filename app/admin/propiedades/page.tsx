@@ -1,7 +1,8 @@
 import { getProperties } from "@/lib/supabase/properties";
 import Link from "next/link";
 import Image from "next/image";
-import { Plus, Search, MapPin, Building2, ExternalLink, Trash2, Edit } from "lucide-react";
+import { Plus, Search, Building2, ExternalLink } from "lucide-react";
+import PropertyActions from "@/components/admin/PropertyActions";
 
 export const dynamic = 'force-dynamic';
 
@@ -101,22 +102,7 @@ export default async function AdminPropiedades() {
                                             </div>
                                         </td>
                                         <td className="px-8 py-6">
-                                            <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <Link
-                                                    href={`/propiedades/${prop.slug}`}
-                                                    target="_blank"
-                                                    className="p-2 text-zinc-400 hover:text-blue-600 transition-colors"
-                                                    title="Ver en web"
-                                                >
-                                                    <ExternalLink size={18} />
-                                                </Link>
-                                                <button className="p-2 text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
-                                                    <Edit size={18} />
-                                                </button>
-                                                <button className="p-2 text-zinc-400 hover:text-red-600 transition-colors">
-                                                    <Trash2 size={18} />
-                                                </button>
-                                            </div>
+                                            <PropertyActions id={prop.id} slug={prop.slug} />
                                         </td>
                                     </tr>
                                 ))

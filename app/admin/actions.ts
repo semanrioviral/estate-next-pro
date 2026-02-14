@@ -2,23 +2,37 @@
 
 import { createClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
-import { createProperty } from '@/lib/supabase/properties'
+import { createProperty, deleteProperty, updateProperty } from '@/lib/supabase/properties'
 
 export async function logout() {
-    try {
-        const supabase = await createClient()
-        await supabase.auth.signOut()
-    } catch (err) {
-        console.error('Error during logout:', err)
-    } finally {
-        return redirect('/admin/login')
-    }
+    // ... existing logout code
 }
 
 export async function handleCreateProperty(formData: FormData, imageUrls: string[]) {
+    // ... existing handleCreateProperty code
+}
+
+export async function handleDeleteProperty(id: string) {
     try {
-        console.log('[ACTION] handleCreateProperty iniciado');
-        console.log('[ACTION] URLs de imágenes recibidas:', imageUrls.length);
+        console.log('[ACTION] handleDeleteProperty iniciado para ID:', id);
+        const result = await deleteProperty(id);
+
+        if (result.error) {
+            console.error('[ACTION] Error en deleteProperty:', result.error);
+            return { error: result.error };
+        }
+
+        console.log('[ACTION] Propiedad eliminada con éxito');
+        return { success: true };
+    } catch (err: any) {
+        console.error('[ACTION] Excepción en handleDeleteProperty:', err);
+        return { error: err.message || 'Error inesperado al eliminar.' };
+    }
+}
+
+export async function handleUpdateProperty(id: string, formData: FormData, imageUrls: string[]) {
+    try {
+        console.log('[ACTION] handleUpdateProperty iniciado para ID:', id);
 
         const titulo = formData.get('titulo') as string;
         const precio = Number(formData.get('precio'));
@@ -32,17 +46,17 @@ export async function handleCreateProperty(formData: FormData, imageUrls: string
         const destacado = formData.get('destacado') === 'true';
 
         if (!titulo || isNaN(precio)) {
-            return { error: 'Título y precio son campos requeridos.' };
+            return { error: 'Título y precio son requeridos.' };
         }
 
-        // Generate a simple slug from title
+        // Re-generate slug if title changed (simplified, could be more robust)
         const slug = titulo.toLowerCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Remove accents
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^a-z0-9]/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-|-$/g, '');
 
-        const result = await createProperty({
+        const result = await updateProperty(id, {
             titulo,
             precio,
             descripcion,
@@ -54,18 +68,17 @@ export async function handleCreateProperty(formData: FormData, imageUrls: string
             area_m2,
             slug,
             destacado,
-            imagen_principal: '', // Handled by createProperty from imageUrls
         }, imageUrls);
 
         if (result.error) {
-            console.error('[ACTION] Error en createProperty:', result.error);
+            console.error('[ACTION] Error en updateProperty:', result.error);
             return { error: result.error };
         }
 
-        console.log('[ACTION] Propiedad y fotos creadas con éxito');
-        return { success: true, slug: result.data.slug };
+        console.log('[ACTION] Propiedad actualizada con éxito');
+        return { success: true, slug };
     } catch (err: any) {
-        console.error('[ACTION] Excepción en handleCreateProperty:', err);
-        return { error: err.message || 'Ocurrió un error inesperado al procesar la solicitud.' };
+        console.error('[ACTION] Excepción en handleUpdateProperty:', err);
+        return { error: err.message || 'Error inesperado al actualizar.' };
     }
 }

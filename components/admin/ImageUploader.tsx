@@ -7,6 +7,7 @@ import { Upload, X, Image as ImageIcon, Loader2, CheckCircle2 } from "lucide-rea
 interface ImageUploaderProps {
     onUploadComplete: (urls: string[]) => void;
     maxFiles?: number;
+    initialUrls?: string[];
 }
 
 interface UploadingFile {
@@ -21,8 +22,18 @@ interface UploadingFile {
 export default function ImageUploader({
     onUploadComplete,
     maxFiles = 10,
+    initialUrls = [],
 }: ImageUploaderProps) {
-    const [files, setFiles] = useState<UploadingFile[]>([]);
+    const [files, setFiles] = useState<UploadingFile[]>(
+        initialUrls.map((url) => ({
+            id: Math.random().toString(36).substring(7),
+            file: null as any,
+            preview: url,
+            progress: 100,
+            status: "success",
+            url: url,
+        }))
+    );
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,6 +71,12 @@ export default function ImageUploader({
         const updatedUrls = files
             .filter(f => f.status === "success" && f.url)
             .map(f => f.url as string);
+
+        // If nothing to upload, just notify
+        if (pendingFiles.length === 0) {
+            onUploadComplete(updatedUrls);
+            return;
+        }
 
         for (const fileObj of pendingFiles) {
             try {
@@ -139,14 +156,12 @@ export default function ImageUploader({
 
                             {/* Overlay */}
                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                                {file.status === "pending" && (
-                                    <button
-                                        onClick={(e) => { e.stopPropagation(); removeFile(file.id); }}
-                                        className="p-2 bg-white rounded-full text-red-600 hover:bg-red-600 hover:text-white transition-colors"
-                                    >
-                                        <X size={16} />
-                                    </button>
-                                )}
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); removeFile(file.id); }}
+                                    className="p-2 bg-white rounded-full text-red-600 hover:bg-red-600 hover:text-white transition-colors"
+                                >
+                                    <X size={16} />
+                                </button>
                             </div>
 
                             {/* Status Badge */}

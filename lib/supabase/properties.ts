@@ -136,6 +136,30 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     }
 }
 
+export async function getPropertyById(id: string): Promise<Property | null> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(`
+                *,
+                property_images (url)
+            `)
+            .eq('id', id)
+            .single();
+
+        if (error || !data) {
+            console.error('Error fetching property by ID:', error);
+            return null;
+        }
+
+        return mapProperty(data);
+    } catch (err) {
+        console.error('Critical exception in getPropertyById:', err);
+        return null;
+    }
+}
+
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
     try {
         const supabase = await createClient();
@@ -258,6 +282,95 @@ export async function createProperty(
     } catch (err: any) {
         console.error('[DB] EXCEPCIÓN capturada en createProperty:', err.message);
         return { error: err.message || 'Error desconocido al crear la propiedad.' };
+    }
+}
+
+export async function deleteProperty(id: string) {
+    const supabase = await createClient();
+    try {
+        console.log('[DB] INICIANDO ELIMINACIÓN DE PROPIEDAD ID:', id);
+
+        // El esquema tiene ON DELETE CASCADE en property_images referenciando properties(id)
+        // Por lo tanto, borrar de 'properties' debería limpiar automáticamente 'property_images'
+        const { error } = await supabase
+            .from('properties')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error('[DB] ERROR al eliminar propiedad:', error.message);
+            return { error: error.message };
+        }
+
+        console.log('[DB] Propiedad eliminada exitosamente');
+        return { success: true };
+    } catch (err: any) {
+        console.error('[DB] EXCEPCIÓN en deleteProperty:', err.message);
+        return { error: err.message || 'Error desconocido al eliminar la propiedad.' };
+    }
+}
+
+export async function updateProperty(
+    id: string,
+    propertyData: Partial<Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>>,
+    imageUrls: string[]
+) {
+    const supabase = await createClient();
+    try {
+        console.log('---------------------------------------------------------');
+        console.log('[DB] INICIANDO ACTUALIZACIÓN DE PROPIEDAD ID:', id);
+
+        // 1. Actualizar datos básicos en tabla 'properties'
+        const updatePayload = {
+            ...propertyData,
+            imagen_principal: imageUrls[0] || '',
+        };
+
+        const { error: propError } = await supabase
+            .from('properties')
+            .update(updatePayload)
+            .eq('id', id);
+
+        if (propError) {
+            console.error('[DB] ERROR al actualizar propiedad:', propError.message);
+            return { error: propError.message };
+        }
+
+        // 2. Sincronizar galería de imágenes
+        // Borramos las existentes e insertamos las nuevas (estrategia simple de reemplazo total)
+        console.log('[DB] Sincronizando galería de imágenes...');
+        const { error: deleteError } = await supabase
+            .from('property_images')
+            .delete()
+            .eq('property_id', id);
+
+        if (deleteError) {
+            console.error('[DB] ERROR al limpiar galería antigua:', deleteError.message);
+            // No lanzamos error aquí, intentamos insertar las nuevas de todos modos
+        }
+
+        if (imageUrls.length > 0) {
+            const imagesToInsert = imageUrls.map((url) => ({
+                property_id: id,
+                url: url
+            }));
+
+            const { error: imgError } = await supabase
+                .from('property_images')
+                .insert(imagesToInsert);
+
+            if (imgError) {
+                console.error('[DB] ERROR al insertar nueva galería:', imgError.message);
+                return { error: `Propiedad actualizada, pero falló la galería: ${imgError.message}` };
+            }
+        }
+
+        console.log('[DB] ACTUALIZACIÓN FINALIZADA CON ÉXITO');
+        console.log('---------------------------------------------------------');
+        return { success: true };
+    } catch (err: any) {
+        console.error('[DB] EXCEPCIÓN en updateProperty:', err.message);
+        return { error: err.message || 'Error desconocido al actualizar la propiedad.' };
     }
 }
 
