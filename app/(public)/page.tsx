@@ -3,8 +3,8 @@ import Link from "next/link";
 import { getFeaturedProperties } from "@/lib/supabase/properties";
 import PropertyCard from "@/components/PropertyCard";
 
-// Optimización: Revalidación cada 60 segundos (ISR)
-export const revalidate = 60;
+// Forzar renderizado dinámico para evitar errores de Supabase durante el build
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   const featuredProperties = await getFeaturedProperties(3);
