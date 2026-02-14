@@ -185,10 +185,12 @@ export async function createProperty(
     let propertyId: string | null = null;
 
     try {
-        console.log('[DB] Iniciando creación de propiedad:', propertyData.titulo);
-        console.log('[DB] URLs de imágenes recibidas:', imageUrls);
+        console.log('---------------------------------------------------------');
+        console.log('[DB] INICIANDO CREACIÓN DE PROPIEDAD:', propertyData.titulo);
+        console.log('[DB] URLs de imágenes recibidas:', imageUrls.length);
+        console.log('[DB] Detalle URLs:', imageUrls);
 
-        // 1. Insert property
+        // 1. Insertar propiedad en tabla 'properties'
         const { data: property, error: propError } = await supabase
             .from('properties')
             .insert([
@@ -201,21 +203,25 @@ export async function createProperty(
             .single();
 
         if (propError) {
-            console.error('[DB] Error al insertar propiedad:', propError);
+            console.error('[DB] ERROR CRÍTICO al insertar propiedad:', propError.message);
             throw new Error(`Error base de datos (propiedad): ${propError.message}`);
         }
 
-        propertyId = property.id;
-        console.log('[DB] Propiedad creada con ID:', propertyId);
+        if (!property || !property.id) {
+            console.error('[DB] ERROR: La propiedad se insertó pero no se devolvió el ID');
+            throw new Error('No se pudo obtener el ID de la propiedad creada.');
+        }
 
-        // 2. Insert images
-        if (imageUrls.length > 0) {
-            console.log('[DB] Insertando', imageUrls.length, 'imágenes...');
+        propertyId = property.id;
+        console.log('[DB] Propiedad creada exitosamente. ID:', propertyId);
+
+        // 2. Insertar fotos en tabla 'property_images'
+        if (imageUrls && imageUrls.length > 0) {
+            console.log(`[DB] Preparando inserción de ${imageUrls.length} imágenes en 'property_images'...`);
 
             const imagesToInsert = imageUrls.map((url) => ({
                 property_id: propertyId,
-                url: url,
-                // El campo 'orden' ha sido eliminado por no existir en el esquema actual
+                url: url // El esquema usa 'url', no 'image_url' ni 'order'
             }));
 
             const { data: imgData, error: imgError } = await supabase
@@ -224,21 +230,33 @@ export async function createProperty(
                 .select();
 
             if (imgError) {
-                console.error('[DB] Error al insertar imágenes:', imgError);
+                console.error('[DB] ERROR CRÍTICO al insertar imágenes:', imgError.message);
 
-                // ROLLBACK MANUAL: Eliminar la propiedad creada si las imágenes fallan
-                console.warn('[DB] Iniciando rollback manual para propiedad ID:', propertyId);
-                await supabase.from('properties').delete().eq('id', propertyId);
+                // ROLLBACK: Si fallan las imágenes, eliminamos la propiedad para mantener integridad
+                console.warn(`[DB] REALIZANDO ROLLBACK: Eliminando propiedad ID ${propertyId} por fallo en imágenes.`);
+                const { error: rollbackError } = await supabase
+                    .from('properties')
+                    .delete()
+                    .eq('id', propertyId);
 
-                throw new Error(`Error base de datos (imágenes): ${imgError.message}`);
+                if (rollbackError) {
+                    console.error('[DB] ERROR ADICIONAL en rollback:', rollbackError.message);
+                }
+
+                throw new Error(`Error al persistir galería de imágenes: ${imgError.message}. Se canceló la creación.`);
             }
 
-            console.log('[DB] Imágenes insertadas exitosamente:', imgData?.length);
+            console.log(`[DB] ÉXITO: Se insertaron ${imgData?.length || 0} registros en 'property_images'.`);
+        } else {
+            console.warn('[DB] ADVERTENCIA: No se recibieron URLs de imágenes para insertar en la galería.');
         }
+
+        console.log('[DB] FLUJO FINALIZADO CORRECTAMENTE');
+        console.log('---------------------------------------------------------');
 
         return { data: property };
     } catch (err: any) {
-        console.error('[DB] Excepción crítica en createProperty:', err);
+        console.error('[DB] EXCEPCIÓN capturada en createProperty:', err.message);
         return { error: err.message || 'Error desconocido al crear la propiedad.' };
     }
 }
