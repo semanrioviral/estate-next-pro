@@ -3,7 +3,7 @@ import { getProperties } from "@/lib/supabase/properties";
 import PropertyCard from "@/components/PropertyCard";
 import Breadcrumbs from "@/components/Breadcrumbs";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
     title: "Catálogo de Propiedades | TucasaLosPatios",

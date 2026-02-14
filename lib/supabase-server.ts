@@ -16,22 +16,31 @@ export async function createClient(isAdmin = false) {
 
     if (!supabaseUrl || !supabaseKey) {
         if (isBuildPhase || process.env.NEXT_PHASE === 'phase-production-build') {
+            console.warn("⚠️ Advertencia: Usando cliente Supabase de respaldo para el build.");
+
             const dummyResult = { data: [], error: null, count: 0 };
-            const handler: ProxyHandler<any> = {
+            const recursiveHandler: ProxyHandler<any> = {
                 get(target, prop): any {
-                    if (prop === 'then') return (resolve: any) => resolve(dummyResult);
-                    if (prop === 'auth') return {
-                        getUser: () => Promise.resolve({ data: { user: null }, error: null }),
-                        getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-                        onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
-                    };
-                    return new Proxy(() => { }, handler);
+                    if (prop === 'then') {
+                        return (resolve: any) => resolve(dummyResult);
+                    }
+                    return new Proxy(() => { }, recursiveHandler);
                 },
                 apply() {
-                    return new Proxy(() => { }, handler);
+                    return new Proxy(() => { }, recursiveHandler);
                 }
             };
-            return new Proxy(() => { }, handler) as any;
+
+            // El cliente raíz NO debe ser thenable para que 'await createClient()' 
+            // resuelva al objeto cliente y no a los datos dummy.
+            return {
+                from: () => new Proxy(() => { }, recursiveHandler),
+                auth: {
+                    getUser: () => Promise.resolve({ data: { user: null }, error: null }),
+                    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+                    onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => { } } } }),
+                }
+            } as any;
         }
         throw new Error("URL y Key de Supabase son requeridas en el servidor");
     }
