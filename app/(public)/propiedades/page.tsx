@@ -23,7 +23,7 @@ export default async function PropiedadesPage() {
             <div className="mt-12 mb-20">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                     <div className="max-w-3xl">
-                        <span className="text-blue-600 font-black uppercase tracking-[0.2em] text-sm mb-4 block">
+                        <span className="text-[#fb2c36] font-black uppercase tracking-[0.2em] text-sm mb-4 block">
                             Inventario Exclusivo
                         </span>
                         <h1 className="text-5xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-7xl uppercase leading-[0.9] mb-8">
@@ -40,7 +40,7 @@ export default async function PropiedadesPage() {
                 {/* Modern Filter Interface (Abstract/visual only for now) */}
                 <div className="mt-16 glass rounded-[2.5rem] p-4 flex flex-col md:flex-row items-center gap-4">
                     <div className="flex-1 w-full bg-white dark:bg-zinc-900/50 rounded-2xl px-6 py-4 border border-zinc-100 dark:border-zinc-800 flex items-center gap-4 group">
-                        <svg className="w-5 h-5 text-zinc-400 group-focus-within:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-zinc-400 group-focus-within:text-[#fb2c36] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                         </svg>
                         <input
@@ -64,7 +64,7 @@ export default async function PropiedadesPage() {
                         </select>
                     </div>
 
-                    <button className="w-full md:w-auto bg-blue-600 text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:bg-blue-500 hover:scale-105 active:scale-95 shadow-xl shadow-blue-600/20">
+                    <button className="w-full md:w-auto bg-[#fb2c36] text-white px-10 py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:bg-[#fb2c36] hover:scale-105 active:scale-95 shadow-xl shadow-[#fb2c36]/20">
                         Filtrar propiedades
                     </button>
                 </div>
@@ -76,7 +76,6 @@ export default async function PropiedadesPage() {
                         <PropertyCard
                             key={property.id}
                             property={property}
-                            priority={index < 3}
                         />
                     ))}
                 </div>

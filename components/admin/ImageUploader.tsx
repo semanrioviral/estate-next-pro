@@ -56,34 +56,22 @@ export default function ImageUploader({
     const uploadFiles = async () => {
         const pendingFiles = files.filter((f) => f.status === "pending" || f.status === "error");
 
+        // Start with already successful URLs
+        const updatedUrls = files
+            .filter(f => f.status === "success" && f.url)
+            .map(f => f.url as string);
+
         for (const fileObj of pendingFiles) {
             try {
                 setFiles(prev => prev.map(f => f.id === fileObj.id ? { ...f, status: "uploading" } : f));
 
-                // 1. Get Signature
-                const timestamp = Math.round(new Date().getTime() / 1000);
-                const paramsToSign = {
-                    timestamp,
-                    folder: "properties",
-                    // Transformation on upload
-                    transformation: "w_1600,c_limit,f_auto,q_auto",
-                };
-
-                const signRes = await fetch("/api/cloudinary/sign", {
-                    method: "POST",
-                    body: JSON.stringify({ paramsToSign }),
-                });
-                const { signature } = await signRes.json();
-
-                // 2. Upload to Cloudinary
+                // 1. Prepare Unsigned Upload Data
                 const formData = new FormData();
                 formData.append("file", fileObj.file);
-                formData.append("api_key", process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!);
-                formData.append("timestamp", timestamp.toString());
-                formData.append("signature", signature);
+                formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
                 formData.append("folder", "properties");
-                formData.append("transformation", "w_1600,c_limit,f_auto,q_auto");
 
+                // 2. Upload directly to Cloudinary
                 const uploadRes = await fetch(
                     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
                     {
@@ -92,27 +80,27 @@ export default function ImageUploader({
                     }
                 );
 
-                if (!uploadRes.ok) throw new Error("Upload failed");
+                if (!uploadRes.ok) {
+                    const errorData = await uploadRes.json();
+                    console.error("Cloudinary upload failed details:", errorData);
+                    throw new Error("Upload failed");
+                }
 
                 const data = await uploadRes.json();
+                const secureUrl = data.secure_url;
 
-                setFiles(prev => prev.map(f => f.id === fileObj.id ? { ...f, status: "success", url: data.secure_url } : f));
+                // Update local tracking and UI state
+                updatedUrls.push(secureUrl);
+                setFiles(prev => prev.map(f => f.id === fileObj.id ? { ...f, status: "success", url: secureUrl } : f));
             } catch (error) {
                 console.error("Upload error:", error);
                 setFiles(prev => prev.map(f => f.id === fileObj.id ? { ...f, status: "error" } : f));
             }
         }
 
-        // Notify parent
-        const allUrls = files
-            .map(f => f.status === "success" ? f.url : null)
-            .filter(Boolean) as string[];
-
-        // Check if new successes were added
-        const currentSuccesses = files.filter(f => f.status === "success").length;
-        if (currentSuccesses > 0) {
-            onUploadComplete(allUrls);
-        }
+        // Notify parent with the full, fresh list
+        console.log("ImageUploader: Notificando subida completa con URLs:", updatedUrls);
+        onUploadComplete(updatedUrls);
     };
 
     return (

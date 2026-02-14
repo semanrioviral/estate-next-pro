@@ -262,7 +262,7 @@ export default async function VentaTipoCiudadPage({ params }: Props) {
                     <>
                         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                             {filteredProperties.map((p, index) => (
-                                <PropertyCard key={p.id} property={p} priority={index < 3} />
+                                <PropertyCard key={p.id} property={p} />
                             ))}
                         </div>
                     </>

@@ -154,7 +154,7 @@ export default async function CiudadPage({ params }: Props) {
 
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
                 <div className="max-w-2xl">
-                    <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
+                    <p className="text-sm font-bold uppercase tracking-widest text-[#fb2c36]">
                         {filteredProperties.length} propiedades disponibles
                     </p>
                     <h1 className="mt-2 text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-6xl uppercase">

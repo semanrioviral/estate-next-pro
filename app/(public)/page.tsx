@@ -27,7 +27,7 @@ export default async function Home() {
 
         <div className="relative z-10 mx-auto max-w-7xl px-6 w-full pt-20">
           <div className="max-w-3xl">
-            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-600/20 backdrop-blur-md border border-blue-500/30 text-blue-400 text-sm font-bold uppercase tracking-widest mb-6 animate-fade-in">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-[#fb2c36]/20 backdrop-blur-md border border-[#fb2c36]/30 text-blue-400 text-sm font-bold uppercase tracking-widest mb-6 animate-fade-in">
               Inmobiliaria de Confianza
             </span>
             <h1 className="text-6xl font-black tracking-tight text-white sm:text-8xl mb-8 leading-[1.1]">
@@ -42,7 +42,7 @@ export default async function Home() {
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
               <Link
                 href="/propiedades"
-                className="w-full sm:w-auto text-center rounded-2xl bg-blue-600 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-blue-600/30 hover:bg-blue-500 transition-all hover:scale-105 active:scale-95"
+                className="w-full sm:w-auto text-center rounded-2xl bg-[#fb2c36] px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-[#fb2c36]/30 hover:bg-[#fb2c36] transition-all hover:scale-105 active:scale-95"
               >
                 Explorar Catálogo
               </Link>
@@ -62,16 +62,16 @@ export default async function Home() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
           <div className="max-w-2xl">
             <h2 className="text-4xl font-black text-zinc-900 dark:text-zinc-50 uppercase tracking-tighter sm:text-5xl">
-              Propiedades <span className="text-blue-600">Destacadas</span>
+              Propiedades <span className="text-[#fb2c36]">Destacadas</span>
             </h2>
-            <div className="h-1.5 w-24 bg-blue-600 mt-4 rounded-full"></div>
+            <div className="h-1.5 w-24 bg-[#fb2c36] mt-4 rounded-full"></div>
             <p className="mt-6 text-xl text-zinc-600 dark:text-zinc-400 leading-relaxed">
               Descubre una selección exclusiva de nuestros inmuebles más valorados en Norte de Santander.
             </p>
           </div>
           <Link
             href="/propiedades"
-            className="group flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-zinc-500 hover:text-blue-600 transition-colors"
+            className="group flex items-center gap-3 text-sm font-bold uppercase tracking-widest text-zinc-500 hover:text-[#fb2c36] transition-colors"
           >
             Ver catálogo completo
             <svg className="w-5 h-5 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -86,7 +86,6 @@ export default async function Home() {
               <PropertyCard
                 key={property.id}
                 property={property}
-                priority={index < 3}
               />
             ))}
           </div>

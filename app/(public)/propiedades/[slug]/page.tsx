@@ -58,10 +58,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 import { Bed, Bath, Square, MapPin, MessageCircle, Calendar, User, Info, Star } from "lucide-react";
+import PropertyGallery from "@/components/PropertyGallery";
 
 export default async function PropertyDetailPage({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlug(slug);
+    if (property) {
+        console.log(`[DEBUG] Property Loaded: ${slug} | Image Count: ${property.galeria?.length || 0}`);
+    }
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
 
     if (!property) {
@@ -165,11 +169,11 @@ export default async function PropertyDetailPage({ params }: Props) {
             <nav className="mb-6 flex" aria-label="Breadcrumb">
                 <ol className="flex items-center space-x-2 text-sm text-zinc-500">
                     <li>
-                        <Link href="/" className="hover:text-blue-600 transition-colors">Inicio</Link>
+                        <Link href="/" className="hover:text-[#fb2c36] transition-colors">Inicio</Link>
                     </li>
                     <li className="flex items-center">
                         <span className="mx-2 text-zinc-300">/</span>
-                        <Link href={`/${property.ciudad.toLowerCase().replace(/ /g, "-")}`} className="hover:text-blue-600 transition-colors">
+                        <Link href={`/${property.ciudad.toLowerCase().replace(/ /g, "-")}`} className="hover:text-[#fb2c36] transition-colors">
                             {property.ciudad}
                         </Link>
                     </li>
@@ -185,22 +189,11 @@ export default async function PropertyDetailPage({ params }: Props) {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 {/* Columna Izquierda: Contenido Principal */}
                 <div className="lg:col-span-2 space-y-10">
-                    {/* Hero Image */}
-                    <div className="relative aspect-video overflow-hidden rounded-[2.5rem] border border-zinc-200 dark:border-zinc-800 shadow-xl">
-                        <Image
-                            src={property.imagen_principal}
-                            alt={property.titulo}
-                            fill
-                            className="object-cover"
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 800px"
-                            priority
-                        />
-                        <div className="absolute top-6 left-6">
-                            <span className="bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md px-4 py-2 rounded-2xl text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-widest border border-white/20 shadow-lg">
-                                {property.tipo}
-                            </span>
-                        </div>
-                    </div>
+                    {/* Modern Gallery Slider */}
+                    <PropertyGallery
+                        images={[property.imagen_principal, ...property.galeria]}
+                        title={property.titulo}
+                    />
 
                     {/* Titulo y Ubicacion */}
                     <div>
@@ -208,7 +201,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                             {property.titulo}
                         </h1>
                         <div className="mt-4 flex items-center text-zinc-500 dark:text-zinc-400">
-                            <MapPin className="mr-2 h-5 w-5 text-blue-500" />
+                            <MapPin className="mr-2 h-5 w-5 text-[#fb2c36]" />
                             <span className="text-lg font-medium">{property.barrio}, {property.ciudad}</span>
                         </div>
                     </div>
@@ -217,25 +210,25 @@ export default async function PropertyDetailPage({ params }: Props) {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-8 border-y border-zinc-100 dark:border-zinc-800">
                         {property.tipo !== "lote" && (
                             <>
-                                <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-blue-500/20 transition-colors">
-                                    <Bed className="h-7 w-7 text-blue-500 mb-2" />
+                                <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-[#fb2c36]/20 transition-colors">
+                                    <Bed className="h-7 w-7 text-[#fb2c36] mb-2" />
                                     <span className="text-sm text-zinc-500 font-medium">Habitaciones</span>
                                     <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{property.habitaciones}</span>
                                 </div>
-                                <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-blue-500/20 transition-colors">
-                                    <Bath className="h-7 w-7 text-blue-500 mb-2" />
+                                <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-[#fb2c36]/20 transition-colors">
+                                    <Bath className="h-7 w-7 text-[#fb2c36] mb-2" />
                                     <span className="text-sm text-zinc-500 font-medium">Baños</span>
                                     <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{property.baños}</span>
                                 </div>
                             </>
                         )}
-                        <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-blue-500/20 transition-colors">
-                            <Square className="h-7 w-7 text-blue-500 mb-2" />
+                        <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-[#fb2c36]/20 transition-colors">
+                            <Square className="h-7 w-7 text-[#fb2c36] mb-2" />
                             <span className="text-sm text-zinc-500 font-medium">Área Útil</span>
                             <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50">{property.area_m2} m²</span>
                         </div>
-                        <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-blue-500/20 transition-colors">
-                            <Star className="h-7 w-7 text-blue-500 mb-2" />
+                        <div className="flex flex-col items-center p-4 rounded-3xl bg-zinc-50 dark:bg-zinc-900/50 border border-transparent hover:border-[#fb2c36]/20 transition-colors">
+                            <Star className="h-7 w-7 text-[#fb2c36] mb-2" />
                             <span className="text-sm text-zinc-500 font-medium">Categoría</span>
                             <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50 capitalize">{property.tipo}</span>
                         </div>
@@ -253,26 +246,6 @@ export default async function PropertyDetailPage({ params }: Props) {
                             ))}
                         </div>
                     </div>
-
-                    {/* Galería Secundaria */}
-                    {property.galeria.length > 0 && (
-                        <div>
-                            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 mb-8">Galería de Imágenes</h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {property.galeria.map((img, idx) => (
-                                    <div key={idx} className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-zinc-200 dark:border-zinc-800 group">
-                                        <Image
-                                            src={img}
-                                            alt={`${property.titulo} - vista ${idx + 1}`}
-                                            fill
-                                            className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                            sizes="(max-width: 768px) 100vw, 50vw"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Columna Derecha: Sidebar Sticky */}
@@ -309,23 +282,23 @@ export default async function PropertyDetailPage({ params }: Props) {
 
                             {/* Perfil Agente */}
                             <div className="mt-10 pt-8 border-t border-zinc-100 dark:border-zinc-800 flex items-center gap-4">
-                                <div className="h-14 w-14 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center border border-blue-500/10">
-                                    <User className="h-8 w-8 text-blue-500" />
+                                <div className="h-14 w-14 rounded-2xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center border border-[#fb2c36]/10">
+                                    <User className="h-8 w-8 text-[#fb2c36]" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-bold text-zinc-900 dark:text-zinc-50">TucasaLosPatios</p>
-                                    <p className="text-xs font-semibold text-blue-600 dark:text-blue-400">Asesor Inmobiliario Senior</p>
+                                    <p className="text-xs font-semibold text-[#fb2c36] dark:text-[#fb2c36]">Asesor Inmobiliario Senior</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Banner de confianza */}
-                        <div className="bg-blue-600 rounded-[2rem] p-6 text-white overflow-hidden relative group">
+                        <div className="bg-[#fb2c36] rounded-[2rem] p-6 text-white overflow-hidden relative group">
                             <div className="absolute top-0 right-0 opacity-10 group-hover:scale-125 transition-transform duration-500">
                                 <Star className="h-24 w-24 -mr-6 -mt-6" />
                             </div>
                             <h4 className="font-bold mb-2">Asesoría de Confianza</h4>
-                            <p className="text-sm text-blue-100 leading-relaxed">
+                            <p className="text-sm text-red-50 leading-relaxed">
                                 Garantizamos transparencia y seguridad jurídica en cada proceso de compra o renta.
                             </p>
                         </div>

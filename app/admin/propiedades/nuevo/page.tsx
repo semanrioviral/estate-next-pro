@@ -14,12 +14,16 @@ export default function NuevoInmueble() {
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        console.log("Submit presionado. URLs actuales en el estado:", imageUrls);
+
         if (imageUrls.length === 0) {
             alert("Debes subir al menos una imagen");
             return;
         }
 
         setLoading(true);
+        console.log("Enviando formulario con:", imageUrls.length, "imágenes");
         const formData = new FormData(e.currentTarget);
 
         try {
@@ -193,7 +197,7 @@ export default function NuevoInmueble() {
 
                     <div className="bg-zinc-100 dark:bg-zinc-800/50 p-6 rounded-3xl">
                         <p className="text-xs font-medium text-zinc-500 leading-relaxed text-center">
-                            Al publicar, la propiedad estará visible inmediatamente en la web pública bajo la configuración de ISR.
+                            Al publicar, la propiedad estará visible inmediatamente en la web pública mediante renderizado dinámico.
                         </p>
                     </div>
                 </div>

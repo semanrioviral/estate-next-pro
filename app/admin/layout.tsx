@@ -4,20 +4,25 @@ import { LayoutDashboard, Home, Send, Users, LogOut } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from './actions'
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode
 }) {
-    const supabase = await createClient()
-
-    const {
-        data: { user },
-    } = await supabase.auth.getUser()
+    let user = null;
+    try {
+        const supabase = await createClient()
+        const { data: { user: supabaseUser } } = await supabase.auth.getUser()
+        user = supabaseUser;
+    } catch (err) {
+        console.error('Error initializing admin layout:', err)
+    }
 
     if (!user) {
-        // Middleware handles the redirect to /admin/login. 
-        // We return null or children to avoid layout loops.
+        // En lugar de redireccionar aquí, permitimos que el middleware lo haga
+        // o simplemente mostramos el contenido (login)
         return <>{children}</>
     }
 

@@ -1,4 +1,4 @@
-'use server'
+// lib/supabase/properties.ts
 
 import { createClient } from '../supabase-server';
 
@@ -22,125 +22,159 @@ export type Property = {
 };
 
 function mapProperty(prop: any): Property {
+    // Intenta extraer imágenes de múltiples posibles nombres de relación
+    const rawImages = prop.property_images || prop.property_image || [];
+    const galeria = Array.isArray(rawImages) ? rawImages.map((img: any) => img.url) : [];
+
+    // Log diagnóstico si no hay galería pero sí id
+    if (galeria.length === 0 && prop.id) {
+        // console.log(`[DEBUG] Propiedad ${prop.slug} sin imágenes en tabla relacionada.`);
+    }
+
     return {
         ...prop,
-        galeria: prop.property_images?.map((img: any) => img.url) || []
+        galeria
     };
 }
 
 export async function getProperties(): Promise<Property[]> {
-    const supabase = await createClient(false);
-    const { data, error } = await supabase
-        .from('properties')
-        .select(`
-            *,
-            property_images (url)
-        `)
-        .order('destacado', { ascending: false })
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error fetching properties:', error);
-        return [];
-    }
-
-    return (data || []).map(mapProperty) as Property[];
-}
-
-export async function getPropertiesByCity(city: string): Promise<Property[]> {
-    const supabase = await createClient(false);
-    const { data, error } = await supabase
-        .from('properties')
-        .select(`
-            *,
-            property_images (url)
-        `)
-        .eq('ciudad', city)
-        .order('destacado', { ascending: false })
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error fetching properties by city:', error);
-        return [];
-    }
-
-    return (data || []).map(mapProperty) as Property[];
-}
-
-export async function getPropertiesByTypeAndCity(tipo: string, city: string): Promise<Property[]> {
-    const supabase = await createClient(false);
-    const { data, error } = await supabase
-        .from('properties')
-        .select(`
-            *,
-            property_images (url)
-        `)
-        .eq('tipo', tipo)
-        .eq('ciudad', city)
-        .order('destacado', { ascending: false })
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('Error fetching properties by type and city:', error);
-        return [];
-    }
-
-    return (data || []).map(mapProperty) as Property[];
-}
-
-export async function getPropertyBySlug(slug: string): Promise<Property | null> {
-    const supabase = await createClient(false);
-    const { data, error } = await supabase
-        .from('properties')
-        .select(`
-            *,
-            property_images (url)
-        `)
-        .eq('slug', slug)
-        .single();
-
-    if (error || !data) {
-        console.error('Error fetching property by slug:', error);
-        return null;
-    }
-
-    return mapProperty(data);
-}
-
-export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-    const supabase = await createClient(false);
-    const { data, error } = await supabase
-        .from('properties')
-        .select(`
-            *,
-            property_images (url)
-        `)
-        .eq('destacado', true)
-        .order('created_at', { ascending: false })
-        .limit(limit);
-
-    if (error) {
-        console.error('Error fetching featured properties:', error);
-        return [];
-    }
-
-    // If we don't have enough featured properties, get the most recent ones
-    if (!data || data.length === 0) {
-        const { data: recentData, error: recentError } = await supabase
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
             .from('properties')
             .select(`
                 *,
                 property_images (url)
             `)
+            .order('destacado', { ascending: false })
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching properties:', error);
+            return [];
+        }
+
+        return (data || []).map(mapProperty) as Property[];
+    } catch (err) {
+        console.error('Critical exception in getProperties:', err);
+        return [];
+    }
+}
+
+export async function getPropertiesByCity(city: string): Promise<Property[]> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(`
+                *,
+                property_images (url)
+            `)
+            .eq('ciudad', city)
+            .order('destacado', { ascending: false })
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching properties by city:', error);
+            return [];
+        }
+
+        return (data || []).map(mapProperty) as Property[];
+    } catch (err) {
+        console.error('Critical exception in getPropertiesByCity:', err);
+        return [];
+    }
+}
+
+export async function getPropertiesByTypeAndCity(tipo: string, city: string): Promise<Property[]> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(`
+                *,
+                property_images (url)
+            `)
+            .eq('tipo', tipo)
+            .eq('ciudad', city)
+            .order('destacado', { ascending: false })
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching properties by type and city:', error);
+            return [];
+        }
+
+        return (data || []).map(mapProperty) as Property[];
+    } catch (err) {
+        console.error('Critical exception in getPropertiesByTypeAndCity:', err);
+        return [];
+    }
+}
+
+export async function getPropertyBySlug(slug: string): Promise<Property | null> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(`
+                *,
+                property_images (url)
+            `)
+            .eq('slug', slug)
+            .single();
+
+        if (error || !data) {
+            console.error('Error fetching property by slug:', error);
+            return null;
+        }
+
+        return mapProperty(data);
+    } catch (err) {
+        console.error('Critical exception in getPropertyBySlug:', err);
+        return null;
+    }
+}
+
+export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
+    try {
+        const supabase = await createClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(`
+                *,
+                property_images (url)
+            `)
+            .eq('destacado', true)
             .order('created_at', { ascending: false })
             .limit(limit);
 
-        if (recentError) return [];
+        if (error) {
+            console.error('Error fetching featured properties:', error);
+            return [];
+        }
 
-        return (recentData || []).map(mapProperty);
+        // If we don't have enough featured properties, get the most recent ones
+        if (!data || data.length === 0) {
+            const { data: recentData, error: recentError } = await supabase
+                .from('properties')
+                .select(`
+                    *,
+                    property_images (url)
+                `)
+                .order('created_at', { ascending: false })
+                .limit(limit);
+
+            if (recentError) return [];
+
+            return (recentData || []).map(mapProperty);
+        }
+
+        return (data || []).map(mapProperty);
+    } catch (err) {
+        console.error('Critical exception in getFeaturedProperties:', err);
+        return [];
     }
-
-    return (data || []).map(mapProperty);
 }
 
 export async function createProperty(
@@ -148,42 +182,65 @@ export async function createProperty(
     imageUrls: string[]
 ) {
     const supabase = await createClient();
+    let propertyId: string | null = null;
 
-    // 1. Insert property
-    const { data: property, error: propError } = await supabase
-        .from('properties')
-        .insert([
-            {
-                ...propertyData,
-                imagen_principal: imageUrls[0] || '',
-            }
-        ])
-        .select()
-        .single();
+    try {
+        console.log('[DB] Iniciando creación de propiedad:', propertyData.titulo);
+        console.log('[DB] URLs de imágenes recibidas:', imageUrls);
 
-    if (propError) {
-        console.error('Error creating property:', propError);
-        return { error: propError.message };
-    }
+        // 1. Insert property
+        const { data: property, error: propError } = await supabase
+            .from('properties')
+            .insert([
+                {
+                    ...propertyData,
+                    imagen_principal: imageUrls[0] || '',
+                }
+            ])
+            .select()
+            .single();
 
-    // 2. Insert images
-    if (imageUrls.length > 0) {
-        const imagesToInsert = imageUrls.map((url, index) => ({
-            property_id: property.id,
-            url: url,
-            orden: index,
-        }));
-
-        const { error: imgError } = await supabase
-            .from('property_images')
-            .insert(imagesToInsert);
-
-        if (imgError) {
-            console.error('Error uploading property images:', imgError);
+        if (propError) {
+            console.error('[DB] Error al insertar propiedad:', propError);
+            throw new Error(`Error base de datos (propiedad): ${propError.message}`);
         }
-    }
 
-    return { data: property };
+        propertyId = property.id;
+        console.log('[DB] Propiedad creada con ID:', propertyId);
+
+        // 2. Insert images
+        if (imageUrls.length > 0) {
+            console.log('[DB] Insertando', imageUrls.length, 'imágenes...');
+
+            const imagesToInsert = imageUrls.map((url) => ({
+                property_id: propertyId,
+                url: url,
+                // El campo 'orden' ha sido eliminado por no existir en el esquema actual
+            }));
+
+            const { data: imgData, error: imgError } = await supabase
+                .from('property_images')
+                .insert(imagesToInsert)
+                .select();
+
+            if (imgError) {
+                console.error('[DB] Error al insertar imágenes:', imgError);
+
+                // ROLLBACK MANUAL: Eliminar la propiedad creada si las imágenes fallan
+                console.warn('[DB] Iniciando rollback manual para propiedad ID:', propertyId);
+                await supabase.from('properties').delete().eq('id', propertyId);
+
+                throw new Error(`Error base de datos (imágenes): ${imgError.message}`);
+            }
+
+            console.log('[DB] Imágenes insertadas exitosamente:', imgData?.length);
+        }
+
+        return { data: property };
+    } catch (err: any) {
+        console.error('[DB] Excepción crítica en createProperty:', err);
+        return { error: err.message || 'Error desconocido al crear la propiedad.' };
+    }
 }
 
 

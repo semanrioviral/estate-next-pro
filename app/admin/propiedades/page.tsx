@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, Search, MapPin, Building2, ExternalLink, Trash2, Edit } from "lucide-react";
 
-export const revalidate = 0; // Don't cache admin listing
+export const dynamic = 'force-dynamic';
 
 export default async function AdminPropiedades() {
     const properties = await getProperties();
@@ -46,6 +46,7 @@ export default async function AdminPropiedades() {
                                 <th className="px-8 py-5 border-b border-zinc-100 dark:border-zinc-900">Ubicación</th>
                                 <th className="px-8 py-5 border-b border-zinc-100 dark:border-zinc-900">Precio</th>
                                 <th className="px-8 py-5 border-b border-zinc-100 dark:border-zinc-900">Tipo</th>
+                                <th className="px-8 py-5 border-b border-zinc-100 dark:border-zinc-900">Imágenes</th>
                                 <th className="px-8 py-5 border-b border-zinc-100 dark:border-zinc-900 text-right">Acciones</th>
                             </tr>
                         </thead>
@@ -90,6 +91,14 @@ export default async function AdminPropiedades() {
                                                 <Building2 size={10} />
                                                 {prop.tipo}
                                             </span>
+                                        </td>
+                                        <td className="px-8 py-6 text-center">
+                                            <div className="flex flex-col items-center">
+                                                <span className={`inline-flex items-center justify-center h-8 w-8 rounded-full text-[10px] font-black ${prop.galeria && prop.galeria.length > 0 ? 'bg-red-100 text-red-600 border border-red-200' : 'bg-zinc-100 text-zinc-400 border border-zinc-200'}`}>
+                                                    {prop.galeria?.length || 0}
+                                                </span>
+                                                <span className="text-[8px] font-bold uppercase text-zinc-400 mt-1">fotos</span>
+                                            </div>
                                         </td>
                                         <td className="px-8 py-6">
                                             <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">

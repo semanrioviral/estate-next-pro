@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase-client'
+import { createClient } from '@/lib/supabase-browser'
 
 export default function LoginPage() {
     const [email, setEmail] = useState('')
@@ -14,6 +14,12 @@ export default function LoginPage() {
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (!supabase) {
+            setError('Error de configuración: Variables de Supabase no encontradas')
+            return
+        }
+
         setLoading(true)
         setError(null)
 
