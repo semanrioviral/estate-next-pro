@@ -1,6 +1,7 @@
 import { getPropertyById } from "@/lib/supabase/properties";
 import PropertyForm from "@/components/admin/PropertyForm";
 import { handleUpdateProperty } from "@/app/admin/actions";
+import { GalleryImage } from "@/lib/supabase/properties";
 import { notFound } from "next/navigation";
 
 interface EditPropertyPageProps {
@@ -18,9 +19,9 @@ export default async function EditarPropiedad({ params }: EditPropertyPageProps)
     }
 
     // Wrap handleUpdateProperty to include the ID
-    const onUpdate = async (formData: FormData, imageUrls: string[]) => {
+    const onUpdate = async (formData: FormData, images: GalleryImage[]) => {
         "use server";
-        const res = await handleUpdateProperty(id, formData, imageUrls);
+        const res = await handleUpdateProperty(id, formData, images);
         return res as unknown as { error?: string, success?: boolean, slug?: string };
     };
 

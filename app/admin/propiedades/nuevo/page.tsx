@@ -8,8 +8,8 @@ export default function NuevoInmueble() {
         <PropertyForm
             title={<>Nuevo <span className="text-red-600">Inmueble</span></>}
             subtitle="Completa los datos para publicar una nueva propiedad."
-            onSubmitAction={async (formData, imageUrls) => {
-                const res = await handleCreateProperty(formData, imageUrls);
+            onSubmitAction={async (formData, images) => {
+                const res = await handleCreateProperty(formData, images);
                 return res as unknown as { error?: string, success?: boolean, slug?: string };
             }}
         />

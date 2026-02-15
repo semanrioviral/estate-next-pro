@@ -30,21 +30,33 @@ export type Property = {
     created_at: string;
     updated_at: string;
     galeria: string[];
+    image_metadata?: GalleryImage[];
 };
+
+export interface GalleryImage {
+    id?: string;
+    url: string;
+    orden: number;
+    es_principal: boolean;
+}
 
 function mapProperty(prop: any): Property {
     // Intenta extraer imágenes de múltiples posibles nombres de relación
     const rawImages = prop.property_images || prop.property_image || [];
     const galeria = Array.isArray(rawImages) ? rawImages.map((img: any) => img.url) : [];
-
-    // Log diagnóstico si no hay galería pero sí id
-    if (galeria.length === 0 && prop.id) {
-        // console.log(`[DEBUG] Propiedad ${prop.slug} sin imágenes en tabla relacionada.`);
-    }
+    const image_metadata: GalleryImage[] = Array.isArray(rawImages)
+        ? rawImages.map((img: any) => ({
+            id: img.id,
+            url: img.url,
+            orden: img.orden || 0,
+            es_principal: img.es_principal || false
+        }))
+        : [];
 
     return {
         ...prop,
-        galeria
+        galeria,
+        image_metadata
     };
 }
 
@@ -193,7 +205,7 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
 
 export async function createProperty(
     propertyData: Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>,
-    imageUrls: string[]
+    images: GalleryImage[]
 ) {
     const supabase = await createClient();
     let propertyId: string | null = null;
@@ -208,7 +220,7 @@ export async function createProperty(
             .insert([
                 {
                     ...propertyData,
-                    imagen_principal: imageUrls[0] || '',
+                    imagen_principal: images.find(img => img.es_principal)?.url || images[0]?.url || '',
                     servicios: propertyData.servicios || [],
                     etiquetas: propertyData.etiquetas || [],
                 }
@@ -230,12 +242,14 @@ export async function createProperty(
         console.log('[DB] Propiedad creada exitosamente. ID:', propertyId);
 
         // 2. Insertar fotos en tabla 'property_images'
-        if (imageUrls && imageUrls.length > 0) {
-            console.log(`[DB] Preparando inserción de ${imageUrls.length} imágenes en 'property_images'...`);
+        if (images && images.length > 0) {
+            console.log(`[DB] Preparando inserción de ${images.length} imágenes en 'property_images'...`);
 
-            const imagesToInsert = imageUrls.map((url) => ({
+            const imagesToInsert = images.map((img) => ({
                 property_id: propertyId,
-                url: url // El esquema usa 'url', no 'image_url' ni 'order'
+                url: img.url,
+                orden: img.orden,
+                es_principal: img.es_principal
             }));
 
             const { data: imgData, error: imgError } = await supabase
@@ -303,7 +317,7 @@ export async function deleteProperty(id: string) {
 export async function updateProperty(
     id: string,
     propertyData: Partial<Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>>,
-    imageUrls: string[]
+    images: GalleryImage[]
 ) {
     const supabase = await createClient();
     try {
@@ -313,7 +327,7 @@ export async function updateProperty(
         // 1. Actualizar datos básicos en tabla 'properties'
         const updatePayload = {
             ...propertyData,
-            imagen_principal: imageUrls[0] || '',
+            imagen_principal: images.find(img => img.es_principal)?.url || images[0]?.url || '',
             servicios: propertyData.servicios || [],
             etiquetas: propertyData.etiquetas || [],
         };
@@ -341,10 +355,12 @@ export async function updateProperty(
             // No lanzamos error aquí, intentamos insertar las nuevas de todos modos
         }
 
-        if (imageUrls.length > 0) {
-            const imagesToInsert = imageUrls.map((url) => ({
+        if (images.length > 0) {
+            const imagesToInsert = images.map((img) => ({
                 property_id: id,
-                url: url
+                url: img.url,
+                orden: img.orden,
+                es_principal: img.es_principal
             }));
 
             const { error: imgError } = await supabase
@@ -362,8 +378,64 @@ export async function updateProperty(
         return { success: true };
     } catch (err: any) {
         console.error('[DB] EXCEPCIÓN en updateProperty:', err.message);
-        return { error: err.message || 'Error desconocido al actualizar la propiedad.' };
+        return { error: err.message || 'Error inesperado al actualizar.' };
     }
 }
 
+export async function syncPropertyGallery(propertyId: string, images: GalleryImage[]) {
+    const supabase = await createClient();
+    try {
+        console.log(`[DB] Iniciando syncPropertyGallery para propiedad: ${propertyId}`);
 
+        // 1. Recalcular orden secuencial (0, 1, 2...)
+        const imagesWithOrder = images.map((img, index) => ({
+            ...img,
+            orden: index
+        }));
+
+        // 2. Identificar URL de la imagen principal
+        const primaryImage = imagesWithOrder.find(img => img.es_principal) || imagesWithOrder[0];
+        const primaryUrl = primaryImage?.url || '';
+
+        // 3. Actualización individual (no destructiva)
+        // Solo actualizamos registros que ya tienen ID (existentes)
+        const updates = imagesWithOrder
+            .filter(img => img.id && !img.id.startsWith('init-')) // Solo los que vienen de DB
+            .map(img =>
+                supabase
+                    .from('property_images')
+                    .update({
+                        orden: img.orden,
+                        es_principal: img.es_principal
+                    })
+                    .eq('id', img.id)
+            );
+
+        if (updates.length > 0) {
+            console.log(`[DB] Ejecutando ${updates.length} actualizaciones en 'property_images'...`);
+            const results = await Promise.all(updates);
+
+            const firstError = results.find(r => r.error);
+            if (firstError && firstError.error) {
+                throw new Error(`Error actualizando imágenes: ${firstError.error.message}`);
+            }
+        }
+
+        // 4. Actualizar properties.imagen_principal
+        console.log(`[DB] Sincronizando imagen_principal: ${primaryUrl}`);
+        const { error: propError } = await supabase
+            .from('properties')
+            .update({ imagen_principal: primaryUrl })
+            .eq('id', propertyId);
+
+        if (propError) {
+            throw new Error(`Error actualizando propiedad principal: ${propError.message}`);
+        }
+
+        console.log('[DB] Sincronización de galería completada con éxito');
+        return { success: true };
+    } catch (err: any) {
+        console.error('[DB] EXCEPCIÓN en syncPropertyGallery:', err.message);
+        return { error: err.message || 'Error al sincronizar galería.' };
+    }
+}

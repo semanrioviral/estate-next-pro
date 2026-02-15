@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { updatePropertyGallery } from "@/app/admin/actions";
 import ImageUploader from "@/components/admin/ImageUploader";
+import { GalleryImage } from "@/lib/supabase/properties";
 import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield, Search, Tags, Globe } from "lucide-react";
 import Link from "next/link";
 import { Property } from "@/lib/supabase/properties";
 
 interface PropertyFormProps {
     initialData?: Property;
-    onSubmitAction: (formData: FormData, imageUrls: string[]) => Promise<{ error?: string, success?: boolean, slug?: string }>;
+    onSubmitAction: (formData: FormData, images: GalleryImage[]) => Promise<{ error?: string, success?: boolean, slug?: string }>;
     title: React.ReactNode;
     subtitle: string;
 }
@@ -17,14 +19,56 @@ interface PropertyFormProps {
 export default function PropertyForm({ initialData, onSubmitAction, title, subtitle }: PropertyFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [imageUrls, setImageUrls] = useState<string[]>(initialData?.galeria || (initialData?.imagen_principal ? [initialData.imagen_principal] : []));
-    const [status, setStatus] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+
+    // Transform initial galeria (string[]) to GalleryImage[]
+    const [images, setImages] = useState<GalleryImage[]>(() => {
+        if (!initialData) return [];
+
+        // Use image_metadata if available (has IDs), otherwise fallback to mapping galeria
+        if (initialData.image_metadata && initialData.image_metadata.length > 0) {
+            return initialData.image_metadata;
+        }
+
+        // If initialData exists, map the galeria
+        // Note: In the future, the backend will return the correct order. 
+        // For now, we use the array index as order.
+        return (initialData.galeria || []).map((url, index) => ({
+            url,
+            orden: index,
+            es_principal: url === initialData.imagen_principal
+        }));
+    });
+
+    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+    const [isSavingGallery, setIsSavingGallery] = useState(false);
+
+    const handleSaveGallery = async () => {
+        if (!initialData?.id) return;
+
+        setIsSavingGallery(true);
+        setStatus(null);
+
+        try {
+            const res = await updatePropertyGallery(initialData.id, images);
+            if (res.success) {
+                setStatus({ type: 'success', message: '¡Galería actualizada con éxito!' });
+            } else {
+                setStatus({ type: 'error', message: res.error || 'Error al actualizar galería' });
+            }
+        } catch (err) {
+            setStatus({ type: 'error', message: 'Error de red al actualizar galería' });
+        } finally {
+            setIsSavingGallery(false);
+            // Auto hide success message
+            setTimeout(() => setStatus(null), 3000);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setStatus({ type: null, message: '' });
+        setStatus(null);
 
-        if (imageUrls.length === 0) {
+        if (images.length === 0) {
             setStatus({ type: 'error', message: 'Debes subir al menos una imagen' });
             return;
         }
@@ -33,7 +77,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
         const formData = new FormData(e.currentTarget);
 
         try {
-            const result = await onSubmitAction(formData, imageUrls);
+            const result = await onSubmitAction(formData, images);
 
             if (result?.error) {
                 setStatus({ type: 'error', message: result.error });
@@ -55,6 +99,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
     return (
         <div className="max-w-6xl mx-auto space-y-8 pb-32">
+            {/* ... (rest of the component remains the same, but using 'images' instead of 'imageUrls') */}
             {/* Header */}
             <div className="flex items-center gap-6">
                 <Link
@@ -72,7 +117,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
             </div>
 
             {/* Status Alert */}
-            {status.type && (
+            {status && (
                 <div
                     className={`p-6 rounded-[2.5rem] border-2 animate-in fade-in slide-in-from-top-4 duration-501 ${status.type === 'success'
                         ? 'bg-emerald-50 border-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400'
@@ -293,7 +338,23 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             </div>
                             <h2 className="font-black uppercase tracking-[0.2em] text-lg">Galería Visual</h2>
                         </div>
-                        <ImageUploader onUploadComplete={setImageUrls} initialUrls={imageUrls} />
+                        <ImageUploader
+                            onUploadComplete={setImages}
+                            initialUrls={initialData?.galeria}
+                            initialImages={initialData?.image_metadata}
+                        />
+
+                        {initialData?.id && (
+                            <button
+                                type="button"
+                                onClick={handleSaveGallery}
+                                disabled={isSavingGallery}
+                                className="w-full flex items-center justify-center gap-2 bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#fb2c36] dark:hover:bg-[#fb2c36] hover:text-white transition-all active:scale-95 disabled:opacity-50"
+                            >
+                                {isSavingGallery ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
+                                {isSavingGallery ? 'Guardando...' : 'Guardar Orden de Galería'}
+                            </button>
+                        )}
                     </section>
 
                     {/* 5. COMODIDADES Y ETIQUETAS */}

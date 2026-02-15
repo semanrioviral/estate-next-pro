@@ -2,14 +2,15 @@
 
 import { createClient, createAdminClient } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
-import { createProperty, deleteProperty, updateProperty } from '@/lib/supabase/properties'
+import { createProperty, deleteProperty, updateProperty, GalleryImage, syncPropertyGallery } from '@/lib/supabase/properties'
 import { revalidatePath } from 'next/cache'
+
 
 export async function logout() {
     // ... existing logout code
 }
 
-export async function handleCreateProperty(formData: FormData, imageUrls: string[]) {
+export async function handleCreateProperty(formData: FormData, images: GalleryImage[]) {
     try {
         console.log('[ACTION] handleCreateProperty iniciado');
 
@@ -74,8 +75,8 @@ export async function handleCreateProperty(formData: FormData, imageUrls: string
             meta_descripcion,
             canonical,
             etiquetas,
-            imagen_principal: imageUrls[0] || '',
-        }, imageUrls);
+            imagen_principal: images.find(img => img.es_principal)?.url || images[0]?.url || '',
+        }, images);
 
         if (result.error) {
             console.error('[ACTION] Error en createProperty:', result.error);
@@ -112,7 +113,7 @@ export async function handleDeleteProperty(id: string) {
     }
 }
 
-export async function handleUpdateProperty(id: string, formData: FormData, imageUrls: string[]) {
+export async function handleUpdateProperty(id: string, formData: FormData, images: GalleryImage[]) {
     try {
         console.log('[ACTION] handleUpdateProperty iniciado para ID:', id);
 
@@ -176,7 +177,7 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
             meta_descripcion,
             canonical,
             etiquetas,
-        }, imageUrls);
+        }, images);
 
         if (result.error) {
             console.error('[ACTION] Error en updateProperty:', result.error);
@@ -190,6 +191,34 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
     } catch (err: any) {
         console.error('[ACTION] Excepción en handleUpdateProperty:', err);
         return { error: err.message || 'Error inesperado al actualizar.' };
+    }
+}
+
+export async function updatePropertyGallery(propertyId: string, images: GalleryImage[]) {
+    try {
+        console.log('[ACTION] updatePropertyGallery iniciado para ID:', propertyId);
+
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            return { error: 'No autorizado.' };
+        }
+
+        const result = await syncPropertyGallery(propertyId, images);
+
+        if (result.success) {
+            revalidatePath(`/admin/propiedades`);
+            revalidatePath(`/propiedades`);
+            // Nota: No se recomienda revalidate del slug específico aquí si no lo tenemos fácil, 
+            // pero el cache global debería limpiarse.
+            return { success: true };
+        }
+
+        return { error: result.error };
+    } catch (err: any) {
+        console.error('[ACTION] Excepción en updatePropertyGallery:', err);
+        return { error: err.message || 'Error inesperado al actualizar la galería.' };
     }
 }
 
