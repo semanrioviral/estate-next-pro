@@ -49,3 +49,30 @@ export function createMiddlewareClient(request: any, response: any) {
         }
     )
 }
+
+export function createAdminClient() {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseServiceKey) {
+        const missing = [];
+        if (!supabaseUrl) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+        if (!supabaseServiceKey) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+
+        throw new Error(
+            `CRITICAL: Supabase credentials missing (${missing.join(", ")}). ` +
+            "Ensure these are set in your environment variables (Vercel or .env.local)."
+        );
+    }
+
+    return createServerClient(
+        supabaseUrl,
+        supabaseServiceKey,
+        {
+            cookies: {
+                getAll() { return [] },
+                setAll() { },
+            },
+        }
+    )
+}

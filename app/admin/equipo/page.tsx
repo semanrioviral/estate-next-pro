@@ -1,24 +1,46 @@
+import { createAdminClient } from '@/lib/supabase-server';
+import AgentList from '@/components/admin/AgentList';
+
 export const dynamic = 'force-dynamic';
 
-export default function AdminEquipo() {
-    return (
-        <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-900">Equipo de Agentes</h1>
-                <button className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                    + Invitar Agente
-                </button>
-            </div>
+export default async function AdminEquipo() {
+    const supabase = createAdminClient();
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm text-center">
-                    <div className="w-20 h-20 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center text-gray-400">
-                        <span className="text-2xl font-bold">?</span>
-                    </div>
-                    <h3 className="text-lg font-bold">Lista de Equipo</h3>
-                    <p className="text-gray-500 text-sm mt-2">Los agentes se mostrarán aquí una vez configurados en Supabase.</p>
-                </div>
-            </div>
-        </div>
-    )
+    // 1. Obtener todos los usuarios de Auth
+    const { data: { users }, error: authError } = await supabase.auth.admin.listUsers();
+
+    if (authError) {
+        console.error('Error fetching auth users:', authError);
+    }
+
+    // 2. Obtener todos los perfiles
+    const { data: profiles, error: profileError } = await supabase
+        .from('profiles')
+        .select('*');
+
+    if (profileError) {
+        console.error('Error fetching profiles:', profileError);
+    }
+
+    // 3. Mapear y combinar datos
+    const allAgents = (users || []).map(user => {
+        const profile = (profiles || []).find(p => p.id === user.id);
+        const fullName = profile?.full_name || user.user_metadata?.full_name || 'Sin nombre';
+
+        return {
+            id: user.id,
+            email: user.email || '',
+            full_name: fullName,
+            role: profile?.role || 'agente',
+            created_at: user.created_at,
+            invited_at: user.invited_at,
+            confirmed_at: user.email_confirmed_at,
+            is_pending: !user.email_confirmed_at && !!user.invited_at,
+            has_profile: !!profile
+        };
+    });
+
+    return (
+        <AgentList initialAgents={allAgents} />
+    );
 }

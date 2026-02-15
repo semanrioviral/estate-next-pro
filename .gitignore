@@ -42,3 +42,9 @@ next-env.d.ts
 
 .vercel
 .env*.local
+
+# data migration
+import_data.csv
+properties.json
+
+inspection_results.txt

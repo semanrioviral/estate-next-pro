@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Plus, Search, Building2, ExternalLink } from "lucide-react";
 import PropertyActions from "@/components/admin/PropertyActions";
+import BulkImporter from "@/components/admin/BulkImporter";
 
 export const dynamic = 'force-dynamic';
 
@@ -18,13 +19,19 @@ export default async function AdminPropiedades() {
                     </h1>
                     <p className="text-zinc-500 font-medium">Administra el inventario de propiedades de la plataforma.</p>
                 </div>
-                <Link
-                    href="/admin/propiedades/nuevo"
-                    className="bg-red-600 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:bg-red-500 hover:scale-105 active:scale-95 shadow-xl shadow-red-600/20 flex items-center gap-2"
-                >
-                    <Plus size={20} />
-                    Nuevo Inmueble
-                </Link>
+                <div className="flex gap-4">
+                    <Link
+                        href="/admin/propiedades/nuevo"
+                        className="bg-red-600 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:bg-red-500 hover:scale-105 active:scale-95 shadow-xl shadow-red-600/20 flex items-center gap-2"
+                    >
+                        <Plus size={20} />
+                        Nuevo Inmueble
+                    </Link>
+                </div>
+            </div>
+
+            <div className="mb-12">
+                <BulkImporter />
             </div>
 
             <div className="bg-white dark:bg-zinc-950 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm overflow-hidden">

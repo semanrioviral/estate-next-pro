@@ -1,21 +1,32 @@
-// lib/supabase/properties.ts
-
 import { createClient } from '../supabase-server';
+import { PROPERTY_SELECT_FIELDS } from './select-fields';
 
 export type Property = {
     id: string;
     titulo: string;
     descripcion: string;
+    descripcion_corta?: string;
+    direccion?: string;
     ciudad: string;
     barrio: string;
     precio: number;
-    tipo: 'casa' | 'apartamento' | 'lote';
+    negociable?: boolean;
+    estado?: string;
+    tipo: 'casa' | 'apartamento' | 'lote' | 'comercial' | 'proyecto';
     habitaciones: number;
     baños: number;
     area_m2: number;
+    medidas_lote?: string;
+    tipo_uso?: string;
+    servicios?: string[];
+    financiamiento?: string;
     imagen_principal: string;
     slug: string;
     destacado: boolean;
+    meta_titulo?: string;
+    meta_descripcion?: string;
+    canonical?: string;
+    etiquetas?: string[];
     created_at: string;
     updated_at: string;
     galeria: string[];
@@ -42,10 +53,7 @@ export async function getProperties(): Promise<Property[]> {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .order('destacado', { ascending: false })
             .order('created_at', { ascending: false });
 
@@ -66,10 +74,7 @@ export async function getPropertiesByCity(city: string): Promise<Property[]> {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .eq('ciudad', city)
             .order('destacado', { ascending: false })
             .order('created_at', { ascending: false });
@@ -91,10 +96,7 @@ export async function getPropertiesByTypeAndCity(tipo: string, city: string): Pr
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .eq('tipo', tipo)
             .eq('ciudad', city)
             .order('destacado', { ascending: false })
@@ -117,10 +119,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .eq('slug', slug)
             .single();
 
@@ -141,10 +140,7 @@ export async function getPropertyById(id: string): Promise<Property | null> {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .eq('id', id)
             .single();
 
@@ -165,10 +161,7 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('properties')
-            .select(`
-                *,
-                property_images (url)
-            `)
+            .select(PROPERTY_SELECT_FIELDS)
             .eq('destacado', true)
             .order('created_at', { ascending: false })
             .limit(limit);
@@ -182,10 +175,7 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
         if (!data || data.length === 0) {
             const { data: recentData, error: recentError } = await supabase
                 .from('properties')
-                .select(`
-                    *,
-                    property_images (url)
-                `)
+                .select(PROPERTY_SELECT_FIELDS)
                 .order('created_at', { ascending: false })
                 .limit(limit);
 
@@ -211,8 +201,6 @@ export async function createProperty(
     try {
         console.log('---------------------------------------------------------');
         console.log('[DB] INICIANDO CREACIÓN DE PROPIEDAD:', propertyData.titulo);
-        console.log('[DB] URLs de imágenes recibidas:', imageUrls.length);
-        console.log('[DB] Detalle URLs:', imageUrls);
 
         // 1. Insertar propiedad en tabla 'properties'
         const { data: property, error: propError } = await supabase
@@ -221,6 +209,8 @@ export async function createProperty(
                 {
                     ...propertyData,
                     imagen_principal: imageUrls[0] || '',
+                    servicios: propertyData.servicios || [],
+                    etiquetas: propertyData.etiquetas || [],
                 }
             ])
             .select()
@@ -324,6 +314,8 @@ export async function updateProperty(
         const updatePayload = {
             ...propertyData,
             imagen_principal: imageUrls[0] || '',
+            servicios: propertyData.servicios || [],
+            etiquetas: propertyData.etiquetas || [],
         };
 
         const { error: propError } = await supabase
