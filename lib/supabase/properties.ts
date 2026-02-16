@@ -60,6 +60,63 @@ function mapProperty(prop: any): Property {
     };
 }
 
+/**
+ * Función interna para adjuntar las imágenes de la tabla property_images
+ * a un array de propiedades de forma eficiente (2da consulta desacoplada).
+ */
+async function attachImagesToProperties(props: any[], supabase: any): Promise<Property[]> {
+    if (!props || props.length === 0) return [];
+
+    const propertyIds = props.map(p => p.id).filter(Boolean);
+    if (propertyIds.length === 0) {
+        return props.map(p => ({
+            ...p,
+            galeria: [],
+            image_metadata: []
+        })) as Property[];
+    }
+
+    // 1. Obtener imágenes filtrando por IDs de propiedad (SIN order en la query)
+    const { data: images, error } = await supabase
+        .from('property_images')
+        .select('id, property_id, url, orden, es_principal')
+        .in('property_id', propertyIds);
+
+    if (error) {
+        console.error('[DB] Error fetching images separately:', error.message);
+        return props.map(p => ({
+            ...p,
+            galeria: [],
+            image_metadata: []
+        })) as Property[];
+    }
+
+    // 2. Agrupar imágenes por property_id en memoria
+    const imagesByPropId: Record<string, any[]> = {};
+    (images || []).forEach((img: any) => {
+        if (!imagesByPropId[img.property_id]) {
+            imagesByPropId[img.property_id] = [];
+        }
+        imagesByPropId[img.property_id].push(img);
+    });
+
+    // 3. Reconstruir cada objeto Property con ordenamiento manual en memoria
+    return props.map(prop => {
+        const rawImages = (imagesByPropId[prop.id] || []).sort((a, b) => (a.orden || 0) - (b.orden || 0));
+
+        return {
+            ...prop,
+            galeria: rawImages.map(img => img.url),
+            image_metadata: rawImages.map(img => ({
+                id: img.id,
+                url: img.url,
+                orden: img.orden || 0,
+                es_principal: img.es_principal || false
+            }))
+        } as Property;
+    });
+}
+
 export async function getProperties(): Promise<Property[]> {
     try {
         const supabase = await createClient();
@@ -74,13 +131,15 @@ export async function getProperties(): Promise<Property[]> {
             return [];
         }
 
-        return (data || []).map(mapProperty) as Property[];
-    } catch (err) {
-        console.error('Critical exception in getProperties:', err);
+        // Sincronizar galería usando el helper con el mismo cliente
+        return await attachImagesToProperties(data || [], supabase);
+    } catch (err: any) {
+        console.error('Critical exception in getProperties:', err.message);
         return [];
     }
 }
 
+// 1. getPropertiesByCity: Retorna array
 export async function getPropertiesByCity(city: string): Promise<Property[]> {
     try {
         const supabase = await createClient();
@@ -96,9 +155,9 @@ export async function getPropertiesByCity(city: string): Promise<Property[]> {
             return [];
         }
 
-        return (data || []).map(mapProperty) as Property[];
-    } catch (err) {
-        console.error('Critical exception in getPropertiesByCity:', err);
+        return await attachImagesToProperties(data || [], supabase);
+    } catch (err: any) {
+        console.error('Critical exception in getPropertiesByCity:', err.message);
         return [];
     }
 }
@@ -126,6 +185,7 @@ export async function getPropertiesByTypeAndCity(tipo: string, city: string): Pr
     }
 }
 
+// 2. getPropertyBySlug: Retorna UN objeto (necesita manejo especial de array)
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {
     try {
         const supabase = await createClient();
@@ -140,13 +200,16 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
             return null;
         }
 
-        return mapProperty(data);
-    } catch (err) {
-        console.error('Critical exception in getPropertyBySlug:', err);
+        // attachImagesToProperties espera un array, así que envolvemos 'data'
+        const propsWithImages = await attachImagesToProperties([data], supabase);
+        return propsWithImages[0] || null;
+    } catch (err: any) {
+        console.error('Critical exception in getPropertyBySlug:', err.message);
         return null;
     }
 }
 
+// 3. getPropertyById: Retorna UN objeto
 export async function getPropertyById(id: string): Promise<Property | null> {
     try {
         const supabase = await createClient();
@@ -161,13 +224,15 @@ export async function getPropertyById(id: string): Promise<Property | null> {
             return null;
         }
 
-        return mapProperty(data);
-    } catch (err) {
-        console.error('Critical exception in getPropertyById:', err);
+        const propsWithImages = await attachImagesToProperties([data], supabase);
+        return propsWithImages[0] || null;
+    } catch (err: any) {
+        console.error('Critical exception in getPropertyById:', err.message);
         return null;
     }
 }
 
+// 4. getFeaturedProperties: Retorna array
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
     try {
         const supabase = await createClient();
@@ -183,22 +248,23 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
             return [];
         }
 
-        // If we don't have enough featured properties, get the most recent ones
-        if (!data || data.length === 0) {
+        // Lógica de fallback si no hay destacados
+        let finalData = data || [];
+        if (finalData.length === 0) {
             const { data: recentData, error: recentError } = await supabase
                 .from('properties')
                 .select(PROPERTY_SELECT_FIELDS)
                 .order('created_at', { ascending: false })
                 .limit(limit);
 
-            if (recentError) return [];
-
-            return (recentData || []).map(mapProperty);
+            if (!recentError && recentData) {
+                finalData = recentData;
+            }
         }
 
-        return (data || []).map(mapProperty);
-    } catch (err) {
-        console.error('Critical exception in getFeaturedProperties:', err);
+        return await attachImagesToProperties(finalData, supabase);
+    } catch (err: any) {
+        console.error('Critical exception in getFeaturedProperties:', err.message);
         return [];
     }
 }

@@ -25,6 +25,5 @@ export const PROPERTY_SELECT_FIELDS = `
     canonical,
     etiquetas,
     created_at,
-    updated_at,
-    property_images (id, url, orden, es_principal)
+    updated_at
 `;
