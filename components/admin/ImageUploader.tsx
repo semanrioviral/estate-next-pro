@@ -150,10 +150,18 @@ export default function ImageUploader({
     initialUrls = [],
     initialImages = [],
 }: ImageUploaderProps) {
+    const buildInitialId = (seed: string, index: number): string => {
+        const normalized = seed
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, '')
+            .slice(0, 16);
+        return `init-${index}-${normalized || 'img'}`;
+    };
+
     const [files, setFiles] = useState<UploadingFile[]>(() => {
         if (initialImages && initialImages.length > 0) {
             return initialImages.map((img, index) => ({
-                id: `init-${index}-${Math.random().toString(36).substring(7)}`,
+                id: buildInitialId(img.id || img.url, index),
                 file: null,
                 preview: img.url,
                 progress: 100,
@@ -164,7 +172,7 @@ export default function ImageUploader({
             }));
         }
         return initialUrls.map((url, index) => ({
-            id: `init-${index}-${Math.random().toString(36).substring(7)}`,
+            id: buildInitialId(url, index),
             file: null,
             preview: url,
             progress: 100,
@@ -199,7 +207,7 @@ export default function ImageUploader({
             }));
             onUploadComplete(galleryData);
         }
-    }, [files]);
+    }, [files, onUploadComplete]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(e.target.files || []);

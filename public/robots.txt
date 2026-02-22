@@ -1,4 +1,11 @@
 User-agent: *
 Allow: /
 
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+
+Disallow: /?utm_
+Disallow: /?fbclid=
+
 Sitemap: https://www.tucasalospatios.com/sitemap.xml

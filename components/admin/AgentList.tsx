@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { User, Mail, Calendar, Trash2, Shield, UserCheck, Search, Filter, Loader2, AlertCircle, RefreshCw } from "lucide-react";
+import { User, Mail, Trash2, Shield, UserCheck, Search, Loader2, AlertCircle, RefreshCw, Pencil, Save, X } from "lucide-react";
 import InviteAgentModal from "./InviteAgentModal";
 
 interface Agent {
     id: string;
     email: string;
     full_name: string;
+    avatar_url?: string;
     role: string;
     created_at: string;
     invited_at?: string;
@@ -20,13 +21,16 @@ interface AgentListProps {
     initialAgents: Agent[];
 }
 
-import { handleDeleteInvitation, handleSyncProfile } from "@/app/admin/actions";
+import { handleDeleteInvitation, handleSyncProfile, handleUpdateAgentProfile } from "@/app/admin/actions";
 
 export default function AgentList({ initialAgents }: AgentListProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
     const [agents, setAgents] = useState(initialAgents);
     const [isProcessing, setIsProcessing] = useState<string | null>(null);
+    const [editingAgentId, setEditingAgentId] = useState<string | null>(null);
+    const [editName, setEditName] = useState("");
+    const [editAvatarUrl, setEditAvatarUrl] = useState("");
 
     // Sincronizar perfiles faltantes (solo para el usuario actual o si un administrador lo ve)
     useEffect(() => {
@@ -67,6 +71,40 @@ export default function AgentList({ initialAgents }: AgentListProps) {
             }
         } catch (err) {
             alert("Error al eliminar la invitación.");
+        } finally {
+            setIsProcessing(null);
+        }
+    };
+
+    const startEditAgent = (agent: Agent) => {
+        setEditingAgentId(agent.id);
+        setEditName(agent.full_name || '');
+        setEditAvatarUrl(agent.avatar_url || '');
+    };
+
+    const cancelEditAgent = () => {
+        setEditingAgentId(null);
+        setEditName('');
+        setEditAvatarUrl('');
+    };
+
+    const saveEditAgent = async () => {
+        if (!editingAgentId) return;
+        setIsProcessing(editingAgentId);
+        try {
+            const result = await handleUpdateAgentProfile(editingAgentId, editName, editAvatarUrl);
+            if (result.error) {
+                alert(`Error: ${result.error}`);
+                return;
+            }
+            setAgents(prev => prev.map(agent =>
+                agent.id === editingAgentId
+                    ? { ...agent, full_name: editName.trim(), avatar_url: editAvatarUrl.trim() }
+                    : agent
+            ));
+            cancelEditAgent();
+        } catch {
+            alert('No se pudo actualizar el perfil del agente.');
         } finally {
             setIsProcessing(null);
         }
@@ -143,10 +181,16 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                                     <tr key={agent.id} className="hover:bg-gray-50/50 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
-                                                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border border-white shadow-sm ${agent.is_pending ? 'bg-amber-100 text-amber-600' : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500'
-                                                    }`}>
-                                                    {agent.full_name?.charAt(0) || <User size={18} />}
-                                                </div>
+                                                {agent.avatar_url ? (
+                                                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white shadow-sm bg-gray-100">
+                                                        <img src={agent.avatar_url} alt={agent.full_name} className="w-full h-full object-cover" />
+                                                    </div>
+                                                ) : (
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border border-white shadow-sm ${agent.is_pending ? 'bg-amber-100 text-amber-600' : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500'
+                                                        }`}>
+                                                        {agent.full_name?.charAt(0) || <User size={18} />}
+                                                    </div>
+                                                )}
                                                 <div>
                                                     <p className="font-bold text-gray-900 leading-tight">{agent.full_name}</p>
                                                     <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
@@ -183,17 +227,28 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                                             {new Date(agent.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 text-right">
-                                            {agent.is_pending ? (
-                                                <button
-                                                    onClick={() => handleDeleteAction(agent)}
-                                                    disabled={isProcessing === agent.id}
-                                                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all title='Eliminar invitación'"
-                                                >
-                                                    {isProcessing === agent.id ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
-                                                </button>
-                                            ) : (
-                                                <span className="text-[10px] text-gray-300 font-medium italic">Activo</span>
-                                            )}
+                                            <div className="inline-flex items-center gap-1">
+                                                {!agent.is_pending && (
+                                                    <button
+                                                        onClick={() => startEditAgent(agent)}
+                                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                                        title="Editar agente"
+                                                    >
+                                                        <Pencil size={16} />
+                                                    </button>
+                                                )}
+                                                {agent.is_pending ? (
+                                                    <button
+                                                        onClick={() => handleDeleteAction(agent)}
+                                                        disabled={isProcessing === agent.id}
+                                                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all title='Eliminar invitación'"
+                                                    >
+                                                        {isProcessing === agent.id ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
+                                                    </button>
+                                                ) : (
+                                                    <span className="text-[10px] text-gray-300 font-medium italic">Activo</span>
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
@@ -215,6 +270,56 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
+
+            {editingAgentId && (
+                <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+                    <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-100 shadow-2xl p-6 space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h3 className="text-xl font-bold text-gray-900">Editar perfil del agente</h3>
+                            <button onClick={cancelEditAgent} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+                                <X size={18} />
+                            </button>
+                        </div>
+
+                        <label className="block">
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Nombre público</span>
+                            <input
+                                value={editName}
+                                onChange={(e) => setEditName(e.target.value)}
+                                className="mt-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                placeholder="Nombre del asesor"
+                            />
+                        </label>
+
+                        <label className="block">
+                            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Foto (URL)</span>
+                            <input
+                                value={editAvatarUrl}
+                                onChange={(e) => setEditAvatarUrl(e.target.value)}
+                                className="mt-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                placeholder="https://..."
+                            />
+                        </label>
+
+                        <div className="flex justify-end gap-2 pt-2">
+                            <button
+                                onClick={cancelEditAgent}
+                                className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={saveEditAgent}
+                                disabled={isProcessing === editingAgentId}
+                                className="px-4 py-2.5 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-500 disabled:opacity-60 inline-flex items-center gap-2"
+                            >
+                                {isProcessing === editingAgentId ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

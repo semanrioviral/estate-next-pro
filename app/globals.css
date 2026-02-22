@@ -1,63 +1,113 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-poppins), ui-sans-serif, system-ui;
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular;
   
-  /* Premium Palette Tokens */
-  --color-primary-50: #eff6ff;
-  --color-primary-100: #dbeafe;
-  --color-primary-500: #3b82f6;
-  --color-primary-600: #2563eb;
-  --color-primary-700: #1d4ed8;
+  /* Tucasa LP - Corporate Geometry (Subtle & Professional) */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 22px;
+  --radius-3xl: 28px;
+  --radius-full: 9999px;
+
+  /* Corporate Red Scale - For Authority & Trust */
+  --color-brand-600: #e7000b;
+  --color-brand-700: #c10007;
+  --color-brand-800: #9f0712;
+  --color-brand: var(--color-brand-600);
   
-  --color-surface-50: #f8fafc;
-  --color-surface-100: #f1f5f9;
-  --color-surface-200: #e2e8f0;
+  --color-whatsapp: #25D366;
+  
+  /* Neutral Palette */
+  --color-text-primary: #0f172a; /* Slate 900 */
+  --color-text-secondary: #334155; /* Slate 700 */
+  --color-text-muted: #64748b; /* Slate 500 */
+  
+  --color-bg-main: #ffffff;
+  --color-bg-alt: #f8fafc; /* Slate 50 */
+  --color-border-clean: #e2e8f0; /* Slate 200 */
+
+  /* Readable Type Scale */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 1.875rem; /* 30px */
+  --text-4xl: 2.25rem; /* 36px */
+  --text-5xl: 3rem; /* 48px */
+  --text-6xl: 3.75rem; /* 60px */
+
+  /* Precise Shadows (No heavy shadows as requested) */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.02), 0 2px 4px -1px rgba(0,0,0,0.01);
 }
 
 :root {
-  --background: #fcfcfc;
-  --foreground: #09090b;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(228, 228, 231, 0.5);
+  --background: #ffffff;
+  --foreground: #222222;
 }
 
+/* Force Light Mode - Identity v3 is about clarity and trust */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #020203;
-    --foreground: #fafafa;
-    --glass-bg: rgba(9, 9, 11, 0.7);
-    --glass-border: rgba(39, 39, 42, 0.5);
+    --background: #ffffff;
+    --foreground: #222222;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom UI Utilities */
-@layer utilities {
-  .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px) saturate(180%);
-    border: 1px solid var(--glass-border);
-  }
-  
-  .card-hover {
-    @apply transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_20px_40px_-15px_rgba(59,130,246,0.15)];
-  }
+/* Clarity Hierarchy (Sober weights) */
+h1 { 
+  @apply text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-brand; 
+}
+h2 { 
+  @apply text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight leading-snug text-slate-900; 
+}
+h3 { 
+  @apply text-xl md:text-2xl font-bold tracking-tight text-slate-800; 
+}
 
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-500 dark:from-white dark:via-zinc-200 dark:to-zinc-500;
-  }
+@utility container-wide {
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+@utility btn-primary {
+  @apply h-11 md:h-12 px-6 bg-brand text-white rounded-md font-semibold text-sm md:text-base flex items-center justify-center gap-2 transition-all hover:bg-brand-700 active:scale-[0.98] shadow-sm;
+}
+
+@utility btn-secondary {
+  @apply h-11 md:h-12 px-6 bg-white border border-slate-200 text-slate-700 rounded-md font-semibold text-sm md:text-base flex items-center justify-center gap-2 transition-all hover:bg-slate-50 active:scale-[0.98];
+}
+
+@utility input-standard {
+  @apply w-full h-11 px-4 bg-white border border-slate-200 rounded-md text-sm focus:ring-1 focus:ring-brand focus:border-brand transition-all outline-none;
 }
 
 ::selection {
-  background: #3b82f6;
+  background: #e7000b;
   color: white;
+}
+
+/* Clean UI Overrides */
+* {
+  @apply border-border-clean;
+}
+
+/* Accessibility: No text too small for readability */
+small, .text-xs {
+  @apply text-[13px] font-medium leading-normal;
 }

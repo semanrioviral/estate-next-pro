@@ -4,11 +4,19 @@ import Image from "next/image";
 import { Plus, Search, Building2, ExternalLink } from "lucide-react";
 import PropertyActions from "@/components/admin/PropertyActions";
 import BulkImporter from "@/components/admin/BulkImporter";
+import Pagination from "@/components/design-system/Pagination";
 
 export const dynamic = 'force-dynamic';
 
-export default async function AdminPropiedades() {
-    const properties = await getProperties();
+export default async function AdminPropiedades({
+    searchParams,
+}: {
+    searchParams: Promise<{ page?: string }>;
+}) {
+    const { page: pageParam } = await searchParams;
+    const currentPage = Number(pageParam) || 1;
+    const itemsPerPage = 24;
+    const { properties, totalCount } = await getProperties(undefined, currentPage, itemsPerPage);
 
     return (
         <div className="space-y-8">
@@ -131,6 +139,16 @@ export default async function AdminPropiedades() {
                         </tbody>
                     </table>
                 </div>
+
+                {totalCount > itemsPerPage && (
+                    <div className="p-8 border-t border-zinc-50 dark:border-zinc-900 bg-zinc-50/30 dark:bg-zinc-900/10">
+                        <Pagination
+                            totalItems={totalCount}
+                            itemsPerPage={itemsPerPage}
+                            currentPage={currentPage}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     )

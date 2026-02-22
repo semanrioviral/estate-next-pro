@@ -28,6 +28,23 @@ export async function createClient() {
     )
 }
 
+/**
+ * Cliente estático para fetch de datos públicos (Property Listings)
+ * Evita el uso de cookies() para permitir que unstable_cache funcione correctamente.
+ */
+export function createPublicClient() {
+    return createServerClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        {
+            cookies: {
+                getAll() { return [] },
+                setAll() { },
+            },
+        }
+    )
+}
+
 export function createMiddlewareClient(request: any, response: any) {
     return createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,

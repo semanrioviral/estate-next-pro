@@ -31,6 +31,7 @@ export default async function AdminEquipo() {
             id: user.id,
             email: user.email || '',
             full_name: fullName,
+            avatar_url: user.user_metadata?.avatar_url || '',
             role: profile?.role || 'agente',
             created_at: user.created_at,
             invited_at: user.invited_at,

@@ -1,88 +1,115 @@
 import { MetadataRoute } from 'next';
-import { properties } from '@/data/properties';
+import { createClient } from '@/lib/supabase-server';
+import { slugify } from '@/lib/supabase/seo-helpers';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
-    const now = new Date();
+/**
+ * Fase 11: Generador de Sitemap Dinámico
+ * Incluye todas las rutas estáticas y dinámicas (propiedades, tags, barrios, ciudades).
+ */
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+    const siteUrl = 'https://www.tucasalospatios.com';
+    const supabase = await createClient();
 
-    // 1. Páginas Estáticas Principales y de Ciudad
-    const staticRoutes: MetadataRoute.Sitemap = [
-        {
-            url: siteUrl,
-            lastModified: now,
-            changeFrequency: 'daily',
-            priority: 1.0,
-        },
-        {
-            url: `${siteUrl}/propiedades`,
-            lastModified: now,
-            changeFrequency: 'daily',
-            priority: 0.9,
-        },
-        {
-            url: `${siteUrl}/cucuta`,
-            lastModified: now,
-            changeFrequency: 'weekly',
-            priority: 0.7,
-        },
-        {
-            url: `${siteUrl}/los-patios`,
-            lastModified: now,
-            changeFrequency: 'weekly',
-            priority: 0.7,
-        },
-        {
-            url: `${siteUrl}/villa-del-rosario`,
-            lastModified: now,
-            changeFrequency: 'weekly',
-            priority: 0.7,
-        },
-        {
-            url: `${siteUrl}/contacto`,
-            lastModified: now,
-            changeFrequency: 'monthly',
-            priority: 0.5,
-        },
-        {
-            url: `${siteUrl}/nosotros`,
-            lastModified: now,
-            changeFrequency: 'monthly',
-            priority: 0.5,
-        },
-        {
-            url: `${siteUrl}/terminos`,
-            lastModified: now,
-            changeFrequency: 'yearly',
-            priority: 0.3,
-        },
-        {
-            url: `${siteUrl}/privacidad`,
-            lastModified: now,
-            changeFrequency: 'yearly',
-            priority: 0.3,
-        },
-    ];
+    const { count: ventaCount } = await supabase
+        .from('properties')
+        .select('id', { count: 'exact', head: true })
+        .eq('operacion', 'venta');
 
-    // 2. Propiedades Individuales Dinámicas (SSG)
-    const propertyRoutes: MetadataRoute.Sitemap = properties.map((property) => ({
-        url: `${siteUrl}/propiedades/${property.slug}`,
-        lastModified: property.updatedAt ? new Date(property.updatedAt) : now,
-        changeFrequency: 'weekly',
-        priority: 0.8,
+    const { count: arriendoCount } = await supabase
+        .from('properties')
+        .select('id', { count: 'exact', head: true })
+        .eq('operacion', 'arriendo');
+
+    // 1. Rutas Estáticas
+    const routes = [
+        '',
+        '/venta',
+        '/nosotros',
+        '/contacto',
+        ...(ventaCount && ventaCount > 0 ? ['/propiedades'] : []),
+        ...(arriendoCount && arriendoCount >= 2 ? ['/arriendo'] : []),
+    ].map((route) => ({
+        url: `${siteUrl}${route}`,
+        lastModified: new Date().toISOString(),
+        changeFrequency: 'daily' as const,
+        priority: route === '' ? 1 : 0.8,
     }));
 
-    // 3. Rutas de Venta Jerárquicas (9 combinaciones)
-    const tipos = ['casas', 'apartamentos', 'lotes'];
-    const ciudades = ['cucuta', 'los-patios', 'villa-del-rosario'];
+    // 2. Propiedades (Individuales)
+    const { data: properties } = await supabase
+        .from('properties')
+        .select('slug, updated_at');
 
-    const salesRoutes: MetadataRoute.Sitemap = tipos.flatMap((tipo) =>
-        ciudades.map((ciudad) => ({
-            url: `${siteUrl}/venta/${tipo}/${ciudad}`,
-            lastModified: now,
-            changeFrequency: 'daily',
-            priority: 0.9,
-        }))
+    const propertyRoutes = (properties || []).map((p) => ({
+        url: `${siteUrl}/propiedades/${p.slug}`,
+        lastModified: p.updated_at || new Date().toISOString(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+    }));
+
+    // 3. Ciudades con listados reales de venta
+    const { data: cityData } = await supabase
+        .from('properties')
+        .select('ciudad')
+        .eq('operacion', 'venta');
+
+    const cityCounts = (cityData || []).reduce<Record<string, number>>((acc, item) => {
+        const city = item.ciudad?.trim();
+        if (!city) return acc;
+        acc[city] = (acc[city] || 0) + 1;
+        return acc;
+    }, {});
+
+    const uniqueCities = Object.keys(cityCounts).filter((city) => cityCounts[city] >= 2);
+
+    const cityRoutes = uniqueCities.map((city) => {
+        const citySlug = slugify(city);
+        return {
+            url: `${siteUrl}/venta/${citySlug}`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.6,
+        };
+    });
+
+    // 4. Blog (Artículos)
+    const { data: blogPosts } = await supabase
+        .from('blog_posts')
+        .select('slug, published_at')
+        .eq('status', 'published')
+        .lte('published_at', new Date().toISOString());
+
+    const blogPostsLive = await Promise.all(
+        (blogPosts || []).map(async (post) => {
+            try {
+                const response = await fetch(`${siteUrl}/blog/${post.slug}`, { cache: 'no-store' });
+                if (response.status !== 200) return null;
+
+                const html = await response.text();
+                if (/name="robots"\s+content="[^"]*noindex/i.test(html)) return null;
+
+                return post;
+            } catch {
+                return null;
+            }
+        })
     );
 
-    return [...staticRoutes, ...propertyRoutes, ...salesRoutes];
+    const blogRoutes = blogPostsLive
+        .filter((post): post is { slug: string; published_at: string | null } => Boolean(post))
+        .map((post) => ({
+            url: `${siteUrl}/blog/${post.slug}`,
+            lastModified: post.published_at || new Date().toISOString(),
+            changeFrequency: 'weekly' as const,
+            priority: 0.7,
+        }));
+
+    const allRoutes = [
+        ...routes,
+        ...propertyRoutes,
+        ...cityRoutes,
+        ...blogRoutes,
+    ];
+
+    return Array.from(new Map(allRoutes.map((route) => [route.url, route])).values());
 }

@@ -1,75 +1,76 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Property } from '@/lib/supabase/properties';
+import { optimizeCloudinaryUrl } from '@/lib/supabase/seo-helpers';
 
 interface PropertyCardProps {
     property: Property;
     priority?: boolean;
+    matchType?: 'barrio' | 'tipo' | 'precio' | 'ninguno';
 }
 
-export default function PropertyCard({ property, priority = false }: PropertyCardProps) {
+export default function PropertyCard({ property, priority = false, matchType }: PropertyCardProps) {
     const formattedPrice = new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         minimumFractionDigits: 0,
     }).format(property.precio);
 
+    const priceDisplay = property.operacion === 'arriendo' ? `${formattedPrice} / mes` : formattedPrice;
+
     return (
-        <div className="group relative bg-white dark:bg-zinc-900 rounded-[2.5rem] overflow-hidden border border-zinc-200 dark:border-zinc-800 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_30px_60px_-15px_rgba(59,130,246,0.1)] hover:-translate-y-2">
-            {/* Image Section */}
-            <div className="relative aspect-[4/3] overflow-hidden">
+        <div className="group bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden flex flex-col h-full shadow-sm">
+            {/* Image Section - Mandatory 4:3 */}
+            <div className="relative aspect-[4/3] overflow-hidden bg-zinc-100 dark:bg-zinc-800">
                 <Image
-                    src={property.imagen_principal}
+                    src={optimizeCloudinaryUrl(property.imagen_principal)}
                     alt={property.titulo}
                     fill
                     priority={priority}
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
 
-                {/* Badge Overlay */}
-                <div className="absolute top-5 left-5 z-10">
-                    <span className="glass px-4 py-1.5 rounded-full text-[10px] font-black text-zinc-900 dark:text-zinc-100 uppercase tracking-[0.2em]">
-                        {property.tipo}
+                {/* Status Badge - Top Right */}
+                <div className="absolute top-4 right-4 z-10">
+                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black text-white uppercase tracking-wider shadow-sm ${property.operacion === 'venta' ? 'bg-[#fb2c36]' : 'bg-green-600'}`}>
+                        {property.operacion}
                     </span>
                 </div>
 
-                {/* Price Overlay (Mobile focus) */}
-                <div className="absolute bottom-5 right-5 z-10 sm:hidden">
-                    <div className="glass px-4 py-2 rounded-2xl">
-                        <span className="text-lg font-black text-[#fb2c36] dark:text-[#fb2c36]">
-                            {formattedPrice}
+                {/* Match type badge */}
+                {matchType && matchType !== 'ninguno' && (
+                    <div className="absolute top-4 left-4 z-10">
+                        <span className="bg-zinc-900/90 px-3 py-1 rounded-lg text-[9px] font-black text-white uppercase tracking-wider border border-white/10">
+                            {matchType === 'barrio' && 'Mismo Barrio'}
+                            {matchType === 'tipo' && 'Mismo Tipo'}
+                            {matchType === 'precio' && 'Precio Similar'}
                         </span>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Content Section */}
-            <div className="p-8">
+            <div className="p-5 flex flex-col flex-grow">
                 <div className="mb-4">
-                    <h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-50 leading-tight mb-2 group-hover:text-[#fb2c36] transition-colors line-clamp-1">
+                    <span className="text-[26px] font-black text-[#fb2c36] block leading-tight mb-1">
+                        {priceDisplay}
+                    </span>
+                    <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-50 leading-snug line-clamp-2 mb-2">
                         {property.titulo}
                     </h3>
-                    <p className="text-zinc-500 dark:text-zinc-400 text-sm font-medium flex items-center gap-2">
-                        <svg className="w-4 h-4 text-[#fb2c36]" fill="currentColor" viewBox="0 0 20 20">
+                    <p className="text-zinc-600 dark:text-zinc-400 text-xs font-bold uppercase tracking-tight flex items-center gap-1">
+                        <svg className="w-3 h-3 text-zinc-400" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                         </svg>
-                        {property.barrio}, {property.ciudad}
+                        {property.barrio}
                     </p>
                 </div>
 
-                {/* Features Grid */}
-                {/* ... existing features section ... */}
-
-                <div className="flex items-center justify-between">
-                    <div className="hidden sm:flex flex-col">
-                        <span className="text-[10px] uppercase tracking-widest font-black text-zinc-400 mb-0.5">Precio</span>
-                        <span className="text-2xl font-black text-[#fb2c36] dark:text-[#fb2c36] tracking-tight">
-                            {formattedPrice}
-                        </span>
-                    </div>
+                <div className="mt-auto">
                     <Link
                         href={`/propiedades/${property.slug}`}
-                        className="w-full sm:w-auto inline-flex items-center justify-center bg-zinc-900 dark:bg-zinc-50 text-white dark:text-zinc-900 px-8 py-4 rounded-2xl text-sm font-black transition-all hover:bg-[#fb2c36] dark:hover:bg-[#fb2c36] hover:text-white dark:hover:text-white active:scale-95 shadow-xl shadow-zinc-200 dark:shadow-none"
+                        className="w-full inline-flex items-center justify-center bg-[#fb2c36] text-white py-4 rounded-xl text-sm font-black transition-all active:scale-95 shadow-sm"
                     >
                         Ver Detalles
                     </Link>

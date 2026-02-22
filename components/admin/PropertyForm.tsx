@@ -5,18 +5,22 @@ import { useRouter } from "next/navigation";
 import { updatePropertyGallery } from "@/app/admin/actions";
 import ImageUploader from "@/components/admin/ImageUploader";
 import { GalleryImage } from "@/lib/supabase/properties";
-import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield, Search, Tags, Globe } from "lucide-react";
+import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield, Tags, Globe } from "lucide-react";
 import Link from "next/link";
 import { Property } from "@/lib/supabase/properties";
+import MultiSelectCheckbox from "@/components/admin/MultiSelectCheckbox";
 
 interface PropertyFormProps {
     initialData?: Property;
     onSubmitAction: (formData: FormData, images: GalleryImage[]) => Promise<{ error?: string, success?: boolean, slug?: string }>;
     title: React.ReactNode;
     subtitle: string;
+    tags: { id: string; nombre: string }[];
+    amenidades: { id: string; nombre: string }[];
+    agents: { id: string; full_name: string }[];
 }
 
-export default function PropertyForm({ initialData, onSubmitAction, title, subtitle }: PropertyFormProps) {
+export default function PropertyForm({ initialData, onSubmitAction, title, subtitle, tags, amenidades, agents }: PropertyFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
 
@@ -41,6 +45,17 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [isSavingGallery, setIsSavingGallery] = useState(false);
+
+    // State for servicios and etiquetas
+    const [selectedServicios, setSelectedServicios] = useState<string[]>(
+        (initialData?.servicios || []).filter((service) => !/^parqueaderos?:\s*\d+/i.test(service))
+    );
+    const [selectedEtiquetas, setSelectedEtiquetas] = useState<string[]>(initialData?.etiquetas || []);
+    const [parkingSpots, setParkingSpots] = useState<number>(() => {
+        const parkingMeta = (initialData?.servicios || []).find((service) => /^parqueaderos?:\s*\d+/i.test(service));
+        const parkingMatch = parkingMeta?.match(/\d+/);
+        return parkingMatch ? Number(parkingMatch[0]) : 0;
+    });
 
     const handleSaveGallery = async () => {
         if (!initialData?.id) return;
@@ -75,6 +90,15 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
         setLoading(true);
         const formData = new FormData(e.currentTarget);
+
+        const sanitizedServicios = selectedServicios.filter((service) => !/^parqueaderos?:\s*\d+/i.test(service));
+        if (parkingSpots > 0) {
+            sanitizedServicios.push(`Parqueaderos: ${parkingSpots}`);
+        }
+
+        // Append selectedServicios and selectedEtiquetas as comma-separated strings
+        formData.set('servicios', sanitizedServicios.join(', '));
+        formData.set('etiquetas', selectedEtiquetas.join(', '));
 
         try {
             const result = await onSubmitAction(formData, images);
@@ -185,11 +209,25 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                                     defaultValue={initialData?.estado || 'Disponible'}
                                     className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold text-zinc-700 dark:text-zinc-200 cursor-pointer appearance-none transition-all shadow-inner"
                                 >
+                                    <option value="Disponible">Disponible</option>
                                     <option value="En Venta">En Venta</option>
                                     <option value="Vendido">Vendido</option>
                                     <option value="Destacado">Destacado</option>
                                     <option value="Reservado">Reservado</option>
                                     <option value="Remate">En Remate</option>
+                                </select>
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Tipo de Operación *</span>
+                                <select
+                                    name="operacion"
+                                    required
+                                    defaultValue={initialData?.operacion || 'venta'}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold text-zinc-700 dark:text-zinc-200 cursor-pointer appearance-none transition-all shadow-inner"
+                                >
+                                    <option value="venta">Venta</option>
+                                    <option value="arriendo">Arriendo</option>
                                 </select>
                             </label>
 
@@ -308,6 +346,16 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                                 <input name="baños" type="number" defaultValue={initialData?.baños || 0} className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner" />
                             </label>
                             <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Parqueaderos</span>
+                                <input
+                                    type="number"
+                                    min={0}
+                                    value={parkingSpots}
+                                    onChange={(e) => setParkingSpots(Math.max(0, Number(e.target.value) || 0))}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner"
+                                />
+                            </label>
+                            <label className="block">
                                 <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Área (m²)</span>
                                 <input name="area_m2" type="number" defaultValue={initialData?.area_m2 || 0} className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner" />
                             </label>
@@ -324,6 +372,41 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                                 defaultValue={initialData?.financiamiento}
                                 className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
                                 placeholder="Ej: Acepta Caja Honor / Crédito Hipotecario / Directo"
+                            />
+                        </label>
+
+                        <label className="block">
+                            <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Agente Responsable</span>
+                            <select
+                                name="agente_id"
+                                defaultValue={initialData?.agente_id || ''}
+                                className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold text-zinc-700 dark:text-zinc-200 appearance-none shadow-inner"
+                            >
+                                <option value="">Sin agente asignado</option>
+                                {agents.map((agent) => (
+                                    <option key={agent.id} value={agent.id}>{agent.full_name}</option>
+                                ))}
+                            </select>
+                            <p className="mt-2 text-[11px] text-zinc-500 font-medium">Al seleccionar un agente, el sistema completa automáticamente nombre y foto si existen en su perfil.</p>
+                        </label>
+
+                        <label className="block">
+                            <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Nombre público del asesor</span>
+                            <input
+                                name="agente_nombre_publico"
+                                defaultValue={initialData?.agente_nombre_publico || ''}
+                                placeholder="Ej: Laura Mendoza"
+                                className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
+                            />
+                        </label>
+
+                        <label className="md:col-span-2 block">
+                            <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Foto del asesor (URL)</span>
+                            <input
+                                name="agente_foto_url"
+                                defaultValue={initialData?.agente_foto_url || ''}
+                                placeholder="https://..."
+                                className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium shadow-inner"
                             />
                         </label>
                     </section>
@@ -367,26 +450,21 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         </div>
 
                         <div className="space-y-6">
-                            <label className="block">
-                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Servicios / Comodidades</span>
-                                <textarea
-                                    name="servicios"
-                                    defaultValue={initialData?.servicios?.join(', ')}
-                                    placeholder="Patio, Cocina Integral, Garaje..."
-                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium text-sm shadow-inner min-h-[100px]"
-                                />
-                                <p className="text-[10px] text-zinc-400 mt-2 font-bold uppercase tracking-widest pl-2">Separa con comas</p>
-                            </label>
+                            <MultiSelectCheckbox
+                                label="Servicios / Comodidades"
+                                options={amenidades}
+                                value={selectedServicios}
+                                onChange={setSelectedServicios}
+                                placeholder="Buscar amenidades..."
+                            />
 
-                            <label className="block">
-                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Etiquetas (Flags)</span>
-                                <input
-                                    name="etiquetas"
-                                    defaultValue={initialData?.etiquetas?.join(', ')}
-                                    placeholder="Inversión, Entrega Inmediata..."
-                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium text-sm shadow-inner"
-                                />
-                            </label>
+                            <MultiSelectCheckbox
+                                label="Etiquetas (Flags)"
+                                options={tags}
+                                value={selectedEtiquetas}
+                                onChange={setSelectedEtiquetas}
+                                placeholder="Buscar etiquetas..."
+                            />
 
                             <div className="pt-6 border-t border-zinc-50 dark:border-zinc-800/50">
                                 <label className="flex items-center gap-4 cursor-pointer group bg-zinc-50 dark:bg-zinc-950 p-4 rounded-2xl border border-transparent hover:border-red-200 transition-all">
