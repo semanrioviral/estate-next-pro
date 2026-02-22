@@ -34,7 +34,7 @@ const getFeedProperties = unstable_cache(
         const { data, error } = await supabase
             .from('properties')
             .select(FEED_SELECT_FIELDS)
-            .eq('estado', 'Disponible')
+            .not('estado', 'ilike', 'vendido')
             .order('created_at', { ascending: false });
 
         if (error) {
