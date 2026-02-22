@@ -61,6 +61,38 @@ function cdata(value: string): string {
     return `<![CDATA[${value.replaceAll(']]>', ']]]]><![CDATA[>')}]]>`;
 }
 
+function truncateTitle(value: string, maxLength = 65): string {
+    if (value.length <= maxLength) {
+        return value;
+    }
+    return `${value.slice(0, maxLength - 3)}...`;
+}
+
+function toPlainTextDescription(value: string, maxLength = 5000): string {
+    const withoutScriptAndStyle = value
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ');
+
+    const withoutHtml = withoutScriptAndStyle
+        .replace(/<br\s*\/?>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ');
+
+    const normalizedEntities = withoutHtml
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;|&apos;/gi, "'")
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>');
+
+    const withoutEmojis = normalizedEntities
+        .replace(/[\p{Extended_Pictographic}\p{Emoji_Presentation}\uFE0F]/gu, '')
+        .replace(/[\u{1F1E6}-\u{1F1FF}]/gu, '');
+
+    const cleaned = withoutEmojis.replace(/\s+/g, ' ').trim();
+    return cleaned.slice(0, maxLength);
+}
+
 function toAbsoluteUrl(url: string): string {
     if (url.startsWith('http://') || url.startsWith('https://')) {
         return url;
@@ -131,8 +163,10 @@ export async function GET(): Promise<NextResponse> {
         .map((property) => {
             const availability = mapAvailability(property.estado);
             const propertyType = mapPropertyType(property.tipo);
-            const title = property.titulo || 'Propiedad disponible';
-            const description = property.descripcion_corta || property.descripcion || title;
+            const rawTitle = property.titulo || 'Propiedad disponible';
+            const title = truncateTitle(rawTitle, 65);
+            const rawDescription = property.descripcion_corta || property.descripcion || rawTitle;
+            const description = toPlainTextDescription(rawDescription, 5000);
             const mainImage = toAbsoluteUrl(property.imagen_principal);
             const propertyLink = `${BASE_URL}/propiedades/${property.slug}`;
 
