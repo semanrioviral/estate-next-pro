@@ -2,7 +2,7 @@ import React from 'react';
 import { cache } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import {
     MapPin,
@@ -103,7 +103,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
 
     if (!property) {
-        notFound();
+        redirect('/venta');
     }
 
     const getAbsoluteUrl = (path: string) => path.startsWith('http') ? path : `${siteUrl}${path}`;

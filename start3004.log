@@ -1,0 +1,108 @@
+
+> estate-next-pro@0.1.0 start
+> next start --port 3004
+
+▲ Next.js 16.1.6
+- Local:         http://localhost:3004
+- Network:       http://192.168.1.5:3004
+
+✓ Starting...
+✓ Ready in 659ms
+[MAP] Property casa-en-venta-en-la-cordialidad-los-patios-cerca-al-supermercado-el-ciclon - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 160
+[MAP] Property casa-en-venta-en-conjunto-cerrado-valles-de-turin-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión' ] Raw Area: 72
+[MAP] Property casa-en-venta-en-urbanizacion-la-campina-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Negociable', 'Inversión' ] Raw Area: 90
+[MAP] Property casa-en-venta-conjunto-residencial-salento-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[MAP] Property casa-en-venta-en-conjunto-cerrado-siena-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[MAP] Property apartamento-en-venta-en-torres-de-villa-de-san-diego-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión' ] Raw Area: 45
+[MAP] Property casa-en-venta-en-la-cordialidad-los-patios-cerca-al-supermercado-el-ciclon - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 160
+[MAP] Property casa-en-venta-en-urbanizacion-monaco-villa-del-rosario - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 150
+[MAP] Property casa-en-venta-en-conjunto-cerrado-valles-de-turin-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión' ] Raw Area: 72
+[MAP] Property lote-en-venta-en-conjunto-campestre-colinas-de-corozal-los-patios-norte-de-santander - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 496
+[MAP] Property casa-en-venta-en-urbanizacion-la-campina-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Negociable', 'Inversión' ] Raw Area: 90
+[MAP] Property casa-en-venta-conjunto-residencial-salento-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[MAP] Property apartamento-en-venta-conjunto-terra-viva-bocono-cucuta - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 48
+[MAP] Property casa-en-venta-en-trigal-del-norte-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Entrega Inmediata', 'Negociable' ] Raw Area: 90
+[MAP] Property casa-en-venta-en-los-patios-barrio-12-de-octubre-4x31-metros - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 124
+[MAP] Property casa-en-venta-en-conjunto-cerrado-siena-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[MAP] Property lote-en-venta-en-savanna-club-cucuta-construye-tu-casa-de-lujo - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 378
+[DB] getPropertyBySlug success for: propiedad-comercial-en-venta-con-locales-y-apartamento-los-patios. ID: 008157fd-0b9d-4061-8aba-ba77479c9303. Status: Disponible. Area: 112. Etiquetas: []
+[MAP] Property propiedad-comercial-en-venta-con-locales-y-apartamento-los-patios - Mapped Etiquetas: [] Raw Area: 112
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-venta-barrio-pensilvania-los-patios-norte-santander. ID: ceddf6e2-bac3-4c01-88a5-77bcabcb4a4b. Status: Disponible. Area: 119. Etiquetas: []
+[MAP] Property casa-venta-barrio-pensilvania-los-patios-norte-santander - Mapped Etiquetas: [] Raw Area: 119
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: amplio-lote-campestre-en-villa-del-rosario-ideal-para-construir-en-hacienda-los-trapiches-2. ID: 6fa906b8-1035-40e7-9bc6-38561f45de88. Status: En Venta. Area: 1625. Etiquetas: []
+[MAP] Property amplio-lote-campestre-en-villa-del-rosario-ideal-para-construir-en-hacienda-los-trapiches-2 - Mapped Etiquetas: [] Raw Area: 1625
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-conjunto-cerrado-valles-de-turin-los-patios. ID: 5abdbf33-fe5a-437f-9fa5-fcef6e61fa19. Status: En Venta. Area: 72. Etiquetas: [ 'Caja Honor', 'Inversión' ]
+[MAP] Property casa-en-venta-en-conjunto-cerrado-valles-de-turin-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión' ] Raw Area: 72
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: lote-en-venta-en-conjunto-campestre-colinas-de-corozal-los-patios-norte-de-santander. ID: 1d43af88-b3d1-4f10-be21-c9ec5852252a. Status: En Venta. Area: 496. Etiquetas: [ 'Inversión', 'Negociable' ]
+[MAP] Property lote-en-venta-en-conjunto-campestre-colinas-de-corozal-los-patios-norte-de-santander - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 496
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-2-pisos-la-cordialidad-los-patios. ID: 9a99b027-ee42-4e98-8897-3548ca0003c6. Status: Disponible. Area: 115. Etiquetas: []
+[MAP] Property casa-2-pisos-la-cordialidad-los-patios - Mapped Etiquetas: [] Raw Area: 115
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: lote-en-venta-en-savanna-club-cucuta-construye-tu-casa-de-lujo. ID: 94332be9-044b-473e-a1f5-041727a6af66. Status: Disponible. Area: 378. Etiquetas: [ 'Inversión', 'Negociable' ]
+[MAP] Property lote-en-venta-en-savanna-club-cucuta-construye-tu-casa-de-lujo - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 378
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: apartamento-de-2-pisos-en-venta-en-el-barrio-daniel-jordan-los-patios. ID: 64afa1b6-dd24-4166-a979-f150dfb5dd0d. Status: Disponible. Area: 0. Etiquetas: []
+[MAP] Property apartamento-de-2-pisos-en-venta-en-el-barrio-daniel-jordan-los-patios - Mapped Etiquetas: [] Raw Area: 0
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-con-potencial-de-dos-apartamentos-barrio-daniel-jordan-los-patios. ID: f43d0bea-1aae-4b19-91f7-fc58f705eb71. Status: Disponible. Area: 0. Etiquetas: []
+[MAP] Property casa-en-venta-con-potencial-de-dos-apartamentos-barrio-daniel-jordan-los-patios - Mapped Etiquetas: [] Raw Area: 0
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-trigal-del-norte-los-patios. ID: 29f7643c-06af-4d5a-bb66-4eab6810340c. Status: En Venta. Area: 90. Etiquetas: [ 'Caja Honor', 'Entrega Inmediata', 'Negociable' ]
+[MAP] Property casa-en-venta-en-trigal-del-norte-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Entrega Inmediata', 'Negociable' ] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-los-patios-barrio-12-de-octubre-4x31-metros. ID: cc5d7406-6ac4-406e-84cd-c0285f1f917f. Status: En Venta. Area: 124. Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ]
+[MAP] Property casa-en-venta-en-los-patios-barrio-12-de-octubre-4x31-metros - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 124
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-conjunto-residencial-salento-los-patios. ID: cc58f600-bfb9-4af0-9f5b-89740f1b6455. Status: En Venta. Area: 90. Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ]
+[MAP] Property casa-en-venta-conjunto-residencial-salento-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: apartamento-en-venta-en-torres-de-villa-de-san-diego-los-patios. ID: e74b28b7-8e3c-47a2-992c-6ffc249f569c. Status: En Venta. Area: 45. Etiquetas: [ 'Caja Honor', 'Inversión' ]
+[MAP] Property apartamento-en-venta-en-torres-de-villa-de-san-diego-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión' ] Raw Area: 45
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-la-cordialidad-los-patios-cerca-al-supermercado-el-ciclon. ID: bcc3318d-2688-4a27-a345-d9ec820a3cdb. Status: En Venta. Area: 160. Etiquetas: [ 'Inversión', 'Negociable' ]
+[MAP] Property casa-en-venta-en-la-cordialidad-los-patios-cerca-al-supermercado-el-ciclon - Mapped Etiquetas: [ 'Inversión', 'Negociable' ] Raw Area: 160
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: amplia-casa-en-venta-barrio-11-de-noviembre-los-patios. ID: 9448f16f-9cc0-45b4-b752-44f347fcd384. Status: Disponible. Area: 320. Etiquetas: []
+[MAP] Property amplia-casa-en-venta-barrio-11-de-noviembre-los-patios - Mapped Etiquetas: [] Raw Area: 320
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: venta-casa-la-estancia-3-los-patios. ID: 9dfb97ef-e382-402f-9493-7b6549b773f2. Status: Disponible. Area: 88. Etiquetas: []
+[MAP] Property venta-casa-la-estancia-3-los-patios - Mapped Etiquetas: [] Raw Area: 88
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-economica-pisarreal-los-patios. ID: 139df3e9-377a-41c5-a055-f834919f8e22. Status: Disponible. Area: 45. Etiquetas: []
+[MAP] Property casa-economica-pisarreal-los-patios - Mapped Etiquetas: [] Raw Area: 45
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-campestre-venta-la-cordialidad-los-patios. ID: eb150cf8-a915-46a3-a13a-018d08deb6a3. Status: Disponible. Area: 180. Etiquetas: []
+[MAP] Property casa-campestre-venta-la-cordialidad-los-patios - Mapped Etiquetas: [] Raw Area: 180
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-venta-tierra-linda-los-patios. ID: 3adb88bf-b84e-4207-8f23-009d2e9f0fbe. Status: Disponible. Area: 90. Etiquetas: []
+[MAP] Property casa-venta-tierra-linda-los-patios - Mapped Etiquetas: [] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-conjunto-cerrado-siena-los-patios. ID: 7067d2bb-bf11-458d-b003-ec8b8cfc6da5. Status: En Venta. Area: 90. Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ]
+[MAP] Property casa-en-venta-en-conjunto-cerrado-siena-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: apartamento-en-venta-conjunto-terra-viva-bocono-cucuta. ID: e32fc682-fb41-4408-b209-0b7b10994d29. Status: En Venta. Area: 48. Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ]
+[MAP] Property apartamento-en-venta-conjunto-terra-viva-bocono-cucuta - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 48
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-urbanizacion-la-campina-los-patios. ID: f6644fb8-e7f4-4cb9-8ade-0290912b9c83. Status: En Venta. Area: 90. Etiquetas: [ 'Caja Honor', 'Negociable', 'Inversión' ]
+[MAP] Property casa-en-venta-en-urbanizacion-la-campina-los-patios - Mapped Etiquetas: [ 'Caja Honor', 'Negociable', 'Inversión' ] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-en-urbanizacion-monaco-villa-del-rosario. ID: 8b538941-9d7d-4f3b-b293-f76fe9f97a6c. Status: En Venta. Area: 150. Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ]
+[MAP] Property casa-en-venta-en-urbanizacion-monaco-villa-del-rosario - Mapped Etiquetas: [ 'Caja Honor', 'Inversión', 'Negociable' ] Raw Area: 150
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-amplia-en-venta-en-el-barrio-montebello-1. ID: 3158aab0-d22c-4973-abf7-6927852081b1. Status: Disponible. Area: 90. Etiquetas: []
+[MAP] Property casa-amplia-en-venta-en-el-barrio-montebello-1 - Mapped Etiquetas: [] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-en-venta-llanitos-los-patios. ID: 75f89ba3-38a0-421f-8147-32ad8cd6b7eb. Status: Disponible. Area: 90. Etiquetas: []
+[MAP] Property casa-en-venta-llanitos-los-patios - Mapped Etiquetas: [] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: proyecto-de-vivienda-casa-nueva-2-habitaciones-en-los-patios. ID: 706f1ca4-fdeb-44d8-b00a-dd550c4f45e3. Status: Disponible. Area: 90. Etiquetas: []
+[MAP] Property proyecto-de-vivienda-casa-nueva-2-habitaciones-en-los-patios - Mapped Etiquetas: [] Raw Area: 90
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
+[DB] getPropertyBySlug success for: casa-dos-pisos-la-campina-los-patios. ID: c615ba4e-8b4f-4ca3-aa9e-0d358876429c. Status: Disponible. Area: 115. Etiquetas: []
+[MAP] Property casa-dos-pisos-la-campina-los-patios - Mapped Etiquetas: [] Raw Area: 115
+[ANALYTICS] Error recording view (maybe table not ready): Could not find the table 'public.property_views' in the schema cache
