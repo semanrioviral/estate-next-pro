@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Mail, Phone, MapPin, Instagram, Facebook, MessageCircle, ArrowRight } from 'lucide-react';
-import { openWhatsapp } from '@/lib/trackWhatsapp';
+import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
 
 export default function FooterV3() {
     const currentYear = new Date().getFullYear();
@@ -86,14 +86,13 @@ export default function FooterV3() {
                         © {currentYear} Inmobiliaria Tucasa Los Patios.
                     </p>
 
-                    <button
-                        type="button"
-                        onClick={() => openWhatsapp(`https://wa.me/${whatsappNumber}`)}
+                    <TrackedWhatsappButton
+                        url={`https://wa.me/${whatsappNumber}`}
                         className="bg-brand text-white px-10 h-14 rounded-[1.2rem] flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:bg-brand-muted transition-all shadow-xl shadow-brand/20 active:scale-95"
                     >
                         <MessageCircle className="w-5 h-5 fill-current" />
                         Soporte Inmediato
-                    </button>
+                    </TrackedWhatsappButton>
                 </div>
             </div>
         </footer>
