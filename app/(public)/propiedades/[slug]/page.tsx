@@ -30,6 +30,7 @@ import RecentlyViewed from '@/components/RecentlyViewed';
 import ExploreAlso from '@/components/ExploreAlso';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 import RetentionModal from '@/components/RetentionModal';
+import MetaPixelViewContent from '@/components/tracking/MetaPixelViewContent';
 
 function slugify(text: string) {
     return text
@@ -246,6 +247,12 @@ Referencia: ${propertyUrl}
             />
 
             <PropertyViewTracker propertyId={property.id} />
+            <MetaPixelViewContent
+                contentIds={[property.id]}
+                contentType="product"
+                value={property.precio}
+                currency="COP"
+            />
 
             {/* Breadcrumb - Institutional Style */}
             <div className="bg-gray-50 border-b border-gray-100 py-3 hidden md:block">
