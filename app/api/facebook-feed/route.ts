@@ -70,8 +70,20 @@ function toAbsoluteUrl(url: string): string {
     return `${BASE_URL}${normalized}`;
 }
 
-function mapAvailability(operacion: string | null | undefined): 'for_sale' | 'for_rent' {
-    return operacion === 'arriendo' ? 'for_rent' : 'for_sale';
+function mapAvailability(estado: string | null | undefined): 'in stock' | 'out of stock' {
+    const normalized = (estado || '').trim().toLowerCase();
+
+    switch (normalized) {
+        case 'reservado':
+        case 'vendido':
+            return 'out of stock';
+        case 'disponible':
+        case 'en venta':
+        case 'destacado':
+        case 'en remate':
+        default:
+            return 'in stock';
+    }
 }
 
 function mapPropertyType(tipo: string | null | undefined): string {
@@ -117,7 +129,7 @@ export async function GET(): Promise<NextResponse> {
     const items = properties
         .filter((property) => Boolean(property.imagen_principal))
         .map((property) => {
-            const availability = mapAvailability(property.operacion);
+            const availability = mapAvailability(property.estado);
             const propertyType = mapPropertyType(property.tipo);
             const title = property.titulo || 'Propiedad disponible';
             const description = property.descripcion_corta || property.descripcion || title;
