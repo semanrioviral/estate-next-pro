@@ -49,7 +49,10 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
             return { error: 'Título y precio son requeridos.' };
         }
 
-        const slug = titulo.toLowerCase()
+        const slugInput = (formData.get('slug') as string) || '';
+        const slugBase = slugInput.trim() || titulo;
+
+        const slug = slugBase.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^a-z0-9]/g, '-')
             .replace(/-+/g, '-')
@@ -185,7 +188,10 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
             return { error: 'Título y precio son requeridos.' };
         }
 
-        const slug = titulo.toLowerCase()
+        const slugInput = (formData.get('slug') as string) || '';
+        const slugBase = slugInput.trim() || titulo;
+
+        const slug = slugBase.toLowerCase()
             .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
             .replace(/[^a-z0-9]/g, '-')
             .replace(/-+/g, '-')

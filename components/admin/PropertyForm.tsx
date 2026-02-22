@@ -490,6 +490,15 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
                         <div className="space-y-6">
                             <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Slug Manual</span>
+                                <input
+                                    name="slug"
+                                    defaultValue={initialData?.slug}
+                                    placeholder="ej: casa-campestre-los-patios"
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium text-sm shadow-inner"
+                                />
+                            </label>
+                            <label className="block">
                                 <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Meta Título</span>
                                 <input
                                     name="meta_titulo"
