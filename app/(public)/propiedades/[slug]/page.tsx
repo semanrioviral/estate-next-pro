@@ -31,6 +31,7 @@ import ExploreAlso from '@/components/ExploreAlso';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 import RetentionModal from '@/components/RetentionModal';
 import MetaPixelViewContent from '@/components/tracking/MetaPixelViewContent';
+import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
 
 function slugify(text: string) {
     return text
@@ -532,14 +533,13 @@ Referencia: ${propertyUrl}
 
                                     {/* CTAs - WhatsApp Priority */}
                                     <div className="space-y-3 pt-2">
-                                        <Link
-                                            href={whatsappUrl}
-                                            target="_blank"
+                                        <TrackedWhatsappButton
+                                            url={whatsappUrl}
                                             className="w-full bg-[#25D366] text-white h-14 rounded-lg font-black text-base hover:bg-[#1ebe5d] transition-colors active:scale-95 flex items-center justify-center gap-2 uppercase tracking-wider"
                                         >
                                             <MessageCircle className="h-5 w-5 fill-current" />
                                             WhatsApp
-                                        </Link>
+                                        </TrackedWhatsappButton>
 
                                         <Link
                                             href={callUrl}
