@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, MessageCircle, Phone, ChevronRight, User } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { openWhatsapp } from '@/lib/trackWhatsapp';
 
 const NAV_LINKS = [
     { label: "Venta", href: "/venta" },
@@ -135,13 +136,14 @@ export default function NavbarV3() {
 
                         <div className="mt-auto pt-12 space-y-4">
                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Canales de Atención</p>
-                            <a
-                                href={`https://wa.me/${whatsappNumber}`}
+                            <button
+                                type="button"
+                                onClick={() => openWhatsapp(`https://wa.me/${whatsappNumber}`)}
                                 className="bg-whatsapp text-white w-full h-14 rounded-full flex items-center justify-center gap-3 text-lg font-bold shadow-sm active:scale-95 transition-all"
                             >
                                 <MessageCircle className="w-5 h-5 fill-current" />
                                 WhatsApp Directo
-                            </a>
+                            </button>
                             <a
                                 href={`tel:+${whatsappNumber}`}
                                 className="bg-slate-50 text-slate-900 w-full h-14 rounded-full flex items-center justify-center gap-3 text-lg font-bold border border-slate-200"

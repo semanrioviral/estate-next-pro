@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { MapPin, Bed, Bath, Square, ChevronRight, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
+import { openWhatsapp } from '@/lib/trackWhatsapp';
 
 interface Property {
     id: string;
@@ -136,15 +137,14 @@ export default function PropertyCardV3({ property, priority = false }: { propert
 
                     {/* Secondary - Professional WhatsApp */}
                     <div className="relative z-30">
-                        <a
-                            href={`https://wa.me/573214567890?text=Hola, me interesa la propiedad: ${optimizedTitle}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <button
+                            type="button"
+                            onClick={() => openWhatsapp(`https://wa.me/573214567890?text=Hola, me interesa la propiedad: ${optimizedTitle}`)}
                             className="w-full h-9 bg-white hover:bg-[#25D366]/5 text-[#128C7E] text-[11px] font-extrabold uppercase rounded-[4px] border border-[#25D366] flex items-center justify-center gap-2 transition-all tracking-wider"
                         >
                             <MessageCircle className="w-4.5 h-4.5 fill-current text-[#25D366]" />
                             WhatsApp
-                        </a>
+                        </button>
                     </div>
                 </div>
             </div>
