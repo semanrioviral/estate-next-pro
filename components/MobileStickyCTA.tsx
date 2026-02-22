@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { MessageCircle, Phone } from 'lucide-react';
+import { openWhatsapp } from '@/lib/trackWhatsapp';
 
 interface MobileStickyCTAProps {
     whatsappUrl: string;
@@ -20,15 +21,14 @@ export default function MobileStickyCTA({ whatsappUrl, callUrl, price }: MobileS
                                 <p className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Precio</p>
                                 <p className="text-[1.05rem] font-black text-zinc-900 tracking-tight leading-none truncate mt-1">{price}</p>
                             </div>
-                            <a
-                                href={whatsappUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                onClick={() => openWhatsapp(whatsappUrl)}
+                                type="button"
                                 aria-label="Contactar por WhatsApp"
                                 className="h-11 w-11 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white inline-flex items-center justify-center transition-colors active:scale-95 shadow-sm"
                             >
                                 <MessageCircle className="w-5 h-5 fill-current" />
-                            </a>
+                            </button>
                             <a
                                 href={callUrl}
                                 aria-label="Llamar ahora"
