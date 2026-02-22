@@ -1,7 +1,6 @@
 import 'server-only';
 
 import { unstable_cache } from 'next/cache';
-import { NextResponse } from 'next/server';
 
 import { attachImagesToProperties, type Property } from '@/lib/supabase/properties';
 import { createPublicClient } from '@/lib/supabase-server';
@@ -155,7 +154,7 @@ function optionalTag(name: string, value: string | number | null | undefined): s
     return tag(name, String(value));
 }
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(): Promise<Response> {
     const properties = await getFeedProperties();
 
     const items = properties
@@ -217,7 +216,7 @@ export async function GET(): Promise<NextResponse> {
         '</rss>',
     ].join('');
 
-    return new NextResponse(xml, {
+    return new Response(xml, {
         headers: {
             'Content-Type': 'application/xml; charset=utf-8',
         },
