@@ -946,151 +946,163 @@ export async function getPropertiesByBarrioSlug(slug: string, orden?: string, pa
 /**
  * Obtiene todas las propiedades filtradas por tipo de operación (venta/arriendo)
  */
-export const getPropertiesByOperacion = unstable_cache(
-    async (operacion: string, habitaciones?: number, orden?: string, page: number = 1): Promise<PaginatedProperties> => {
-        try {
-            const supabase = createPublicClient();
-            const pageSize = 12;
-            const from = (page - 1) * pageSize;
-            const to = from + pageSize - 1;
+export const getPropertiesByOperacion = (
+    operacion: string,
+    habitaciones?: number,
+    orden?: string,
+    page: number = 1
+): Promise<PaginatedProperties> => {
+    const key = `props-operacion-${operacion}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
+    return unstable_cache(
+        async (op: string, hab?: number, ord?: string, pg: number = 1): Promise<PaginatedProperties> => {
+            // inner function — params come from outer closure via cache key
+            try {
+                const supabase = createPublicClient();
+                const pageSize = 12;
+                const from = (page - 1) * pageSize;
+                const to = from + pageSize - 1;
 
-            let query = supabase
-                .from('properties')
-                .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                .eq('operacion', operacion);
-
-            query = applyOrder(query, orden);
-            query = query.range(from, to);
-
-            const { data: properties, error, count } = await query;
-
-            if (error) {
-                console.error('[DB] Error fetching properties by operacion:', error.message);
-                return { properties: [], totalCount: 0 };
-            }
-
-            // El filtrado manual de habitaciones se mantiene pero idealmente debería ser parte de la query
-            // para que la paginación de Supabase sea correcta. 
-            // SIN EMBARGO, para mantener la lógica actual de "filtrado en memoria" (que afecta al count):
-            // Si filtramos en memoria, el count de Supabase será incorrecto para el set filtrado.
-            // Para ser 100% correcto, el filtro de habitaciones debería estar en la query de Supabase.
-
-            // Re-evaluando: El código original filtraba en memoria.
-            // Para soporte correcto de paginación, MOVERÉ el filtro a la query.
-            if (habitaciones) {
-                // Re-ejecutar query con filtro si es necesario, pero mejor modificarla desde el inicio
-                // Volviendo a definir la query con el filtro de habitaciones
-                let baseQuery = supabase
+                let query = supabase
                     .from('properties')
                     .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                    .eq('operacion', operacion)
-                    .gte('habitaciones', habitaciones);
+                    .eq('operacion', operacion);
 
-                baseQuery = applyOrder(baseQuery, orden);
-                const { data: p2, error: e2, count: c2 } = await baseQuery.range(from, to);
-                if (e2) return { properties: [], totalCount: 0 };
+                query = applyOrder(query, orden);
+                query = query.range(from, to);
+
+                const { data: properties, error, count } = await query;
+
+                if (error) {
+                    console.error('[DB] Error fetching properties by operacion:', error.message);
+                    return { properties: [], totalCount: 0 };
+                }
+
+                // El filtrado manual de habitaciones se mantiene pero idealmente debería ser parte de la query
+                // para que la paginación de Supabase sea correcta. 
+                // SIN EMBARGO, para mantener la lógica actual de "filtrado en memoria" (que afecta al count):
+                // Si filtramos en memoria, el count de Supabase será incorrecto para el set filtrado.
+                // Para ser 100% correcto, el filtro de habitaciones debería estar en la query de Supabase.
+
+                // Re-evaluando: El código original filtraba en memoria.
+                // Para soporte correcto de paginación, MOVERÉ el filtro a la query.
+                if (habitaciones) {
+                    // Re-ejecutar query con filtro si es necesario, pero mejor modificarla desde el inicio
+                    // Volviendo a definir la query con el filtro de habitaciones
+                    let baseQuery = supabase
+                        .from('properties')
+                        .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
+                        .eq('operacion', operacion)
+                        .gte('habitaciones', habitaciones);
+
+                    baseQuery = applyOrder(baseQuery, orden);
+                    const { data: p2, error: e2, count: c2 } = await baseQuery.range(from, to);
+                    if (e2) return { properties: [], totalCount: 0 };
+                    return {
+                        properties: await attachImagesToProperties(p2 || [], supabase),
+                        totalCount: c2 || 0
+                    };
+                }
+
                 return {
-                    properties: await attachImagesToProperties(p2 || [], supabase),
-                    totalCount: c2 || 0
+                    properties: await attachImagesToProperties(properties || [], supabase),
+                    totalCount: count || 0
                 };
+            } catch (err: any) {
+                console.error('[DB] Critical exception in getPropertiesByOperacion:', err.message);
+                return { properties: [], totalCount: 0 };
             }
-
-            return {
-                properties: await attachImagesToProperties(properties || [], supabase),
-                totalCount: count || 0
-            };
-        } catch (err: any) {
-            console.error('[DB] Critical exception in getPropertiesByOperacion:', err.message);
-            return { properties: [], totalCount: 0 };
-        }
-    },
-    ['properties-by-operacion-v6'], // Cache bust por ajuste de campos select
-    { revalidate: 3600, tags: ['properties'] }
-);
+        },
+        [key],
+        { revalidate: 3600, tags: ['properties'] }
+    )(operacion, habitaciones, orden, page);
+};
 
 /**
  * Obtiene propiedades filtradas por operación y ciudad
  * @param operacion - Tipo de operación (venta/arriendo)
  * @param ciudadSlug - Slug de la ciudad (se comparará con ciudad normalizada)
  */
-export const getPropertiesByOperacionAndCiudad = unstable_cache(
-    async (
-        operacion: string,
-        slug: string,
-        barrioSlug?: string,
-        habitaciones?: number,
-        orden?: string,
-        page: number = 1
-    ): Promise<PaginatedProperties | null> => {
-        try {
-            const validation = isValidFilter(slug);
-            if (!validation.isValid) {
-                return null;
-            }
+export const getPropertiesByOperacionAndCiudad = (
+    operacion: string,
+    slug: string,
+    barrioSlug?: string,
+    habitaciones?: number,
+    orden?: string,
+    page: number = 1
+): Promise<PaginatedProperties | null> => {
+    const key = `props-op-ciudad-${operacion}-${slug}-b${barrioSlug ?? 'none'}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
+    return unstable_cache(
+        async (op: string, sl: string, bsl?: string, hab?: number, ord?: string, pg: number = 1): Promise<PaginatedProperties | null> => {
+            try {
+                const validation = isValidFilter(sl);
+                if (!validation.isValid) {
+                    return null;
+                }
 
-            const supabase = createPublicClient();
-            const pageSize = 12;
-            const from = (page - 1) * pageSize;
-            const to = from + pageSize - 1;
+                const supabase = createPublicClient();
+                const pageSize = 12;
+                const from = (pg - 1) * pageSize;
+                const to = from + pageSize - 1;
 
-            let query = supabase
-                .from('properties')
-                .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                .eq('operacion', operacion);
+                let query = supabase
+                    .from('properties')
+                    .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
+                    .eq('operacion', op);
 
-            // Mover filtros a la query para que la paginación sea correcta
-            if (validation.type === 'ciudad') {
-                query = query.eq('ciudad', validation.dbName);
-            } else if (validation.type === 'tipo') {
-                // Usar normalized (ej: 'casa') para la DB, no dbName (ej: 'Casa') que es para UI
-                query = query.eq('tipo', validation.normalized);
-            }
+                // Mover filtros a la query para que la paginación sea correcta
+                if (validation.type === 'ciudad') {
+                    query = query.eq('ciudad', validation.dbName);
+                } else if (validation.type === 'tipo') {
+                    // Usar normalized (ej: 'casa') para la DB, no dbName (ej: 'Casa') que es para UI
+                    query = query.eq('tipo', validation.normalized);
+                }
 
-            if (habitaciones) {
-                query = query.gte('habitaciones', habitaciones);
-            }
+                if (hab) {
+                    query = query.gte('habitaciones', hab);
+                }
 
-            if (barrioSlug) {
-                // Resolver el ID del barrio desde el slug
-                const { data: barrioData, error: barrioError } = await supabase
-                    .from('barrios')
-                    .select('id')
-                    .eq('slug', barrioSlug)
-                    .single();
+                if (bsl) {
+                    // Resolver el ID del barrio desde el slug
+                    const { data: barrioData, error: barrioError } = await supabase
+                        .from('barrios')
+                        .select('id')
+                        .eq('slug', bsl)
+                        .single();
 
-                if (barrioError || !barrioData) {
-                    console.warn(`[DB] Barrio slug '${barrioSlug}' not found.`);
-                    // Si el barrio no existe, no devolvemos nada para evitar confusión
+                    if (barrioError || !barrioData) {
+                        console.warn(`[DB] Barrio slug '${bsl}' not found.`);
+                        // Si el barrio no existe, no devolvemos nada para evitar confusión
+                        return { properties: [], totalCount: 0 };
+                    }
+
+                    // Filtrar por ID de barrio
+                    query = query.eq('barrio_id', barrioData.id);
+                }
+
+                query = applyOrder(query, ord);
+                query = query.range(from, to);
+
+                const { data: properties, error, count } = await query;
+
+                if (error) {
+                    console.error('[DB] Error fetching properties by operacion and slug:', error.message);
                     return { properties: [], totalCount: 0 };
                 }
 
-                // Filtrar por ID de barrio
-                query = query.eq('barrio_id', barrioData.id);
-            }
-
-            query = applyOrder(query, orden);
-            query = query.range(from, to);
-
-            const { data: properties, error, count } = await query;
-
-            if (error) {
-                console.error('[DB] Error fetching properties by operacion and slug:', error.message);
+                const attached = await attachImagesToProperties(properties || [], supabase);
+                return {
+                    properties: attached,
+                    totalCount: count || 0
+                };
+            } catch (err: any) {
+                console.error('[DB] Critical exception in getPropertiesByOperacionAndCiudad:', err.message);
                 return { properties: [], totalCount: 0 };
             }
-
-            const attached = await attachImagesToProperties(properties || [], supabase);
-            return {
-                properties: attached,
-                totalCount: count || 0
-            };
-        } catch (err: any) {
-            console.error('[DB] Critical exception in getPropertiesByOperacionAndCiudad:', err.message);
-            return { properties: [], totalCount: 0 };
-        }
-    },
-    ['properties-by-operacion-ciudad-v7'],
-    { revalidate: 3600, tags: ['properties'] }
-);
+        },
+        [key],
+        { revalidate: 3600, tags: ['properties'] }
+    )(operacion, slug, barrioSlug, habitaciones, orden, page);
+};
 
 /**
  * Obtiene propiedades filtradas por operación, ciudad y tipo de inmueble
@@ -1098,76 +1110,79 @@ export const getPropertiesByOperacionAndCiudad = unstable_cache(
  * @param ciudadSlug - Slug de la ciudad
  * @param tipoSlug - Slug del tipo de inmueble
  */
-export const getPropertiesByOperacionCiudadTipo = unstable_cache(
-    async (
-        operacion: string,
-        ciudadParam: string,
-        tipoParam: string,
-        barrioSlug?: string,
-        habitaciones?: number,
-        orden?: string,
-        page: number = 1
-    ): Promise<PaginatedProperties | null> => {
-        try {
-            const ciudadValid = isValidFilter(ciudadParam);
-            const tipoValid = isValidFilter(tipoParam);
+export const getPropertiesByOperacionCiudadTipo = (
+    operacion: string,
+    ciudadParam: string,
+    tipoParam: string,
+    barrioSlug?: string,
+    habitaciones?: number,
+    orden?: string,
+    page: number = 1
+): Promise<PaginatedProperties | null> => {
+    const key = `props-op-ciudad-tipo-${operacion}-${ciudadParam}-${tipoParam}-b${barrioSlug ?? 'none'}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
+    return unstable_cache(
+        async (op: string, ciudad: string, tipo: string, bsl?: string, hab?: number, ord?: string, pg: number = 1): Promise<PaginatedProperties | null> => {
+            try {
+                const ciudadValid = isValidFilter(ciudad);
+                const tipoValid = isValidFilter(tipo);
 
-            if (ciudadValid.type !== 'ciudad' || tipoValid.type !== 'tipo') {
-                return null;
-            }
+                if (ciudadValid.type !== 'ciudad' || tipoValid.type !== 'tipo') {
+                    return null;
+                }
 
-            const supabase = createPublicClient();
-            const pageSize = 12;
-            const from = (page - 1) * pageSize;
-            const to = from + pageSize - 1;
+                const supabase = createPublicClient();
+                const pageSize = 12;
+                const from = (pg - 1) * pageSize;
+                const to = from + pageSize - 1;
 
-            let query = supabase
-                .from('properties')
-                .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                .eq('operacion', operacion)
-                .eq('ciudad', ciudadValid.dbName)
-                .eq('tipo', tipoValid.normalized);
+                let query = supabase
+                    .from('properties')
+                    .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
+                    .eq('operacion', op)
+                    .eq('ciudad', ciudadValid.dbName)
+                    .eq('tipo', tipoValid.normalized);
 
-            if (habitaciones) {
-                query = query.gte('habitaciones', habitaciones);
-            }
+                if (hab) {
+                    query = query.gte('habitaciones', hab);
+                }
 
-            if (barrioSlug) {
-                const { data: barrioData, error: barrioError } = await supabase
-                    .from('barrios')
-                    .select('id')
-                    .eq('slug', barrioSlug)
-                    .single();
+                if (bsl) {
+                    const { data: barrioData, error: barrioError } = await supabase
+                        .from('barrios')
+                        .select('id')
+                        .eq('slug', bsl)
+                        .single();
 
-                if (barrioError || !barrioData) {
+                    if (barrioError || !barrioData) {
+                        return { properties: [], totalCount: 0 };
+                    }
+                    query = query.eq('barrio_id', barrioData.id);
+                }
+
+                query = applyOrder(query, ord);
+                query = query.range(from, to);
+
+                const { data: properties, error, count } = await query;
+
+                if (error) {
+                    console.error('[DB] Error fetching properties by operacion, ciudad and tipo:', error.message);
                     return { properties: [], totalCount: 0 };
                 }
-                query = query.eq('barrio_id', barrioData.id);
-            }
 
-            query = applyOrder(query, orden);
-            query = query.range(from, to);
-
-            const { data: properties, error, count } = await query;
-
-            if (error) {
-                console.error('[DB] Error fetching properties by operacion, ciudad and tipo:', error.message);
+                const attached = await attachImagesToProperties(properties || [], supabase);
+                return {
+                    properties: attached,
+                    totalCount: count || 0
+                };
+            } catch (err: any) {
+                console.error('[DB] Critical exception in getPropertiesByOperacionCiudadTipo:', err.message);
                 return { properties: [], totalCount: 0 };
             }
-
-            const attached = await attachImagesToProperties(properties || [], supabase);
-            return {
-                properties: attached,
-                totalCount: count || 0
-            };
-        } catch (err: any) {
-            console.error('[DB] Critical exception in getPropertiesByOperacionCiudadTipo:', err.message);
-            return { properties: [], totalCount: 0 };
-        }
-    },
-    ['properties-by-operacion-ciudad-tipo-v6'],
-    { revalidate: 3600, tags: ['properties'] }
-);
+        },
+        [key],
+        { revalidate: 3600, tags: ['properties'] }
+    )(operacion, ciudadParam, tipoParam, barrioSlug, habitaciones, orden, page);
+};
 
 /**
  * Obtiene todas las propiedades filtradas por operación y el slug de una etiqueta.
