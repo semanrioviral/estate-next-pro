@@ -79,7 +79,7 @@ export default function PropertyCardV3({ property, priority = false }: { propert
                 </div>
 
                 {/* 2.2 Title - Professional Contrast */}
-                <h3 className="text-[14px] font-bold text-slate-900 leading-snug line-clamp-2 h-[40px] mb-2 antialiased">
+                <h3 className="text-[14px] font-bold text-slate-900 leading-snug line-clamp-2 mb-2 antialiased">
                     {optimizedTitle}
                 </h3>
 

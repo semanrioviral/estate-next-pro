@@ -54,7 +54,7 @@ export default function PropertyCardV2({ property, priority = false, matchType }
             {/* Content Section */}
             <div className="p-4 flex flex-col flex-grow">
                 <div className="mb-3">
-                    <h3 className="text-base font-bold text-text-primary dark:text-zinc-100 line-clamp-1 mb-1 leading-snug">
+                    <h3 className="text-base font-bold text-text-primary dark:text-zinc-100 line-clamp-2 mb-1 leading-snug">
                         {property.titulo}
                     </h3>
                     <div className="flex items-center text-text-secondary dark:text-zinc-400">
