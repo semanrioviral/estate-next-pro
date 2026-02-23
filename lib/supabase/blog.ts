@@ -59,66 +59,75 @@ export const getAllBlogPosts = unstable_cache(
 /**
  * Fetches a single blog post by its slug
  */
-export const getBlogPostBySlug = unstable_cache(
-    async (slug: string): Promise<BlogPost | null> => {
-        await autoPublishScheduled();
-        const { data, error } = await supabase
-            .from('blog_posts')
-            .select('*')
-            .eq('slug', slug)
-            .eq('status', 'published')
-            .lte('published_at', new Date().toISOString())
-            .single();
+export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+    await autoPublishScheduled();
+    const fetcher = unstable_cache(
+        async (s: string): Promise<BlogPost | null> => {
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('slug', s)
+                .eq('status', 'published')
+                .lte('published_at', new Date().toISOString())
+                .single();
 
-        if (error) {
-            if (error.code === 'PGRST116') return null; // Not found
-            throw error;
-        }
-        return data;
-    },
-    ['blog-post-by-slug'],
-    { revalidate: 1, tags: ['blog'] }
-);
+            if (error) {
+                if (error.code === 'PGRST116') return null; // Not found
+                throw error;
+            }
+            return data;
+        },
+        [`blog-post-by-slug-${slug}`],
+        { revalidate: 60, tags: ['blog', `blog-${slug}`] }
+    );
+    return fetcher(slug);
+};
 
 /**
  * Fetches blog posts filtered by city
  */
-export const getBlogPostsByCiudad = unstable_cache(
-    async (ciudad: string): Promise<BlogPost[]> => {
-        await autoPublishScheduled();
-        const { data, error } = await supabase
-            .from('blog_posts')
-            .select('*')
-            .eq('ciudad', ciudad)
-            .eq('status', 'published')
-            .lte('published_at', new Date().toISOString())
-            .order('published_at', { ascending: false });
+export const getBlogPostsByCiudad = async (ciudad: string): Promise<BlogPost[]> => {
+    const fetcher = unstable_cache(
+        async (c: string): Promise<BlogPost[]> => {
+            await autoPublishScheduled();
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('ciudad', c)
+                .eq('status', 'published')
+                .lte('published_at', new Date().toISOString())
+                .order('published_at', { ascending: false });
 
-        if (error) throw error;
-        return data || [];
-    },
-    ['blog-posts-by-ciudad'],
-    { revalidate: 1, tags: ['blog'] }
-);
+            if (error) throw error;
+            return data || [];
+        },
+        [`blog-posts-by-ciudad-${ciudad}`],
+        { revalidate: 60, tags: ['blog'] }
+    );
+    return fetcher(ciudad);
+};
 
 /**
  * Fetches related posts by category
  */
-export const getRelatedPosts = unstable_cache(
-    async (categoria: string, currentSlug: string, limit = 3): Promise<BlogPost[]> => {
-        const { data, error } = await supabase
-            .from('blog_posts')
-            .select('*')
-            .eq('categoria', categoria)
-            .eq('status', 'published')
-            .lte('published_at', new Date().toISOString())
-            .neq('slug', currentSlug)
-            .limit(limit)
-            .order('published_at', { ascending: false });
+export const getRelatedPosts = async (categoria: string, currentSlug: string, limit = 3): Promise<BlogPost[]> => {
+    const fetcher = unstable_cache(
+        async (cat: string, slug: string): Promise<BlogPost[]> => {
+            const { data, error } = await supabase
+                .from('blog_posts')
+                .select('*')
+                .eq('categoria', cat)
+                .eq('status', 'published')
+                .lte('published_at', new Date().toISOString())
+                .neq('slug', slug)
+                .limit(limit)
+                .order('published_at', { ascending: false });
 
-        if (error) throw error;
-        return data || [];
-    },
-    ['related-blog-posts'],
-    { revalidate: 1, tags: ['blog'] }
-);
+            if (error) throw error;
+            return data || [];
+        },
+        [`related-blog-posts-${categoria}-${currentSlug}`],
+        { revalidate: 60, tags: ['blog'] }
+    );
+    return fetcher(categoria, currentSlug);
+};

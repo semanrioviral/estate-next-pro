@@ -14,11 +14,15 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+// Force dynamic so newly published posts appear immediately
+export const dynamic = 'force-dynamic';
+
 interface BlogPostPageProps {
     params: { slug: string };
 }
 
 const getBlogPostBySlugCached = cache(async (slug: string) => getBlogPostBySlug(slug));
+
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
     const { slug } = params;
