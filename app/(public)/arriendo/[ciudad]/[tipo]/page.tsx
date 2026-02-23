@@ -201,7 +201,7 @@ export default async function ArriendoCiudadTipoPage({ params, searchParams }: A
             />
 
             {/* Properties Grid */}
-            <section className="py-20">
+            <section className="py-8 md:py-20">
                 <div className="container-wide px-4">
                     {properties.length > 0 ? (
                         <>

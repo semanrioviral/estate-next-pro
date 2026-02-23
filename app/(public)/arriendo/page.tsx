@@ -125,7 +125,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
                 }}
             />
 
-            <div className="container-wide px-4 py-20">
+            <div className="container-wide px-4 py-8 md:py-20">
                 {/* Properties Grid */}
                 {properties.length > 0 ? (
                     <>

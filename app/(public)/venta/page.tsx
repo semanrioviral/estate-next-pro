@@ -142,17 +142,17 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                 }}
             />
 
-            <div className="container-wide px-4 py-20">
+            <div className="container-wide px-4 py-8 md:py-20">
                 {/* Properties Grid */}
                 {properties.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                             {properties.map((property) => (
                                 <PropertyCardV3 key={property.id} property={property} />
                             ))}
                         </div>
 
-                        <div className="mt-12">
+                        <div className="mt-8 md:mt-12">
                             <Pagination
                                 totalItems={totalCount}
                                 itemsPerPage={12}
@@ -170,8 +170,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
 
                 {/* Trending Section */}
                 {trendingProperties && trendingProperties.length > 0 && (
-                    <section className="mt-32 pt-24 border-t border-border-clean">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
+                    <section className="mt-12 md:mt-32 pt-8 md:pt-24 border-t border-border-clean">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-8 mb-8 md:mb-16">
                             <div className="max-w-xl">
                                 <p className="text-[10px] font-black text-orange-600 uppercase tracking-widest mb-3 flex items-center gap-2">
                                     <Flame className="w-3 h-3 fill-current" />
@@ -183,7 +183,7 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                             {trendingProperties.map((prop) => (
                                 <PropertyCardV3 key={prop.id} property={prop} />
                             ))}
@@ -191,9 +191,9 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                     </section>
                 )}
 
-                <section className="mt-24 pt-16 border-t border-border-clean">
+                <section className="mt-10 md:mt-24 pt-8 md:pt-16 border-t border-border-clean">
                     <h2 className="text-2xl md:text-3xl font-bold text-text-primary">Preguntas frecuentes</h2>
-                    <div className="mt-8 space-y-6">
+                    <div className="mt-5 md:mt-8 space-y-6">
                         {faqItems.map((faq) => (
                             <article key={faq.question} className="space-y-2">
                                 <h3 className="text-lg font-semibold text-text-primary">{faq.question}</h3>
@@ -204,7 +204,7 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                 </section>
 
                 {/* Navigation and conversion blocks */}
-                <div className="mt-32 space-y-24 pb-32">
+                <div className="mt-12 md:mt-32 space-y-10 md:space-y-24 pb-12 md:pb-32">
                     <ExploreAlso currentOperacion="venta" />
                     <ListingConversionBanner />
                 </div>
