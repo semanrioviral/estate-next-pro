@@ -3,9 +3,27 @@ import { supabase } from '@/lib/supabase';
 
 // Temporary debug endpoint — remove after diagnosis
 export async function GET(req: NextRequest) {
-    const slug = req.nextUrl.searchParams.get('slug') || 'comprar-casa-en-cucuta-2026';
+    const slug = req.nextUrl.searchParams.get('slug');
 
-    // Fetch the post ignoring status/published_at — so we see it no matter what
+    if (!slug) {
+        // List ALL posts with their slugs and status
+        const { data, error } = await supabase
+            .from('blog_posts')
+            .select('id, slug, titulo, status, published, published_at')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+
+        return NextResponse.json({
+            total: data?.length || 0,
+            posts: data,
+            serverTime: new Date().toISOString(),
+        });
+    }
+
+    // Fetch a specific post ignoring status/published_at
     const { data, error } = await supabase
         .from('blog_posts')
         .select('id, slug, titulo, status, published, published_at, created_at')
