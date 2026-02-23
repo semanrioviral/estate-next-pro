@@ -18,14 +18,14 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 interface BlogPostPageProps {
-    params: { slug: string };
+    params: Promise<{ slug: string }>;
 }
 
 const getBlogPostBySlugCached = cache(async (slug: string) => getBlogPostBySlug(slug));
 
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
-    const { slug } = params;
+    const { slug } = await params;
     const post = await getBlogPostBySlugCached(slug);
     if (!post) return {};
 
@@ -52,7 +52,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-    const { slug } = params;
+    const { slug } = await params;
     const post = await getBlogPostBySlugCached(slug);
     if (!post) notFound();
 
