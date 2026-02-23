@@ -1,0 +1,33 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Back house body (dark grey) -->
+  <rect x="28" y="30" width="26" height="24" fill="#3a3a3a"/>
+
+  <!-- Back house roof (dark grey, like the logo shadow house) -->
+  <polygon points="26,32 41,14 56,32" fill="#555555"/>
+
+  <!-- Back roof highlight line -->
+  <line x1="26" y1="32" x2="41" y2="14" stroke="white" stroke-width="1.5"/>
+  <line x1="41" y1="14" x2="56" y2="32" stroke="white" stroke-width="1.5"/>
+
+  <!-- Back house windows -->
+  <rect x="31" y="36" width="5" height="4" fill="#888888"/>
+  <rect x="40" y="36" width="5" height="4" fill="#888888"/>
+  <rect x="31" y="44" width="5" height="6" fill="#555555"/>
+
+  <!-- Front house body (off-white/grey) -->
+  <rect x="8" y="30" width="30" height="24" fill="#e0e0e0"/>
+
+  <!-- Front house roof (vivid red) -->
+  <polygon points="4,32 23,10 42,32" fill="#fb2c36"/>
+
+  <!-- Front roof highlight line -->
+  <line x1="4" y1="32" x2="23" y2="10" stroke="white" stroke-width="1.5"/>
+  <line x1="23" y1="10" x2="42" y2="32" stroke="white" stroke-width="1.5"/>
+
+  <!-- Front house windows (small square, 2 side by side) -->
+  <rect x="11" y="36" width="5" height="4" fill="#aaaaaa"/>
+  <rect x="20" y="36" width="5" height="4" fill="#aaaaaa"/>
+
+  <!-- Front door -->
+  <rect x="18" y="44" width="6" height="10" fill="#aaaaaa"/>
+</svg>

@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   authors: [{ name: "Inmobiliaria Tucasa Los Patios" }],
   creator: "Inmobiliaria Tucasa Los Patios",
   publisher: "Inmobiliaria Tucasa Los Patios",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "es_CO",
