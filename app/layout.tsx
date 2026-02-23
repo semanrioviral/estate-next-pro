@@ -7,8 +7,9 @@ import Footer from "@/components/Footer";
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-outfit",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
