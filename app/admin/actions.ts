@@ -7,7 +7,9 @@ import { revalidatePath, revalidateTag } from 'next/cache'
 
 
 export async function logout() {
-    // ... existing logout code
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    redirect('/admin/login')
 }
 
 export async function handleCreateProperty(formData: FormData, images: GalleryImage[]) {
@@ -143,6 +145,8 @@ export async function handleDeleteProperty(id: string) {
         console.log('[ACTION] Propiedad eliminada con éxito');
         revalidatePath('/admin/propiedades');
         revalidatePath('/propiedades');
+        // @ts-ignore - Build fix for revalidateTag signature issues in specific environments
+        revalidateTag('properties');
         return { success: true };
     } catch (err: any) {
         console.error('[ACTION] Excepción en handleDeleteProperty:', err);

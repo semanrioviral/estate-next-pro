@@ -34,11 +34,13 @@ export const metadata: Metadata = {
     siteName: "Inmobiliaria Tucasa Los Patios",
     title: "Inmobiliaria Tucasa Los Patios | Líder en Finca Raíz Norte de Santander",
     description: "Expertos en venta y renta de inmuebles en el área metropolitana de Cúcuta.",
+    images: [{ url: "/og-default.jpg", width: 1200, height: 630, alt: "Inmobiliaria Tucasa Los Patios" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Inmobiliaria Tucasa Los Patios | Líder en Finca Raíz Norte de Santander",
     description: "Tu hogar ideal en Cúcuta, Los Patios y Villa del Rosario.",
+    images: ["https://www.tucasalospatios.com/og-default.jpg"],
   },
   robots: {
     index: true,

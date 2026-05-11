@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HomeHeroV3() {
@@ -7,10 +8,13 @@ export default function HomeHeroV3() {
         <section className="relative min-h-[70vh] flex items-center justify-center pt-32 pb-48 overflow-hidden bg-slate-900">
             {/* Background Image with optimized overlay */}
             <div className="absolute inset-0 z-0">
-                <img
+                <Image
                     src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop"
                     alt="Propiedad de Lujo"
-                    className="w-full h-full object-cover opacity-60"
+                    fill
+                    priority
+                    sizes="100vw"
+                    className="object-cover opacity-60"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
             </div>

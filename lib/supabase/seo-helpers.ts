@@ -183,12 +183,11 @@ export async function upsertBarrio(
  * q_auto: calidad automática
  * w_auto: ancho automático (útil para transformaciones dinámicas)
  */
-export function optimizeCloudinaryUrl(url: string, width: number | 'auto' = 'auto'): string {
+export function optimizeCloudinaryUrl(url: string, width?: number): string {
     if (!url) return '';
     if (url.includes('cloudinary.com') && !url.includes('f_auto,q_auto')) {
-        // Formato estándar: .../upload/v123456/path
         if (url.includes('/upload/')) {
-            const params = `f_auto,q_auto${width ? `,w_${width}` : ''}`;
+            const params = width ? `f_auto,q_auto,w_${width}` : 'f_auto,q_auto';
             return url.replace('/upload/', `/upload/${params}/`);
         }
     }
