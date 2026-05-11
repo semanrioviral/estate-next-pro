@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
+  experimental: {
+    optimizePackageImports: [
+      'lucide-react',
+      'embla-carousel-react',
+      '@dnd-kit/core',
+      '@dnd-kit/sortable',
+      '@dnd-kit/utilities',
+    ],
+  },
   images: {
     loader: 'custom',
     loaderFile: './lib/cloudinary-loader.ts',

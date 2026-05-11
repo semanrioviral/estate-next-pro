@@ -1,6 +1,7 @@
 import React from 'react';
 import { cache } from 'react';
 import { unstable_cache } from 'next/cache';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -26,14 +27,14 @@ import { getCloudinaryOGImage } from '@/lib/supabase/seo-helpers';
 import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
-import LeadCaptureForm from '@/components/LeadCaptureForm';
-import PropertyViewTracker from '@/components/PropertyViewTracker';
-import RecentlyViewed from '@/components/RecentlyViewed';
-import ExploreAlso from '@/components/ExploreAlso';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
-import RetentionModal from '@/components/RetentionModal';
-import MetaPixelViewContent from '@/components/tracking/MetaPixelViewContent';
 import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
+
+const PropertyViewTracker = dynamic(() => import('@/components/PropertyViewTracker'));
+const RecentlyViewed = dynamic(() => import('@/components/RecentlyViewed'));
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
+const RetentionModal = dynamic(() => import('@/components/RetentionModal'));
+const MetaPixelViewContent = dynamic(() => import('@/components/tracking/MetaPixelViewContent'));
 
 function slugify(text: string) {
     return text

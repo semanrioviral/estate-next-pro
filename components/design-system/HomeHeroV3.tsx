@@ -13,6 +13,7 @@ export default function HomeHeroV3() {
                     alt="Propiedad de Lujo"
                     fill
                     priority
+                    fetchPriority="high"
                     sizes="100vw"
                     className="object-cover opacity-60"
                 />
