@@ -21,7 +21,7 @@ import {
     Share2,
     Check
 } from 'lucide-react';
-import { getPropertyBySlug, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
+import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
 import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
@@ -68,6 +68,14 @@ const getDetailPageData = unstable_cache(
     ['property-detail-data'],
     { revalidate: 300 }
 );
+
+export const revalidate = 300;
+export const dynamicParams = true;
+
+export async function generateStaticParams() {
+    const slugs = await getAllPropertySlugs();
+    return slugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({ params }: Props) {
     const { slug } = await params;

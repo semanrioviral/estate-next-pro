@@ -1635,3 +1635,22 @@ export const getWeeklyViews = unstable_cache(
     { revalidate: 600, tags: ['views'] }
 );
 
+export async function getAllPropertySlugs(): Promise<string[]> {
+    try {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select('slug');
+
+        if (error) {
+            console.error('[DB] Error fetching property slugs:', error.message);
+            return [];
+        }
+
+        return (data || []).map((p: { slug: string }) => p.slug);
+    } catch (err) {
+        console.error('[DB] Unexpected error fetching property slugs:', err);
+        return [];
+    }
+}
+
