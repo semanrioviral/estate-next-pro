@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
     optimizePackageImports: [
-      'lucide-react',
       'embla-carousel-react',
       '@dnd-kit/core',
       '@dnd-kit/sortable',
