@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const post = await getBlogPostBySlugCached(slug);
     if (!post) return {};
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = post.meta_titulo || `${post.titulo} | Inmobiliaria Tucasa Los Patios`;
     const description = post.meta_descripcion || post.excerpt || '';
     const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ]);
 
     const headings = extractHeadings(post.contenido);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     const blogJsonLd = {
         "@context": "https://schema.org",

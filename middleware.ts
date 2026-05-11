@@ -1,8 +1,29 @@
-import { type NextRequest } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function middleware(request: NextRequest) {
-    return await updateSession(request)
+    const url = request.nextUrl.clone()
+    const hostname = request.headers.get('host') || ''
+
+    if (hostname.startsWith('www.')) {
+        const nonWwwHost = hostname.replace(/^www\./, '')
+        url.hostname = nonWwwHost
+        url.host = nonWwwHost
+        const redirectResponse = NextResponse.redirect(url, { status: 301 })
+        redirectResponse.headers.set('X-Robots-Tag', 'noindex')
+        return redirectResponse
+    }
+
+    const response = await updateSession(request)
+
+    if (!response.headers.has('Strict-Transport-Security')) {
+        response.headers.set(
+            'Strict-Transport-Security',
+            'max-age=31536000; includeSubDomains; preload'
+        )
+    }
+
+    return response
 }
 
 export const config = {

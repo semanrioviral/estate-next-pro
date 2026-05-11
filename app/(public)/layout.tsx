@@ -2,6 +2,7 @@
 
 import NavbarV3 from "@/components/design-system/NavbarV3";
 import FooterV3 from "@/components/design-system/FooterV3";
+import WhatsAppFloatingButton from "@/components/WhatsAppFloatingButton";
 import { usePathname } from "next/navigation";
 
 export default function PublicLayout({
@@ -19,6 +20,7 @@ export default function PublicLayout({
                 {children}
             </main>
             <FooterV3 />
+            <WhatsAppFloatingButton />
         </>
     );
 }

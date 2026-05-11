@@ -28,7 +28,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadPage
     const { ciudad: slug } = await params;
     const { barrio, habitaciones, orden } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
 
     const tag = await getTagBySlug(slug);
     if (tag) {
@@ -114,7 +114,7 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
 
     // 1. Check for Tag
     const tag = await getTagBySlug(slug);

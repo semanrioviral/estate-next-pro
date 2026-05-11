@@ -13,7 +13,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.tucasalospatios.com"), // TODO: Update to production domain
+  metadataBase: new URL("https://tucasalospatios.com"),
   title: {
     default: "Inmobiliaria Tucasa Los Patios | Líder en Finca Raíz Norte de Santander",
     template: "%s | Inmobiliaria Tucasa Los Patios"
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CO",
-    url: "https://www.tucasalospatios.com",
+    url: "https://tucasalospatios.com",
     siteName: "Inmobiliaria Tucasa Los Patios",
     title: "Inmobiliaria Tucasa Los Patios | Líder en Finca Raíz Norte de Santander",
     description: "Expertos en venta y renta de inmuebles en el área metropolitana de Cúcuta.",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Inmobiliaria Tucasa Los Patios | Líder en Finca Raíz Norte de Santander",
     description: "Tu hogar ideal en Cúcuta, Los Patios y Villa del Rosario.",
-    images: ["https://www.tucasalospatios.com/og-default.jpg"],
+    images: ["https://tucasalospatios.com/og-default.jpg"],
   },
   robots: {
     index: true,
@@ -62,7 +62,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const siteUrl = "https://www.tucasalospatios.com";
+  const siteUrl = "https://tucasalospatios.com";
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
   const globalJsonLd = {

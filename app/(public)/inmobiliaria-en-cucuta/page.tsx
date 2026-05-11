@@ -1,14 +1,14 @@
 import { getPropertiesByOperacionAndCiudad, getFeaturedBarrios } from '@/lib/supabase/properties';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import { Metadata } from 'next';
-import { Building2, Landmark, Search, ArrowRight, TrendingUp, Home, PiggyBank, Flame, CheckCircle2, MapPin } from 'lucide-react';
+import { Building2, Landmark, Search, ArrowRight, TrendingUp, Home, PiggyBank, Flame, CheckCircle2, MapPin, ChevronRight } from 'lucide-react';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
 import Link from 'next/link';
 import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = 'Inmobiliaria en Cúcuta | Inmobiliaria Tucasa Los Patios';
     const description = "Tu inmobiliaria de confianza en Cúcuta y el Área Metropolitana. Expertos en venta y arriendo con asesoría legal profesional y el mejor catálogo de inmuebles.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-cucuta`;
@@ -43,7 +43,7 @@ export default async function CucutaPillarPage({
 }) {
     const { orden, page: pageParam } = await searchParams;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     // Data fetching
     const [propertiesData, featuredBarrios] = await Promise.all([
@@ -152,18 +152,33 @@ export default async function CucutaPillarPage({
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            <CatalogHeader
-                title={<>Expertos en <span className="text-brand">Inmobiliaria</span> en Cúcuta</>}
-                description={<>Su socio estratégico para <Link href="/venta/cucuta" className="text-text-primary border-b-2 border-brand/30 hover:border-brand transition-colors">invertir en activos</Link> de alta rentabilidad en el oriente colombiano.</>}
-                totalCount={totalCount}
-                breadcrumbs={[
-                    { label: 'Inmobiliaria en Cúcuta' }
-                ]}
-                badge={{
-                    icon: Landmark,
-                    text: 'Liderazgo Regional 2026'
-                }}
-            />
+            {/* Hero Header */}
+            <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-12 relative border-b border-border-clean">
+                <div className="container-wide px-4">
+                    <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
+                        <nav className="flex items-center text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
+                            <Link href="/" className="hover:text-brand transition-colors flex items-center gap-1.5">
+                                <Home className="w-3 h-3" />
+                                Inicio
+                            </Link>
+                            <ChevronRight className="w-3 h-3 mx-1.5 text-text-muted" />
+                            <span className="text-brand">Inmobiliaria en Cúcuta</span>
+                        </nav>
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-bg-alt border border-border-clean rounded-full mb-3 md:mb-6">
+                            <Landmark className="w-3.5 h-3.5 text-brand" />
+                            <span className="text-[10px] font-black text-text-primary uppercase tracking-widest">Liderazgo Regional 2026</span>
+                        </div>
+                    </div>
+                    <div className="max-w-4xl mx-auto text-center mb-6 md:mb-12">
+                        <h1 className="mb-3 md:mb-4 leading-tight text-slate-900 tracking-tight">
+                            Expertos en <span className="text-brand">Inmobiliaria</span> en Cúcuta
+                        </h1>
+                        <div className="text-sm md:text-lg text-text-secondary font-medium max-w-2xl mx-auto leading-relaxed">
+                            Su socio estratégico para <Link href="/venta/cucuta" className="text-text-primary border-b-2 border-brand/30 hover:border-brand transition-colors">invertir en activos</Link> de alta rentabilidad en el oriente colombiano.
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             {/* Contexto Regional */}
             <section className="py-24">
@@ -316,19 +331,17 @@ export default async function CucutaPillarPage({
                 </div>
             </section>
 
-            {/* PROPIEDADES DESTACADAS */}
-            <section className="py-24">
-                <div className="container-wide px-4">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                        <div>
-                            <span className="text-[10px] font-black text-brand uppercase tracking-widest mb-4 block">Portafolio Curado</span>
-                            <h2 className="mb-2 font-black">Inmuebles en <span className="text-brand">Cúcuta</span></h2>
-                        </div>
-                        <Link href="/venta/cucuta" className="text-[10px] font-black text-brand uppercase tracking-widest flex items-center gap-2 group border-b border-brand/20 pb-1">
-                            Ver Todo en Cúcuta <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </div>
+            {/* PROPIEDADES — CatalogHeader + Grid */}
+            <CatalogHeader
+                title={<>Inmuebles en <span className="text-brand">Cúcuta</span></>}
+                totalCount={totalCount}
+                breadcrumbs={[
+                    { label: 'Inmuebles en Cúcuta' }
+                ]}
+            />
 
+            <section className="py-12 md:py-24 bg-white">
+                <div className="container-wide px-4">
                     {properties.length > 0 ? (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

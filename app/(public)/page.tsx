@@ -86,13 +86,31 @@ export default async function Home() {
           </div>
 
           {featuredProperties.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-              {featuredProperties.map((property) => (
-                <div key={property.id} className="transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-3xl">
-                  <PropertyCardV3 property={property} />
-                </div>
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                {featuredProperties.map((property) => (
+                  <div key={property.id} className="transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-3xl">
+                    <PropertyCardV3 property={property} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Prominent CTA Button */}
+              <div className="flex flex-col items-center mt-16">
+                <Link
+                  href="/venta"
+                  className="group relative inline-flex items-center gap-3 bg-brand-600 text-white px-10 md:px-14 h-16 md:h-[4.5rem] rounded-full font-black text-sm md:text-base uppercase tracking-[0.15em] hover:bg-brand-700 transition-all shadow-xl shadow-brand-600/25 active:scale-[0.97] hover:shadow-2xl hover:shadow-brand-600/30 hover:-translate-y-0.5 overflow-hidden"
+                >
+                  {/* Subtle pulse ring */}
+                  <span className="absolute inset-0 rounded-full border-2 border-brand-600 animate-ping opacity-15"></span>
+                  Ver Todas las Propiedades
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <p className="mt-4 text-sm text-slate-400 font-medium">
+                  Descubre todo nuestro inventario disponible
+                </p>
+              </div>
+            </>
           ) : (
             <div className="py-32 bg-slate-50 rounded-[3rem] border border-slate-200 text-center shadow-inner">
               <Building2 className="w-16 h-16 text-slate-200 mx-auto mb-6" />

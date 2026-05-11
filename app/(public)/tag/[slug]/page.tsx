@@ -18,7 +18,7 @@ export async function generateMetadata({ params, searchParams }: TagPageProps): 
     const { slug } = params;
     const { orden } = searchParams ?? {};
     const tag = await getTagBySlugCached(slug);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     if (!tag) {
         return {
@@ -58,7 +58,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
 
     const { properties, totalCount } = await getPropertiesByTagSlug(slug, orden, currentPage);
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const canonicalUrl = `${siteUrl}/tag/${slug}`;
 
     const jsonLd = {

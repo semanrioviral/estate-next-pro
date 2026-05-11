@@ -8,7 +8,7 @@ import PropertyOwnerForm from '@/components/PropertyOwnerForm';
 import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = "Vender In inmueble en Cúcuta | Inmobiliaria Profesional 2026";
     const description = "Venda su casa, apartamento o local en Cúcuta con la mejor estrategia. Mi Casa Ya, Caja Honor y créditos hipotecarios. ¡Expertos en cierre!";
     const canonicalUrl = `${siteUrl}/vender-casa-en-cucuta`;
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function VenderCucutaPage() {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     const faqs = [
         { q: "¿En qué zonas de Cúcuta tienen mayor demanda?", a: "Actualmente barrios como Caobos, Lleras y Prados del Este tienen una altísima rotación. Sin embargo, cubrimos toda la ciudad y el área metropolitana." },

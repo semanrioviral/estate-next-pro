@@ -25,7 +25,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadP
     const { ciudad: slug } = await params;
     const { barrio, habitaciones, orden } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
 
     const tag = await getTagBySlug(slug);
     if (tag) {
@@ -87,7 +87,7 @@ export default async function ArriendoCiudadPage({ params, searchParams }: Arrie
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     const tag = await getTagBySlug(slug);
 

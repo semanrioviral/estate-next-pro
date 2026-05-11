@@ -1,3 +1,14 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Términos y Condiciones | Inmobiliaria Tucasa Los Patios',
+    description: 'Términos y condiciones de uso del sitio web de Inmobiliaria Tucasa Los Patios.',
+    robots: { index: false, follow: true },
+    alternates: {
+        canonical: 'https://tucasalospatios.com/terminos',
+    },
+};
+
 export default function TerminosPage() {
     return (
         <div className="mx-auto max-w-7xl px-6 py-24">

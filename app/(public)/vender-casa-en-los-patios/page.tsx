@@ -8,7 +8,7 @@ import PropertyOwnerForm from '@/components/PropertyOwnerForm';
 import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = "Vender mi Casa en Los Patios | Inmobiliaria Tucasa Los Patios";
     const description = "Venda su propiedad en Los Patios con expertos. Valoración estratégica, marketing profesional y cierre seguro.";
     const canonicalUrl = `${siteUrl}/vender-casa-en-los-patios`;
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function VenderLosPatiosPage() {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     const faqs = [
         { q: "¿Cuánto tiempo toma vender una casa en Los Patios?", a: "En promedio, nuestras propiedades se venden en un plazo de 45 a 90 días, gracias a nuestra estrategia de segmentación digital." },

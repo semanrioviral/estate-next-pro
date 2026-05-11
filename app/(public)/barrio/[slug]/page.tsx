@@ -20,7 +20,7 @@ export async function generateMetadata({ params, searchParams }: BarrioPageProps
     const { slug } = params;
     const { orden } = searchParams ?? {};
     const barrio = await getBarrioBySlugCached(slug);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     if (!barrio) {
         return {
@@ -57,7 +57,7 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
     }
 
     const { properties, totalCount } = await getPropertiesByBarrioSlug(slug, orden, currentPage);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const canonicalUrl = `${siteUrl}/barrio/${slug}`;
 
     const jsonLd = {

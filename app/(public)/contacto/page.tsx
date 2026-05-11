@@ -1,5 +1,14 @@
 import { MessageCircle, Mail, MapPin, Phone, Clock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Contacto | Inmobiliaria Tucasa Los Patios',
+    description: 'Contacta con Inmobiliaria Tucasa Los Patios por WhatsApp, correo o teléfono. Atención personalizada para venta y arriendo de inmuebles en Norte de Santander.',
+    alternates: {
+        canonical: 'https://tucasalospatios.com/contacto',
+    },
+};
 
 export default function ContactoPage() {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';

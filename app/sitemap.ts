@@ -7,7 +7,7 @@ import { slugify } from '@/lib/supabase/seo-helpers';
  * Incluye todas las rutas estáticas y dinámicas (propiedades, tags, barrios, ciudades).
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
     const supabase = await createClient();
 
     const { count: ventaCount } = await supabase

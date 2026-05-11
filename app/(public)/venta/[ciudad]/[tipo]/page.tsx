@@ -27,7 +27,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadTipo
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
 
     // Parsing combo (tipo-tag)
     let tipoSlug = tipoParam;
@@ -156,7 +156,7 @@ export default async function VentaCiudadTipoPage({ params, searchParams }: Vent
     const tipoPluralizado = tipoNombre.toLowerCase().endsWith('s') ? tipoNombre : `${tipoNombre}s`;
     const displayBarrio = barrio ? barrio.replace(/-/g, ' ') : '';
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const canonicalUrl =
         currentPage > 1
             ? `${siteUrl}/venta/${ciudadSlug}/${tipoParam}?page=${currentPage}`

@@ -21,7 +21,7 @@ export async function generateMetadata({ searchParams }: ArriendoPageProps): Pro
     const currentPage = Number(pageParam) || 1;
 
     const { properties } = await getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage);
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
     let title = 'Propiedades en arriendo';
     let description = 'Encuentra las mejores propiedades en arriendo en Norte de Santander. Casas, apartamentos, locales y más.';
 
@@ -62,7 +62,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
         getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage),
         getTrendingProperties(7, 3)
     ]);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const canonicalUrl = `${siteUrl}/arriendo`;
 
     const jsonLd = {

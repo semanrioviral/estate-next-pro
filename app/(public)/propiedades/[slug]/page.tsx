@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: Props) {
 
     if (!property) return { title: 'Propiedad no encontrada' };
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const propertyUrl = `${siteUrl}/propiedades/${property.slug}`;
     const absoluteImage = property.imagen_principal.startsWith('http')
         ? property.imagen_principal
@@ -130,7 +130,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlugCached(slug);
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     if (!property) {
         redirect('/venta');

@@ -37,7 +37,7 @@ export const dynamic = 'force-dynamic';
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const { ciudad } = await params;
     const { orden } = await searchParams;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tucasalospatios.com";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
     const seo = CITY_SEO_DATA[ciudad];
 
     if (!seo) return { title: "Ciudad no encontrada" };
@@ -81,7 +81,7 @@ export default async function CiudadPage({ params, searchParams }: Props) {
     }
 
     const { properties, totalCount } = await getPropertiesByCity(cityName, orden, currentPage);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tucasalospatios.com";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
 
     const jsonLd = {
         "@context": "https://schema.org",

@@ -26,7 +26,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadT
     const { barrio, habitaciones, orden, page } = await searchParams; // Destructure 'page' here
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(page) || 1; // Define currentPage for metadata
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
 
     // Parsing combo (tipo-tag)
     let tipoSlug = tipoParam;
@@ -132,7 +132,7 @@ export default async function ArriendoCiudadTipoPage({ params, searchParams }: A
     const tipoPluralizado = tipoNombre.toLowerCase().endsWith('s') ? tipoNombre : `${tipoNombre}s`;
     const displayBarrio = barrio ? barrio.replace(/-/g, ' ') : '';
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const canonicalUrl = `${siteUrl}/arriendo/${ciudadSlug}/${tipoParam}`;
 
     let displayTitle = tagNombre

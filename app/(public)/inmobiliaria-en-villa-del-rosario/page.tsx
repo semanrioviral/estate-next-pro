@@ -1,14 +1,14 @@
 import { getPropertiesByOperacionAndCiudad } from '@/lib/supabase/properties';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import { Metadata } from 'next';
-import { Building2, Search, ArrowRight, TrendingUp, BadgeCheck, History, HelpCircle } from 'lucide-react';
+import { Building2, Search, ArrowRight, TrendingUp, BadgeCheck, History, HelpCircle, Home, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import FAQAccordion from '@/components/FAQAccordion';
 import Pagination from '@/components/design-system/Pagination';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = 'Inmobiliaria en Villa del Rosario | Inmobiliaria Tucasa Los Patios';
     const description = "Tu inmobiliaria experta en Villa del Rosario. Descubre casas y apartamentos en venta y arriendo en el municipio histórico.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-villa-del-rosario`;
@@ -43,7 +43,7 @@ export default async function VillaRosarioPillarPage({
 }) {
     const { orden, page: pageParam } = await searchParams;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     // Data fetching
     const [propertiesData] = await Promise.all([
@@ -95,18 +95,33 @@ export default async function VillaRosarioPillarPage({
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
 
-            <CatalogHeader
-                title={<>Inmobiliaria en <span className="text-brand">Villa Rosario</span></>}
-                description={<>Oportunidades únicas de <Link href="/venta/villa-del-rosario" className="text-text-primary border-b border-brand/30 hover:border-brand transition-colors">vivienda en Villa del Rosario</Link> con el respaldo de nuestra red metropolitana.</>}
-                totalCount={totalCount}
-                breadcrumbs={[
-                    { label: 'Inmobiliaria en Villa del Rosario' }
-                ]}
-                badge={{
-                    icon: History,
-                    text: 'Patrimonio Histórico 2026'
-                }}
-            />
+            {/* Hero Header */}
+            <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-12 relative border-b border-border-clean">
+                <div className="container-wide px-4">
+                    <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
+                        <nav className="flex items-center text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
+                            <Link href="/" className="hover:text-brand transition-colors flex items-center gap-1.5">
+                                <Home className="w-3 h-3" />
+                                Inicio
+                            </Link>
+                            <ChevronRight className="w-3 h-3 mx-1.5 text-text-muted" />
+                            <span className="text-brand">Inmobiliaria en Villa del Rosario</span>
+                        </nav>
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-bg-alt border border-border-clean rounded-full mb-3 md:mb-6">
+                            <History className="w-3.5 h-3.5 text-brand" />
+                            <span className="text-[10px] font-black text-text-primary uppercase tracking-widest">Patrimonio Histórico 2026</span>
+                        </div>
+                    </div>
+                    <div className="max-w-4xl mx-auto text-center mb-6 md:mb-12">
+                        <h1 className="mb-3 md:mb-4 leading-tight text-slate-900 tracking-tight">
+                            Inmobiliaria en <span className="text-brand">Villa Rosario</span>
+                        </h1>
+                        <div className="text-sm md:text-lg text-text-secondary font-medium max-w-2xl mx-auto leading-relaxed">
+                            Oportunidades únicas de <Link href="/venta/villa-del-rosario" className="text-text-primary border-b border-brand/30 hover:border-brand transition-colors">vivienda en Villa del Rosario</Link> con el respaldo de nuestra red metropolitana.
+                        </div>
+                    </div>
+                </div>
+            </section>
 
 
             {/* MERCADO */}
@@ -185,19 +200,17 @@ export default async function VillaRosarioPillarPage({
                 </div>
             </section>
 
-            {/* PROPIEDADES */}
-            <section className="py-24 bg-white">
-                <div className="container-wide px-4">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
-                        <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Portafolio Destacado</p>
-                            <h2 className="mb-2">Oportunidades en <span className="text-brand">Villa Rosario</span></h2>
-                        </div>
-                        <Link href="/venta/villa-del-rosario" className="text-xs font-black text-brand uppercase tracking-widest flex items-center gap-2 group">
-                            Ver Todo el Portafolio <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                    </div>
+            {/* PROPIEDADES — CatalogHeader + Grid */}
+            <CatalogHeader
+                title={<>Oportunidades en <span className="text-brand">Villa Rosario</span></>}
+                totalCount={totalCount}
+                breadcrumbs={[
+                    { label: 'Inmuebles en Villa del Rosario' }
+                ]}
+            />
 
+            <section className="py-12 md:py-24 bg-white">
+                <div className="container-wide px-4">
                     {properties.length > 0 ? (
                         <>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">

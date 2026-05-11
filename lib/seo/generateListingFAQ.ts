@@ -48,7 +48,7 @@ export function generateListingFAQ({ operacion, ciudad, tipo }: GenerateListingF
     }
   ];
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.tucasalospatios.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
   const absoluteUrl = `${siteUrl}/venta${ciudad ? `/${ciudad}` : ""}${tipo ? `/${tipo}` : ""}#faq`;
 
   const faqJsonLd = {

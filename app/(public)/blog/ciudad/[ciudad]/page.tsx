@@ -11,7 +11,7 @@ interface BlogCityPageProps {
 export async function generateMetadata({ params }: BlogCityPageProps): Promise<Metadata> {
     const { ciudad: ciudadRaw } = await params;
     const ciudad = ciudadRaw.charAt(0).toUpperCase() + ciudadRaw.slice(1);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = `Guía Inmobiliaria en ${ciudad} | Blog TLP`;
     const description = `Descubra las mejores oportunidades y consejos expertos para el mercado inmobiliario específicamente en ${ciudad}, Norte de Santander.`;
     const canonicalUrl = `${siteUrl}/blog/ciudad/${ciudadRaw}`;

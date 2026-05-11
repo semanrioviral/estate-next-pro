@@ -6,6 +6,7 @@
       "url": "https://mcp.supabase.com/mcp",
       "enabled": true
     },
+
     "github": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
@@ -14,24 +15,48 @@
       },
       "enabled": true
     },
+
     "vercel": {
       "type": "remote",
       "url": "https://mcp.vercel.com",
       "enabled": true
     },
+
     "puppeteer": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-puppeteer"],
       "enabled": true
     },
+
     "fetch": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-fetch"],
       "enabled": true
     },
+
     "sequential-thinking": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+
+    "pagespeed": {
+      "type": "local",
+      "command": [
+        "cmd",
+        "/c",
+        "set GOOGLE_API_KEY=AIzaSyCwLfGBKVfOWdNWNWRIAxtzLJmNK1VgLtU&& node C:/MCP/pagespeed-insights-mcp/dist/index.js"
+      ],
+      "enabled": true
+    },
+
+    "google-search-console": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "google-searchconsole-mcp"
+      ],
       "enabled": true
     }
   }

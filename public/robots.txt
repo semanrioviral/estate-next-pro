@@ -8,4 +8,4 @@ Disallow: /admin/
 Disallow: /?utm_
 Disallow: /?fbclid=
 
-Sitemap: https://www.tucasalospatios.com/sitemap.xml
+Sitemap: https://tucasalospatios.com/sitemap.xml

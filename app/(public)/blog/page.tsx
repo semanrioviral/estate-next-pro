@@ -7,7 +7,7 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.tucasalospatios.com';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
     const title = "Blog Inmobiliario Norte de Santander | Noticias y Guías 2026";
     const description = "Las últimas noticias, guías de inversión y consejos del mercado inmobiliario en Cúcuta, Los Patios y Villa del Rosario. Expertos en propiedad raíz.";
     const canonicalUrl = `${siteUrl}/blog`;

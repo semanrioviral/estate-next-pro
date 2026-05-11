@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
     const currentPage = Number(pageParam) || 1;
 
     const { properties } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage);
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
     let title = 'Propiedades en venta en Cúcuta y Los Patios';
     let description = 'Encuentra las mejores propiedades en venta en Norte de Santander. Casas, apartamentos, lotes y más.';
 
@@ -70,7 +70,7 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
         getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage),
         getTrendingProperties(7, 3)
     ]);
-    const siteUrl = 'https://www.tucasalospatios.com';
+    const siteUrl = 'https://tucasalospatios.com';
     const canonicalUrl = `${siteUrl}/venta`;
     const itemListId = `${canonicalUrl}#itemlist`;
     const { faqItems, faqJsonLd } = generateListingFAQ({ operacion: 'venta' });
