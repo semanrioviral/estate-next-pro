@@ -10,5 +10,11 @@ export default function cloudinaryLoader({ src, width, quality }: {
         }
         return src.replace('/upload/', `/upload/f_auto,q_auto,${transforms}/`);
     }
+    if (src.startsWith('http')) {
+      const url = new URL(src);
+      url.searchParams.set('w', String(width));
+      url.searchParams.set('q', String(quality || 75));
+      return url.toString();
+    }
     return `${src}?w=${width}&q=${quality || 75}`;
 }
