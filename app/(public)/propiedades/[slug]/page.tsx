@@ -22,6 +22,7 @@ import {
     Check
 } from 'lucide-react';
 import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
+import { getCloudinaryOGImage } from '@/lib/supabase/seo-helpers';
 import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
@@ -88,6 +89,7 @@ export async function generateMetadata({ params }: Props) {
     const absoluteImage = property.imagen_principal.startsWith('http')
         ? property.imagen_principal
         : `${siteUrl}${property.imagen_principal}`;
+    const ogImage = getCloudinaryOGImage(absoluteImage);
 
     const title = property.meta_titulo || `${property.titulo} | Inmobiliaria Premium`;
     const description = property.meta_descripcion || property.descripcion.substring(0, 160);
@@ -106,7 +108,7 @@ export async function generateMetadata({ params }: Props) {
             locale: "es_CO",
             images: [
                 {
-                    url: absoluteImage,
+                    url: ogImage,
                     width: 1200,
                     height: 630,
                     alt: property.titulo,
@@ -118,7 +120,7 @@ export async function generateMetadata({ params }: Props) {
             card: "summary_large_image",
             title,
             description,
-            images: [absoluteImage],
+            images: [ogImage],
         },
     };
 }

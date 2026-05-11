@@ -193,3 +193,11 @@ export function optimizeCloudinaryUrl(url: string, width?: number): string {
     }
     return url;
 }
+
+export function getCloudinaryOGImage(url: string): string {
+    if (!url) return '';
+    if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+        return url.replace('/upload/', '/upload/f_auto,q_auto,c_fill,w_1200,h_630,g_auto/');
+    }
+    return url;
+}
