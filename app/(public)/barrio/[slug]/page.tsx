@@ -34,7 +34,7 @@ export async function generateMetadata({ params, searchParams }: BarrioPageProps
     const seo = generateBarrioSEO(barrio.nombre, barrio.nombre, totalCount, slug, { siteUrl });
 
     return {
-        title: seo.title,
+        title: { absolute: seo.title },
         description: seo.description,
         alternates: seo.alternates,
         openGraph: seo.openGraph,

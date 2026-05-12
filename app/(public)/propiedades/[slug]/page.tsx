@@ -90,7 +90,7 @@ export async function generateMetadata({ params }: Props) {
     const seo = generatePropertySEO(property, { siteUrl });
 
     return {
-        title: seo.title,
+        title: { absolute: seo.title },
         description: seo.description,
         alternates: seo.alternates,
         openGraph: seo.openGraph,
