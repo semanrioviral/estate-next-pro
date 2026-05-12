@@ -21,29 +21,30 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
 
-    const { properties } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage);
+    const { properties, totalCount } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage);
     const siteUrl = 'https://tucasalospatios.com';
-    let title = 'Propiedades en venta en Cúcuta y Los Patios';
-    let description = 'Encuentra las mejores propiedades en venta en Norte de Santander. Casas, apartamentos, lotes y más.';
 
-    if (numHabitaciones) {
-        title = `Propiedades en venta con ${numHabitaciones}+ habitaciones`;
-        description = `Explora casas y apartamentos en venta con ${numHabitaciones} o más habitaciones en Cúcuta y Los Patios.`;
-    }
+    const baseTitle = numHabitaciones
+        ? `${numHabitaciones}+ Hab | Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario | Tucasa`
+        : 'Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario | Tucasa';
+
+    const baseDescription = numHabitaciones
+        ? `Explora casas y apartamentos en venta con ${numHabitaciones} o más habitaciones en Cúcuta, Los Patios y Villa del Rosario. Asesoría personalizada con respaldo jurídico. ¡Encuentra tu hogar hoy!`
+        : `Descubre ${totalCount} casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Compara precios, zonas y tipos de inmueble. Asesoría personalizada con respaldo jurídico. ¡Encuentra tu hogar hoy!`;
 
     const canonicalUrl = `${siteUrl}/venta`;
 
     return {
-        title,
-        description,
+        title: baseTitle,
+        description: baseDescription,
         alternates: { canonical: canonicalUrl },
         robots: {
             index: properties.length >= 2,
             follow: true,
         },
         openGraph: {
-            title,
-            description,
+            title: baseTitle,
+            description: baseDescription,
             type: 'website',
             url: canonicalUrl,
             images: [
@@ -55,8 +56,8 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
             ]
         },
         twitter: {
-            title,
-            description,
+            title: baseTitle,
+            description: baseDescription,
         },
     };
 }
@@ -82,8 +83,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                 "@type": "CollectionPage",
                 "@id": canonicalUrl,
                 "url": canonicalUrl,
-                "name": "Propiedades en venta en Cúcuta y Los Patios",
-                "description": "Casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario.",
+                "name": "Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario",
+                "description": `${totalCount} casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Asesoría personalizada con respaldo jurídico.`,
                 "dateModified": new Date().toISOString(),
                 ...(properties.length > 0 ? { "mainEntity": { "@id": itemListId } } : {})
             },
@@ -129,8 +130,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
             />
 
             <CatalogHeader
-                title={<>Propiedades en <span className="text-brand">Venta</span></>}
-                description="Explore nuestra selección exclusiva de inmuebles en Cúcuta y el área metropolitana. Invierta con seguridad y respaldo legal total."
+                title={<>Casas y Apartamentos en <span className="text-brand">Venta</span></>}
+                description={`Explora ${totalCount} inmuebles disponibles en Cúcuta, Los Patios y Villa del Rosario. Casas, apartamentos y lotes con asesoría personalizada y respaldo jurídico.`}
                 totalCount={totalCount}
                 breadcrumbs={[
                     { label: 'Inicio', href: '/' },
