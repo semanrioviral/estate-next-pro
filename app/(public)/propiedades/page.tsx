@@ -8,7 +8,7 @@ import Pagination from "@/components/design-system/Pagination";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-    title: "Catálogo de Propiedades | Inmobiliaria Tucasa Los Patios",
+    title: "Catálogo de Propiedades",
     description: "Explora nuestra amplia oferta de casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Tu hogar ideal está aquí.",
     alternates: {
         canonical: "/propiedades",

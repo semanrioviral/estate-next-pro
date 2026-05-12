@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     if (!post) return {};
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = post.meta_titulo || `${post.titulo} | Inmobiliaria Tucasa Los Patios`;
+    const title = post.meta_titulo || `${post.titulo}`;
     const description = post.meta_descripcion || post.excerpt || '';
     const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
 

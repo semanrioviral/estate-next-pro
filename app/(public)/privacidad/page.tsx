@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Política de Privacidad | Inmobiliaria Tucasa Los Patios',
+    title: 'Política de Privacidad',
     description: 'Política de privacidad y tratamiento de datos personales de Inmobiliaria Tucasa Los Patios.',
     robots: { index: false, follow: true },
     alternates: {

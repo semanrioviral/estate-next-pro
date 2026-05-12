@@ -22,12 +22,12 @@ export async function generateMetadata({ params, searchParams }: TagPageProps): 
 
     if (!tag) {
         return {
-            title: 'Etiqueta no encontrada - Inmobiliaria Tucasa Los Patios',
+            title: 'Etiqueta no encontrada',
             description: 'La etiqueta que buscas no existe.',
         };
     }
 
-    const title = tag.meta_titulo || `${tag.nombre} - Propiedades en Inmobiliaria Tucasa Los Patios`;
+    const title = tag.meta_titulo || `${tag.nombre}`;
     const description = tag.meta_descripcion || `Encuentra propiedades con ${tag.nombre} en Norte de Santander.`;
     const canonicalUrl = `${siteUrl}/tag/${slug}`;
 

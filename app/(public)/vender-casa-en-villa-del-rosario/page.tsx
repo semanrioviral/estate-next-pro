@@ -9,7 +9,7 @@ import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = "Vender Inmueble en Villa del Rosario | Inmobiliaria Tucasa Los Patios";
+    const title = "Vender Inmueble en Villa del Rosario";
     const description = "¿Quiere vender su propiedad en Villa del Rosario? Valoración técnica y marketing profesional para captar el interés de compradores.";
     const canonicalUrl = `${siteUrl}/vender-casa-en-villa-del-rosario`;
 

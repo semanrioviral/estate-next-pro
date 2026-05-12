@@ -71,7 +71,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadPage
         : (isCityFilter ? (filter.dbName || slug.replace(/-/g, ' ')) : slug.replace(/-/g, ' '));
 
     const normalizedTitle = isCityFilter
-        ? `Casas y apartamentos en venta en ${ciudadNombre} | Inmobiliaria Tucasa`
+        ? `Casas y apartamentos en venta en ${ciudadNombre}`
         : (barrio
             ? `Inmuebles en venta en ${barrio.replace(/-/g, ' ')}, ${ciudadNombre}`
             : `Inmuebles en venta en ${ciudadNombre}`);

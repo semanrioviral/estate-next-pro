@@ -9,7 +9,7 @@ import Pagination from '@/components/design-system/Pagination';
 
 export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = 'Inmobiliaria en Villa del Rosario | Inmobiliaria Tucasa Los Patios';
+    const title = 'Inmobiliaria en Villa del Rosario';
     const description = "Tu inmobiliaria experta en Villa del Rosario. Descubre casas y apartamentos en venta y arriendo en el municipio histórico.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-villa-del-rosario`;
 

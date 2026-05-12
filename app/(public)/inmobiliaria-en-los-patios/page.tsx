@@ -9,7 +9,7 @@ import Pagination from '@/components/design-system/Pagination';
 
 export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = 'Inmobiliaria en Los Patios | Inmobiliaria Tucasa Los Patios';
+    const title = 'Inmobiliaria en Los Patios';
     const description = "Autoridad definitiva en bienes raíces en Los Patios, Norte de Santander. Guía de inversión 2026, datos de mercado, servicios integrales y seguridad jurídica total.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-los-patios`;
 

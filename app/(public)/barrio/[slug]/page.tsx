@@ -32,7 +32,7 @@ export async function generateMetadata({ params, searchParams }: BarrioPageProps
 
     if (!barrio) {
         return {
-            title: 'Barrio no encontrado - Inmobiliaria Tucasa Los Patios',
+            title: 'Barrio no encontrado',
             description: 'El barrio que buscas no existe en nuestro catálogo.',
         };
     }

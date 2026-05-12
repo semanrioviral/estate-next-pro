@@ -9,7 +9,7 @@ import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = "Vender mi Casa en Los Patios | Inmobiliaria Tucasa Los Patios";
+    const title = "Vender mi Casa en Los Patios";
     const description = "Venda su propiedad en Los Patios con expertos. Valoración estratégica, marketing profesional y cierre seguro.";
     const canonicalUrl = `${siteUrl}/vender-casa-en-los-patios`;
 

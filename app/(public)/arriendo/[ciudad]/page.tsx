@@ -54,7 +54,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadP
     const ciudadNombre = !isTypeFilter ? (filter.dbName || slug.replace(/-/g, ' ')) : 'Norte de Santander';
 
     const title = barrio
-        ? `Inmuebles en arriendo en ${barrio.replace(/-/g, ' ')}, ${ciudadNombre} | Inmobiliaria Tucasa Los Patios`
+        ? `Inmuebles en arriendo en ${barrio.replace(/-/g, ' ')}, ${ciudadNombre}`
         : (isTypeFilter
             ? `${filter.dbName}s en Arriendo en Cúcuta y Los Patios`
             : `Inmuebles en arriendo en ${ciudadNombre}`);

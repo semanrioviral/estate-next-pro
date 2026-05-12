@@ -9,7 +9,7 @@ import FAQAccordion from '@/components/FAQAccordion';
 
 export async function generateMetadata(): Promise<Metadata> {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const title = 'Inmobiliaria en Cúcuta | Inmobiliaria Tucasa Los Patios';
+    const title = 'Inmobiliaria en Cúcuta';
     const description = "Tu inmobiliaria de confianza en Cúcuta y el Área Metropolitana. Expertos en venta y arriendo con asesoría legal profesional y el mejor catálogo de inmuebles.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-cucuta`;
 
