@@ -8,6 +8,7 @@ import { MapPin, Search, ArrowLeft, Building2 } from 'lucide-react';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Link from 'next/link';
 import Pagination from '@/components/design-system/Pagination';
+import { generateBarrioSEO, generateBarrioJSONLD } from '@/lib/seo/generatePropertySEO';
 
 interface BarrioPageProps {
     params: { slug: string };
@@ -18,7 +19,6 @@ const getBarrioBySlugCached = cache(async (slug: string) => getBarrioBySlug(slug
 
 export async function generateMetadata({ params, searchParams }: BarrioPageProps): Promise<Metadata> {
     const { slug } = params;
-    const { orden } = searchParams ?? {};
     const barrio = await getBarrioBySlugCached(slug);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
@@ -30,19 +30,19 @@ export async function generateMetadata({ params, searchParams }: BarrioPageProps
     }
 
     const { properties, totalCount } = await getPropertiesByBarrioSlug(slug);
-    const title = barrio.meta_titulo || `Casas y Apartamentos en venta en ${barrio.nombre} | Inmobiliaria Tucasa Los Patios`;
-    const description = barrio.meta_descripcion || `Encuentra las mejores propiedades disponibles en el barrio ${barrio.nombre}, Norte de Santander.`;
-    const canonicalUrl = `${siteUrl}/barrio/${slug}`;
+
+    const seo = generateBarrioSEO(barrio.nombre, barrio.nombre, totalCount, slug, { siteUrl });
 
     return {
-        title,
-        description,
-        alternates: { canonical: canonicalUrl },
+        title: seo.title,
+        description: seo.description,
+        alternates: seo.alternates,
+        openGraph: seo.openGraph,
+        twitter: seo.twitter,
         robots: {
-            index: (properties && properties.length > 0),
+            index: properties && properties.length > 0,
             follow: true,
         },
-        openGraph: { title, description, type: 'website', url: canonicalUrl },
     };
 }
 
@@ -58,29 +58,8 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
 
     const { properties, totalCount } = await getPropertiesByBarrioSlug(slug, orden, currentPage);
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const canonicalUrl = `${siteUrl}/barrio/${slug}`;
 
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "CollectionPage",
-                "@id": `${canonicalUrl}#collection`,
-                "name": `Propiedades en ${barrio.nombre}`,
-                "description": barrio.meta_descripcion || `Catálogo de propiedades disponibles en el barrio ${barrio.nombre}.`,
-                "url": canonicalUrl,
-                "mainEntity": {
-                    "@type": "ItemList",
-                    "numberOfItems": totalCount,
-                    "itemListElement": properties.map((property, index) => ({
-                        "@type": "ListItem",
-                        "position": ((currentPage - 1) * 12) + index + 1,
-                        "url": `${siteUrl}/propiedades/${property.slug}`
-                    }))
-                }
-            }
-        ]
-    };
+    const jsonLd = generateBarrioJSONLD(barrio.nombre, barrio.nombre, totalCount, siteUrl, slug);
 
     return (
         <main className="min-h-screen bg-white">

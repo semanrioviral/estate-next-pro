@@ -23,7 +23,7 @@ import {
     Check
 } from 'lucide-react';
 import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
-import { getCloudinaryOGImage } from '@/lib/supabase/seo-helpers';
+import { generatePropertySEO, generatePropertyJSONLD } from '@/lib/seo/generatePropertySEO';
 import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
@@ -86,43 +86,15 @@ export async function generateMetadata({ params }: Props) {
     if (!property) return { title: 'Propiedad no encontrada' };
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
-    const propertyUrl = `${siteUrl}/propiedades/${property.slug}`;
-    const absoluteImage = property.imagen_principal.startsWith('http')
-        ? property.imagen_principal
-        : `${siteUrl}${property.imagen_principal}`;
-    const ogImage = getCloudinaryOGImage(absoluteImage);
 
-    const title = property.meta_titulo || `${property.titulo} | Inmobiliaria Premium`;
-    const description = property.meta_descripcion || property.descripcion.substring(0, 160);
+    const seo = generatePropertySEO(property, { siteUrl });
 
     return {
-        title,
-        description,
-        alternates: {
-            canonical: propertyUrl,
-        },
-        openGraph: {
-            title,
-            description,
-            url: propertyUrl,
-            siteName: "Inmobiliaria Tucasa Los Patios",
-            locale: "es_CO",
-            images: [
-                {
-                    url: ogImage,
-                    width: 1200,
-                    height: 630,
-                    alt: property.titulo,
-                },
-            ],
-            type: "article",
-        },
-        twitter: {
-            card: "summary_large_image",
-            title,
-            description,
-            images: [ogImage],
-        },
+        title: seo.title,
+        description: seo.description,
+        alternates: seo.alternates,
+        openGraph: seo.openGraph,
+        twitter: seo.twitter,
     };
 }
 
@@ -198,70 +170,7 @@ Referencia: ${propertyUrl}
         new Set([property.imagen_principal, ...(property.galeria || [])].filter(Boolean))
     );
 
-    const jsonLd: any = {
-        "@context": "https://schema.org",
-        "@graph": [
-            {
-                "@type": "Product",
-                "@id": `${propertyUrl}#product`,
-                "name": property.titulo,
-                "description": property.descripcion,
-                "url": propertyUrl,
-                "image": propertyImages.map((img) => getAbsoluteUrl(img)),
-                "brand": {
-                    "@type": "Organization",
-                    "name": "Inmobiliaria Tucasa Los Patios"
-                },
-                "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": property.ciudad,
-                    "addressRegion": "Norte de Santander",
-                    "addressCountry": "CO"
-                },
-                "category": `${property.tipo} en venta`,
-                ...(property.precio ? {
-                    "offers": {
-                        "@type": "Offer",
-                        "price": property.precio,
-                        "priceCurrency": "COP",
-                        "availability": "https://schema.org/InStock",
-                        "url": propertyUrl,
-                        "seller": {
-                            "@type": "RealEstateAgent",
-                            "name": "Inmobiliaria Tucasa Los Patios"
-                        }
-                    }
-                } : {}),
-                "additionalProperty": [
-                    ...(property.habitaciones ? [{
-                        "@type": "PropertyValue",
-                        "name": "Habitaciones",
-                        "value": property.habitaciones
-                    }] : []),
-                    ...(property.baños ? [{
-                        "@type": "PropertyValue",
-                        "name": "Baños",
-                        "value": property.baños
-                    }] : []),
-                    ...(property.area_m2 ? [{
-                        "@type": "PropertyValue",
-                        "name": "Área construida",
-                        "value": (property as any).area ?? property.area_m2,
-                        "unitCode": "MTK"
-                    }] : [])
-                ]
-            },
-            {
-                "@type": "BreadcrumbList",
-                "@id": `${propertyUrl}#breadcrumb`,
-                "itemListElement": [
-                    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": siteUrl },
-                    { "@type": "ListItem", "position": 2, "name": "Venta", "item": `${siteUrl}/venta` },
-                    { "@type": "ListItem", "position": 3, "name": property.titulo, "item": propertyUrl }
-                ]
-            }
-        ]
-    };
+    const jsonLd = generatePropertyJSONLD(property, siteUrl);
 
     return (
         <main className="bg-white min-h-screen pb-24 md:pb-20">
