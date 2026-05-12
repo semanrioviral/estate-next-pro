@@ -16,44 +16,48 @@ import { CIUDAD_MAP } from "@/lib/supabase/constants";
 
 const CITY_SEO_DATA: Record<string, { title: string; description: string; text: string }> = {
     "cucuta": {
-        title: "Inmobiliaria en Cúcuta - Casas y apartamentos en venta | Inmobiliaria Tucasa Los Patios",
-        description: "Explora el catálogo más completo de inmuebles en Cúcuta. Casas en La Riviera, Caobos y más sectores exclusivos de Norte de Santander.",
+        title: "Inmobiliaria en Cúcuta - Casas y apartamentos en venta",
+        description: "Encuentra casas y apartamentos en venta en Cúcuta. 30+ inmuebles verificados en La Riviera, Caobos y sectores exclusivos. ¡Tu nuevo hogar en la Perla del Norte te espera!",
         text: "Cúcuta, la vibrante capital de Norte de Santander, ofrece un mercado inmobiliario dinámico y lleno de oportunidades para todo tipo de compradores. Si está interesado en casas y apartamentos en venta en Cúcuta, descubrirá que la ciudad cuenta con sectores de alta valorización y prestigio como La Riviera, Caobos y Quinta Oriental, donde la arquitectura moderna se mezcla con la calidez del clima local. Como centro comercial y logístico estratégico en la frontera, Cúcuta atrae inversiones constantes, lo que se traduce en una oferta de vivienda robusta que incluye desde apartamentes de lujo con vistas panorámicas hasta casas confortables en urbanizaciones seguras. Ya sea que busque su primera vivienda o una propiedad para inversión, Cúcuta proporciona todas las comodidades urbanas, centros comerciales de primer nivel, instituciones educativas reconocidas y una infraestructura vial en mejora permanente. Confíe en nuestra experiencia para encontrar el inmueble perfecto en la Perla del Norte."
     },
     "los-patios": {
-        title: "Casas y apartamentos en venta en Los Patios, N.S. | Inmobiliaria Tucasa Los Patios",
-        description: "Encuentra las mejores opciones de vivienda en Los Patios, Norte de Santander. Casas amplias, apartamentos modernos y lotes con gran ubicación. ¡Tu hogar ideal te espera!",
+        title: "Casas y apartamentos en venta en Los Patios, N.S.",
+        description: "Descubre 25+ casas, apartamentos y lotes en venta en Los Patios. Conjuntos cerrados, vivienda con Caja Honor y terrenos con potencial de inversión en el área metropolitana de Cúcuta.",
         text: "Los Patios se ha consolidado como uno de los municipios con mayor crecimiento residencial en el área metropolitana de Cúcuta. Su clima agradable, ambiente familiar y la tranquilidad de sus barrios lo convierten en la opción predilecta para quienes buscan un hogar equilibrado. Al buscar casas y apartamentos en venta en Los Patios, encontrará una oferta variada que incluye desde modernos conjuntos cerrados con zonas sociales completas hasta amplias casas independientes en sectores tradicionales. Esta zona ofrece una excelente conectividad con la capital del departamento, permitiendo disfrutar de la paz de un municipio residencial sin alejarse de los servicios comerciales y profesionales de la ciudad. Invertir en finca raíz en Los Patios garantiza valorización a largo plazo, gracias al desarrollo de infraestructura y la constante demanda de vivienda de calidad en sectores como Valles del Mirador o Tierra Linda."
     },
     "villa-del-rosario": {
-        title: "Venta de casas en Villa del Rosario, Norte de Santander | Inmobiliaria Tucasa Los Patios",
-        description: "Propiedades destacadas en Villa del Rosario. Vive cerca de la historia y el progreso en sectores como Juan Frío y el Centro Histórico.",
+        title: "Casas en venta en Villa del Rosario, Norte de Santander",
+        description: "Villa del Rosario te espera. Encuentra casas, fincas y lotes en venta cerca del puente internacional. Vive en el municipio histórico con el mejor potencial de valorización de la región.",
         text: "Villa del Rosario no solo es la cuna de la Gran Colombia, sino también uno de los destinos residenciales más prometedores de Norte de Santander. La búsqueda de casas y apartamentos en venta en Villa del Rosario es hoy una tendencia creciente debido a su ubicación estratégica cerca de los puentes internacionales y su desarrollo urbanístico ordenado. El municipio ofrece un estilo de vida más pausado y tradicional, ideal para familias que valoran el espacio y la tranquilidad sin renunciar a la cercanía con el dinamismo comercial de Cúcuta. Los nuevos proyectos de vivienda en sectores como La Parada o el centro histórico están diseñados para cumplir con altos estándares de confort y seguridad, atrayendo a quienes desean habitar en un entorno con un profundo valor cultural y un horizonte de valorización garantizado. Con servicios públicos eficientes, parques recreativos y una comunidad acogedora, Villa del Rosario es el lugar donde su inversión inmobiliaria se transforma en un hogar con identidad y futuro."
     }
 };
 
 export const dynamic = 'force-dynamic';
 
+function normalizeSiteUrl(url: string): string {
+    return url.replace(/^(https?:\/\/)www\./, '$1');
+}
+
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const { ciudad } = await params;
     const { orden } = await searchParams;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
+    const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com");
     const seo = CITY_SEO_DATA[ciudad];
 
     if (!seo) return { title: "Ciudad no encontrada" };
 
+    const canonical = `${siteUrl}/${ciudad}`;
+
     return {
         metadataBase: new URL(siteUrl),
-        title: seo.title,
+        title: { absolute: seo.title },
         description: seo.description,
         robots: { index: true, follow: true },
-        alternates: {
-            canonical: `${siteUrl}/${ciudad}`,
-        },
+        alternates: { canonical },
         openGraph: {
             title: seo.title,
             description: seo.description,
-            url: `${siteUrl}/${ciudad}`,
+            url: canonical,
             siteName: "Inmobiliaria Tucasa Los Patios",
             locale: "es_CO",
             type: "website",
@@ -81,7 +85,7 @@ export default async function CiudadPage({ params, searchParams }: Props) {
     }
 
     const { properties, totalCount } = await getPropertiesByCity(cityName, orden, currentPage);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
+    const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com");
 
     const jsonLd = {
         "@context": "https://schema.org",

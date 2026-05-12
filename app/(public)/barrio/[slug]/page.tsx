@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { getBarrioBySlug, getPropertiesByBarrioSlug } from '@/lib/supabase/properties';
+import { getBarrioBySlug, getPropertiesByBarrioSlug, getAllBarrios } from '@/lib/supabase/properties';
 import { notFound } from 'next/navigation';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExploreAlso from '@/components/ExploreAlso';
@@ -15,7 +15,15 @@ interface BarrioPageProps {
     searchParams?: { orden?: string; page?: string };
 }
 
+export const revalidate = 300;
+export const dynamicParams = true;
+
 const getBarrioBySlugCached = cache(async (slug: string) => getBarrioBySlug(slug));
+
+export async function generateStaticParams() {
+    const barrios = await getAllBarrios();
+    return barrios.map((b) => ({ slug: b.slug }));
+}
 
 export async function generateMetadata({ params, searchParams }: BarrioPageProps): Promise<Metadata> {
     const { slug } = params;

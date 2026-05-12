@@ -5,6 +5,17 @@ export async function middleware(request: NextRequest) {
     const url = request.nextUrl.clone()
     const hostname = request.headers.get('host') || ''
 
+    // Imágenes antiguas de WordPress → 410 Gone
+    if (url.pathname.startsWith('/wp-content/')) {
+        return new NextResponse(null, { status: 410 })
+    }
+
+    // Trailing slash → non-trailing slash (except root)
+    if (url.pathname !== '/' && url.pathname.endsWith('/')) {
+        url.pathname = url.pathname.slice(0, -1)
+        return NextResponse.redirect(url, { status: 301 })
+    }
+
     if (hostname.startsWith('www.')) {
         const nonWwwHost = hostname.replace(/^www\./, '')
         url.hostname = nonWwwHost

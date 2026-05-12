@@ -29,6 +29,56 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      // Antiguas URLs de WordPress - 301 a páginas equivalentes
+      {
+        source: '/Categoria/venta/:path*',
+        destination: '/venta',
+        permanent: true,
+      },
+      {
+        source: '/category/:path*',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/servicios',
+        destination: '/nosotros',
+        permanent: true,
+      },
+      {
+        source: '/servicios/:path*',
+        destination: '/nosotros',
+        permanent: true,
+      },
+      {
+        source: '/consignar-inmueble-los-patios-cucuta',
+        destination: '/vender-casa-en-los-patios',
+        permanent: true,
+      },
+      {
+        source: '/casas-en-venta-en-los-patios-compra-con-caja-honor',
+        destination: '/venta/los-patios',
+        permanent: true,
+      },
+      {
+        source: '/resultados-de-la-busqueda',
+        destination: '/propiedades',
+        permanent: true,
+      },
+      {
+        source: '/quieres-vender-tu-casa-en-los-patios-cucuta-y-colombia',
+        destination: '/vender-casa-en-los-patios',
+        permanent: true,
+      },
+      {
+        source: '/vender-casa-en-los-patios-cucuta-y-colombia',
+        destination: '/vender-casa-en-los-patios',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

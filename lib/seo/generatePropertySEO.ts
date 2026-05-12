@@ -101,17 +101,21 @@ function getBarrioDisplay(barrio: string): string {
   return capitalize(barrio);
 }
 
+function normalizeSiteUrl(url: string): string {
+  return url.replace(/^(https?:\/\/)www\./, '$1');
+}
+
 function buildPropertyURL(property: Property, siteUrl: string): string {
-  return `${siteUrl}/propiedades/${property.slug}`;
+  return `${normalizeSiteUrl(siteUrl)}/propiedades/${property.slug}`;
 }
 
 function buildBarrioURL(barrioSlug: string, siteUrl: string): string {
-  return `${siteUrl}/barrio/${barrioSlug}`;
+  return `${normalizeSiteUrl(siteUrl)}/barrio/${barrioSlug}`;
 }
 
 function getAbsoluteImageUrl(imageUrl: string, siteUrl: string): string {
   if (imageUrl.startsWith('http')) return imageUrl;
-  return `${siteUrl}${imageUrl}`;
+  return `${normalizeSiteUrl(siteUrl)}${imageUrl}`;
 }
 
 function selectTitleVariation(titles: TitleVariation[]): string {
@@ -193,6 +197,7 @@ export function generatePropertyOGDescription(property: Property): string {
 }
 
 export function generatePropertyJSONLD(property: Property, siteUrl: string): Record<string, unknown> {
+  siteUrl = normalizeSiteUrl(siteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
   const absoluteImage = getAbsoluteImageUrl(property.imagen_principal, siteUrl);
   const ogImage = getCloudinaryOGImage(absoluteImage);
@@ -277,7 +282,8 @@ export function generatePropertySEO(
   property: Property,
   context: PropertySEOContext = { siteUrl: 'https://tucasalospatios.com' }
 ): SEOOutput {
-  const { siteUrl } = context;
+  const { siteUrl: rawSiteUrl } = context;
+  const siteUrl = normalizeSiteUrl(rawSiteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
   const absoluteImage = getAbsoluteImageUrl(property.imagen_principal, siteUrl);
   const ogImage = getCloudinaryOGImage(absoluteImage);
@@ -367,6 +373,7 @@ export function generateBarrioJSONLD(
   siteUrl: string,
   barrioSlug: string
 ): Record<string, unknown> {
+  siteUrl = normalizeSiteUrl(siteUrl);
   const barrioUrl = buildBarrioURL(barrioSlug, siteUrl);
 
   return {
@@ -419,7 +426,8 @@ export function generateBarrioSEO(
   context: BarrioSEOContext = { siteUrl: 'https://tucasalospatios.com' },
   operacion?: string
 ): SEOOutput {
-  const { siteUrl } = context;
+  const { siteUrl: rawSiteUrl } = context;
+  const siteUrl = normalizeSiteUrl(rawSiteUrl);
   const barrioUrl = buildBarrioURL(barrioSlug, siteUrl);
 
   const title = generateBarrioTitle(barrio, ciudad, totalCount, operacion);
