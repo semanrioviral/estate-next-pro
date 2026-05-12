@@ -190,7 +190,7 @@ export default async function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {cities.map((city) => (
+            {cities.map((city, cityIndex) => (
               <Link
                 key={city.slug}
                 href={`/${city.slug}`}
@@ -199,9 +199,11 @@ export default async function Home() {
                 <div className="relative h-64 overflow-hidden">
                   <Image
                     src={city.image}
-                    alt={city.name}
+                    alt={`Propiedades en ${city.name} - ${city.count} inmuebles disponibles`}
                     fill
                     className="object-cover transition-transform duration-[2000ms] group-hover:scale-110"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px"
+                    priority={cityIndex === 0}
                   />
                   <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/20 text-slate-900 text-[10px] font-black uppercase tracking-widest shadow-xl">
                     {city.count}
