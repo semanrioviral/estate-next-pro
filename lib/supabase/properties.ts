@@ -379,7 +379,7 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
  */
 export async function getAllTags(): Promise<{ id: string; nombre: string }[]> {
     try {
-        const supabase = await createClient();
+        const supabase = createPublicClient();
         const { data, error } = await supabase
             .from('tags')
             .select('id, nombre')
@@ -402,7 +402,7 @@ export async function getAllTags(): Promise<{ id: string; nombre: string }[]> {
  */
 export async function getAllAmenidades(): Promise<{ id: string; nombre: string }[]> {
     try {
-        const supabase = await createClient();
+        const supabase = createPublicClient();
         const { data, error } = await supabase
             .from('amenidades')
             .select('id, nombre')
@@ -432,7 +432,7 @@ export async function getTagBySlug(slug: string): Promise<{
     meta_descripcion?: string;
 } | null> {
     try {
-        const supabase = await createClient();
+        const supabase = createPublicClient();
         const { data, error } = await supabase
             .from('tags')
             .select('id, nombre, slug, descripcion, meta_titulo, meta_descripcion')
@@ -456,7 +456,7 @@ export async function getTagBySlug(slug: string): Promise<{
  */
 export async function getPropertiesByTagSlug(slug: string, orden?: string, page: number = 1): Promise<PaginatedProperties> {
     try {
-        const supabase = await createClient();
+        const supabase = createPublicClient();
         const pageSize = 12;
         const from = (page - 1) * pageSize;
         const to = from + pageSize - 1;
@@ -855,7 +855,7 @@ export async function syncPropertyGallery(propertyId: string, images: GalleryIma
  */
 export async function getBarrioBySlug(slug: string) {
     try {
-        const supabase = await createClient();
+        const supabase = createPublicClient();
         const { data, error } = await supabase
             .from('barrios')
             .select('id, nombre, slug, descripcion, meta_titulo, meta_descripcion, destacado, orden')
@@ -1450,7 +1450,7 @@ export const getSimilarProperties = unstable_cache(
  */
 export async function recordPropertyView(propertyId: string, clientIp?: string, sessionId?: string) {
     try {
-        const supabase = await createClient(); // Solo servidor para inserción segura
+        const supabase = createPublicClient();
 
         let ip_hash = '';
         if (clientIp) {
