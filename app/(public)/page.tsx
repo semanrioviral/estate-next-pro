@@ -3,28 +3,18 @@ import PropertyCardV3 from "@/components/design-system/PropertyCardV3";
 import HomeHeroV3 from "@/components/design-system/HomeHeroV3";
 import Link from 'next/link';
 import Image from 'next/image';
-import type { Metadata } from 'next';
 import { ChevronRight, Building2, MapPin, ShieldCheck, Users, Trophy, Star, CheckCircle2, Home as HomeIcon, Building, Map, LayoutGrid } from 'lucide-react';
 import SearchBarV3 from "@/components/design-system/SearchBarV3";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: "Inmobiliaria Tucasa Los Patios | Casas y Apartamentos en Cúcuta y Norte de Santander",
-  description: "Encuentra casas, apartamentos y lotes en venta y arriendo en Cúcuta, Los Patios y Villa del Rosario. Inmobiliaria líder en Norte de Santador con asesoría personalizada y respaldo jurídico.",
-  openGraph: {
-    title: "Inmobiliaria Tucasa Los Patios | Casas y Apartamentos en Cúcuta y Norte de Santander",
-    description: "Encuentra tu hogar ideal en Cúcuta, Los Patios y Villa del Rosario. Expertos en venta y arriendo de inmuebles.",
-  },
-};
-
 export default async function Home() {
   const featuredProperties = await getFeaturedProperties(6);
 
   const cities = [
-    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/v1778794447/tucasa-web/city-cucuta.jpg" },
-    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/v1778794346/tucasa-web/city-los-patios.jpg" },
-    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/v1778794346/tucasa-web/city-villa-rosario.jpg" }
+    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://images.unsplash.com/photo-1596487640076-9289196b6534?q=80&w=1200&auto=format&fit=crop" },
+    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop" },
+    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1200&auto=format&fit=crop" }
   ];
 
   return (

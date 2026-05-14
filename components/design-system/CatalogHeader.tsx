@@ -27,27 +27,9 @@ export default function CatalogHeader({
     breadcrumbs,
     badge
 }: CatalogHeaderProps) {
-    const breadcrumbJsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Inicio", "item": "https://tucasalospatios.com" },
-            ...breadcrumbs.map((item, index) => ({
-                "@type": "ListItem",
-                "position": index + 2,
-                "name": item.label,
-                "item": item.href ? `https://tucasalospatios.com${item.href}` : undefined
-            }))
-        ]
-    };
-
     return (
         <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-12 relative border-b border-border-clean">
             <div className="container-wide px-4">
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-                />
                 {/* Breadcrumbs & Badge */}
                 <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
                     <nav className="flex items-center text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">

@@ -1,7 +1,6 @@
 import Link from 'next/link';
 
 export default function Footer() {
-    const phoneNumber = process.env.NEXT_PUBLIC_PHONE_NUMBER || "3223047435";
     return (
         <footer className="w-full bg-white dark:bg-black border-t border-zinc-200 dark:border-zinc-800 pt-24 pb-12 mt-32">
             <div className="mx-auto max-w-7xl px-6">
@@ -57,7 +56,7 @@ export default function Footer() {
                             Av. Principal Los Patios<br />
                             Norte de Santander, Colombia
                         </p>
-                        <a href={`tel:${phoneNumber}`} className="text-[#fb2c36] font-bold block mb-2">{phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')}</a>
+                        <a href={`tel:${process.env.NEXT_PUBLIC_PHONE_NUMBER}`} className="text-[#fb2c36] font-bold block mb-2">{process.env.NEXT_PUBLIC_PHONE_NUMBER?.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3')}</a>
                         <a href="mailto:ventas@tucasalospatios.com" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] transition-colors font-medium">ventas@tucasalospatios.com</a>
                     </div>
                 </div>

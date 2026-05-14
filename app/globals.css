@@ -97,24 +97,6 @@ h3 {
   @apply w-full h-11 px-4 bg-white border border-slate-200 rounded-md text-sm focus:ring-1 focus:ring-brand focus:border-brand transition-all outline-none;
 }
 
-.skip-link {
-  position: absolute;
-  top: -100%;
-  left: 8px;
-  z-index: 99999;
-  padding: 12px 24px;
-  background: #e7000b;
-  color: white;
-  font-size: 14px;
-  font-weight: 700;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: top 0.1s;
-}
-.skip-link:focus {
-  top: 8px;
-}
-
 ::selection {
   background: #e7000b;
   color: white;

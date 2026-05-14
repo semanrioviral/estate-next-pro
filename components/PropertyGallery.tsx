@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import Image from 'next/image'
 import { ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react'
@@ -16,7 +16,6 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [isLightboxOpen, setIsLightboxOpen] = useState(false)
     const [mosaicStartIndex, setMosaicStartIndex] = useState(0)
-    const lightboxRef = useRef<HTMLDivElement>(null)
 
     // Main Carousel
     const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
@@ -155,32 +154,10 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
                 if (isLightboxOpen) emblaLightboxApi?.scrollNext();
                 else emblaMainApi?.scrollNext();
             }
-            if (e.key === 'Tab' && isLightboxOpen && lightboxRef.current) {
-                const focusable = lightboxRef.current.querySelectorAll<HTMLElement>(
-                    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                );
-                const first = focusable[0];
-                const last = focusable[focusable.length - 1];
-                if (e.shiftKey) {
-                    if (document.activeElement === first) {
-                        e.preventDefault();
-                        last?.focus();
-                    }
-                } else {
-                    if (document.activeElement === last) {
-                        e.preventDefault();
-                        first?.focus();
-                    }
-                }
-            }
         };
         if (isLightboxOpen) {
             window.addEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                const firstButton = lightboxRef.current?.querySelector('button');
-                firstButton?.focus();
-            }, 100);
         }
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
@@ -197,7 +174,7 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
     }
 
     const lightboxModal = isLightboxOpen ? (
-        <div ref={lightboxRef} className="fixed inset-0 z-[9999] bg-zinc-950/95 flex items-center justify-center transition-all duration-500 animate-in fade-in backdrop-blur-md">
+        <div className="fixed inset-0 z-[9999] bg-zinc-950/95 flex items-center justify-center transition-all duration-500 animate-in fade-in backdrop-blur-md">
             <button
                 className="absolute top-6 right-6 z-[10000] p-3 text-white/70 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full border border-white/10"
                 onClick={() => setIsLightboxOpen(false)}

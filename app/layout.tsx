@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -108,14 +110,9 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth light" data-scroll-behavior="smooth" style={{ colorScheme: 'light' }}>
       <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
-        <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link rel="preconnect" href="https://connect.facebook.net" />
-        <a href="#main-content" className="skip-link">
-          Saltar al contenido principal
-        </a>
         {metaPixelId ? (
           <>
-            <Script id="meta-pixel-base" strategy="lazyOnload">
+            <Script id="meta-pixel-base" strategy="afterInteractive">
               {`
                 var metaPixelId = '${metaPixelId}';
                 !function(f,b,e,v,n,t,s){
