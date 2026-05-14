@@ -4,8 +4,11 @@ Allow: /
 Disallow: /api/
 Disallow: /_next/
 Disallow: /admin/
-
+Disallow: /es_neighborhood/
+Disallow: /Categoria/
+Disallow: /category/
 Disallow: /?utm_
 Disallow: /?fbclid=
+Disallow: /*?paged
 
 Sitemap: https://tucasalospatios.com/sitemap.xml

@@ -4,7 +4,7 @@ import { unstable_cache } from 'next/cache';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { headers } from 'next/headers';
 import {
     MapPin,
@@ -105,7 +105,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
 
     if (!property) {
-        redirect('/venta');
+        notFound();
     }
 
     const getAbsoluteUrl = (path: string) => path.startsWith('http') ? path : `${siteUrl}${path}`;

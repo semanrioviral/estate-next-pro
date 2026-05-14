@@ -77,6 +77,18 @@ const nextConfig: NextConfig = {
         destination: '/vender-casa-en-los-patios',
         permanent: true,
       },
+      // WordPress neighborhood taxonomy pages
+      {
+        source: '/es_neighborhood/:slug*',
+        destination: '/barrio/:slug*',
+        permanent: true,
+      },
+      // WordPress Propiedades (capitalized)
+      {
+        source: '/Propiedades/:slug*',
+        destination: '/propiedades/:slug*',
+        permanent: true,
+      },
     ];
   },
 };

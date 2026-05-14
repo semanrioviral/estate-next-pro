@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     title: "Catálogo de Propiedades",
     description: "Explora nuestra amplia oferta de casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Tu hogar ideal está aquí.",
     alternates: {
-        canonical: "/propiedades",
+        canonical: "https://tucasalospatios.com/propiedades",
     },
 };
 
