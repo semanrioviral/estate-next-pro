@@ -6,14 +6,20 @@ export async function updateSession(request: NextRequest) {
         request,
     });
 
+    const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
+    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
+
+    // Skip Supabase auth for public routes to avoid redirect loops
+    if (!isAdminPath) {
+        return supabaseResponse;
+    }
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
         console.error('Supabase middleware: missing environment variables');
-        // If it's an admin path (but NOT the login page), don't allow access if variables are missing
-        const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
-        if (request.nextUrl.pathname.startsWith("/admin") && !isLoginPage) {
+        if (isAdminPath && !isLoginPage) {
             const url = request.nextUrl.clone();
             url.pathname = "/";
             return NextResponse.redirect(url);
@@ -23,16 +29,9 @@ export async function updateSession(request: NextRequest) {
 
     const supabase = createMiddlewareClient(request, supabaseResponse);
 
-    // IMPORTANT: Avoid writing any logic between createServerClient and
-    // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-    // auth issues.
-
     const {
         data: { user },
     } = await supabase.auth.getUser();
-
-    const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
-    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
 
     // 1. No user -> Redirect to login (if not already there)
     if (!user && isAdminPath && !isLoginPage) {
