@@ -107,11 +107,9 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="scroll-smooth light" data-scroll-behavior="smooth" style={{ colorScheme: 'light' }}>
-      <head>
+      <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
-      </head>
-      <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
         <a href="#main-content" className="skip-link">
           Saltar al contenido principal
         </a>
