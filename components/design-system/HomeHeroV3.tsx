@@ -9,7 +9,7 @@ export default function HomeHeroV3() {
             {/* Background Image with optimized overlay */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop"
+                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/v1778794344/tucasa-web/hero-bg.jpg"
                     alt="Propiedad de Lujo"
                     fill
                     priority

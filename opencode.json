@@ -1,8 +1,21 @@
 {
+  "$schema": "https://opencode.ai/config.json",
   "mcp": {
     "supabase": {
       "type": "remote",
-      "url": "https://mcp.supabase.com/mcp",
+      "url": "https://mcp.supabase.com/mcp?project_ref=uehajzlrvqvirtsubsdq",
+      "headers": {
+        "Authorization": "Bearer env:SUPABASE_MCP_TOKEN"
+      },
+      "enabled": true
+    },
+
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "ctx7sk-af24ee81-dae2-4da1-9e71-8c46227cfbe1"
+      },
       "enabled": true
     },
 
@@ -24,12 +37,6 @@
     "puppeteer": {
       "type": "local",
       "command": ["npx", "-y", "@modelcontextprotocol/server-puppeteer"],
-      "enabled": true
-    },
-
-    "fetch": {
-      "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-fetch"],
       "enabled": true
     },
 

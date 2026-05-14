@@ -16,7 +16,7 @@ export default function PublicLayout({
     return (
         <>
             <NavbarV3 />
-            <main className={`min-h-screen ${isHome ? "pt-0" : "pt-20 md:pt-24"}`}>
+            <main id="main-content" className={`min-h-screen ${isHome ? "pt-0" : "pt-20 md:pt-24"}`}>
                 {children}
             </main>
             <FooterV3 />

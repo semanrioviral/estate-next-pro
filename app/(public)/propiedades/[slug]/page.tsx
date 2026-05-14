@@ -395,7 +395,7 @@ Referencia: ${propertyUrl}
                                 </div>
 
                                 <div className="aspect-[21/9] w-full rounded-lg overflow-hidden border border-slate-200 bg-white group relative">
-                                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80')] bg-cover bg-center grayscale opacity-[0.03]" />
+                                    <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dwdlmbftw/image/upload/v1778794348/tucasa-web/propiedades-bg.jpg')] bg-cover bg-center grayscale opacity-[0.03]" />
                                     <div className="relative z-10 w-full h-full flex items-center justify-center p-8">
                                         <div className="text-center max-w-md">
                                             <div className="h-12 w-12 bg-brand/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-brand/10">

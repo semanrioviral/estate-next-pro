@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -109,10 +107,17 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="scroll-smooth light" data-scroll-behavior="smooth" style={{ colorScheme: 'light' }}>
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
+      </head>
       <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
+        <a href="#main-content" className="skip-link">
+          Saltar al contenido principal
+        </a>
         {metaPixelId ? (
           <>
-            <Script id="meta-pixel-base" strategy="afterInteractive">
+            <Script id="meta-pixel-base" strategy="lazyOnload">
               {`
                 var metaPixelId = '${metaPixelId}';
                 !function(f,b,e,v,n,t,s){
@@ -153,6 +158,14 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalJsonLd) }}
         />
+        <script type="speculationrules">
+          {JSON.stringify({
+            prerender: [{
+              where: { href_matches: "/*" },
+              eagerness: "moderate"
+            }]
+          })}
+        </script>
         {children}
       </body>
     </html>
