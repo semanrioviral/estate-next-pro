@@ -85,11 +85,13 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       // WordPress Propiedades (capitalized)
+/*
       {
         source: '/Propiedades/:slug*',
         destination: '/propiedades/:slug*',
         permanent: true,
       },
+*/
     ];
   },
 };
