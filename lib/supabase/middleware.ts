@@ -2,34 +2,42 @@ import { createMiddlewareClient } from "../supabase-server";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function updateSession(request: NextRequest) {
-    const response = NextResponse.next({ request });
+    let supabaseResponse = NextResponse.next({
+        request,
+    });
 
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
     if (!supabaseUrl || !supabaseKey) {
-        return response;
+        console.error('Supabase middleware: missing environment variables');
+        const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
+        if (request.nextUrl.pathname.startsWith("/admin") && !isLoginPage) {
+            const url = request.nextUrl.clone();
+            url.pathname = "/";
+            return NextResponse.redirect(url);
+        }
+        return supabaseResponse;
     }
 
-    const supabase = createMiddlewareClient(request, response);
+    const supabase = createMiddlewareClient(request, supabaseResponse);
 
-    // Only check auth for admin routes to keep public routes fast
-    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
-    if (!isAdminPath) {
-        return response;
-    }
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
 
     const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
+    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
 
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user && !isLoginPage) {
+    // 1. No user -> Redirect to login (if not already there)
+    if (!user && isAdminPath && !isLoginPage) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin/login";
         return NextResponse.redirect(url);
     }
 
-    if (user && !isLoginPage) {
+    // 2. User logged in -> Check roles for admin paths (except login itself)
+    if (user && isAdminPath && !isLoginPage) {
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('role')
@@ -37,17 +45,19 @@ export async function updateSession(request: NextRequest) {
             .single();
 
         if (error || !profile || (profile.role !== 'admin' && profile.role !== 'agente')) {
+            console.error("Access Denied - Role Check Failed:", { user: user.email, profile, error });
             const url = request.nextUrl.clone();
             url.pathname = "/";
             return NextResponse.redirect(url);
         }
     }
 
+    // 3. User logged in but on login page -> Redirect to admin dashboard
     if (user && isLoginPage) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin";
         return NextResponse.redirect(url);
     }
 
-    return response;
+    return supabaseResponse;
 }
