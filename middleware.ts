@@ -10,11 +10,8 @@ export async function middleware(request: NextRequest) {
         return new NextResponse(null, { status: 410 })
     }
 
-    // Trailing slash → non-trailing slash (except root)
-    if (url.pathname !== '/' && url.pathname.endsWith('/')) {
-        url.pathname = url.pathname.slice(0, -1)
-        return NextResponse.redirect(url, { status: 301 })
-    }
+    // Trailing slash is handled by Vercel Edge / Next.js (trailingSlash: false)
+    // Do NOT add a trailing-slash removal here — it conflicts with Vercel Edge routing
 
     if (hostname.startsWith('www.')) {
         const nonWwwHost = hostname.replace(/^www\./, '')
