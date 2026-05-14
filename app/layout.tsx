@@ -156,14 +156,6 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(globalJsonLd) }}
         />
-        <script type="speculationrules">
-          {JSON.stringify({
-            prerender: [{
-              where: { href_matches: "/*" },
-              eagerness: "moderate"
-            }]
-          })}
-        </script>
         {children}
       </body>
     </html>
