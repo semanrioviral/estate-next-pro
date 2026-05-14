@@ -21,28 +21,30 @@ export async function updateSession(request: NextRequest) {
         return supabaseResponse;
     }
 
-    const supabase = createMiddlewareClient(request, supabaseResponse);
+    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
 
-    // IMPORTANT: Avoid writing any logic between createServerClient and
-    // supabase.auth.getUser(). A simple mistake could make it very hard to debug
-    // auth issues.
+    // Public routes: skip Supabase auth entirely
+    if (!isAdminPath) {
+        return supabaseResponse;
+    }
+
+    const supabase = createMiddlewareClient(request, supabaseResponse);
 
     const {
         data: { user },
     } = await supabase.auth.getUser();
 
     const isLoginPage = request.nextUrl.pathname.startsWith("/admin/login");
-    const isAdminPath = request.nextUrl.pathname.startsWith("/admin");
 
     // 1. No user -> Redirect to login (if not already there)
-    if (!user && isAdminPath && !isLoginPage) {
+    if (!user && !isLoginPage) {
         const url = request.nextUrl.clone();
         url.pathname = "/admin/login";
         return NextResponse.redirect(url);
     }
 
-    // 2. User logged in -> Check roles for admin paths (except login itself)
-    if (user && isAdminPath && !isLoginPage) {
+    // 2. User logged in -> Check roles (except login itself)
+    if (user && !isLoginPage) {
         const { data: profile, error } = await supabase
             .from('profiles')
             .select('role')
@@ -50,7 +52,6 @@ export async function updateSession(request: NextRequest) {
             .single();
 
         if (error || !profile || (profile.role !== 'admin' && profile.role !== 'agente')) {
-            console.error("Access Denied - Role Check Failed:", { user: user.email, profile, error });
             const url = request.nextUrl.clone();
             url.pathname = "/";
             return NextResponse.redirect(url);
