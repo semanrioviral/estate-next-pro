@@ -247,7 +247,7 @@ function FeaturedPropertiesFallback() {
 export default function Home() {
   return (
     <>
-      <link rel="preload" as="image" href="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_640/hero/hero-homepage" fetchpriority="high" />
+      <link rel="preload" as="image" href="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_640/hero/hero-homepage" fetchPriority="high" />
       <div className="flex flex-col bg-white">
       <HomeHeroV3 />
       <div className="-mt-12 relative z-30 flex justify-center">
