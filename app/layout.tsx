@@ -109,6 +109,10 @@ export default function RootLayout({
 
   return (
     <html lang="es" className="scroll-smooth light" data-scroll-behavior="smooth" style={{ colorScheme: 'light' }}>
+      <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+      </head>
       <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
         {/* Skip Link for Accessibility */}
         <a
