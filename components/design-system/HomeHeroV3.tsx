@@ -8,29 +8,16 @@ export default function HomeHeroV3() {
         <section className="relative min-h-[70vh] flex items-center justify-center pt-32 pb-48 overflow-hidden bg-slate-900">
             {/* Background Image with optimized overlay */}
             <div className="absolute inset-0 z-0">
-                <picture>
-                    {/* Mobile: smaller image */}
-                    <source
-                        media="(max-width: 640px)"
-                        srcSet="https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto:low,w_640/hero/hero-homepage"
-                    />
-                    {/* Tablet: medium image */}
-                    <source
-                        media="(max-width: 1024px)"
-                        srcSet="https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_1024/hero/hero-homepage"
-                    />
-                    {/* Desktop: full quality */}
-                    <Image
-                        src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_1600/hero/hero-homepage"
-                        alt="Propiedad de Lujo"
-                        fill
-                        priority
-                        fetchPriority="high"
-                        sizes="100vw"
-                        quality={85}
-                        className="object-cover opacity-60"
-                    />
-                </picture>
+                <Image
+                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/hero/hero-homepage"
+                    alt="Propiedad de Lujo"
+                    fill
+                    priority
+                    fetchPriority="high"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+                    quality={75}
+                    className="object-cover opacity-60"
+                />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
             </div>
 

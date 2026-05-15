@@ -51,6 +51,8 @@ export default function NavbarV3() {
                                     fill
                                     className="object-contain"
                                     priority
+                                    sizes="160px"
+                                    quality={85}
                                 />
                             </div>
                         </Link>
