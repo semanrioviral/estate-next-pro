@@ -164,6 +164,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     <select
                         value={ciudad}
                         onChange={(e) => setCiudad(e.target.value)}
+                        aria-label="Seleccionar ciudad"
                         className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r`}
                     >
                         <option value="">Ciudad</option>
@@ -185,6 +186,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         value={barrio}
                         onChange={(e) => setBarrio(e.target.value)}
                         disabled={!ciudad || isLoadingBarrios}
+                        aria-label="Seleccionar barrio"
                         className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r disabled:cursor-not-allowed disabled:text-slate-300`}
                     >
                         <option value="">{isLoadingBarrios ? 'Cargando...' : 'Barrio (Opcional)'}</option>
@@ -205,6 +207,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     <select
                         value={tipo}
                         onChange={(e) => setTipo(e.target.value)}
+                        aria-label="Seleccionar tipo de inmueble"
                         className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
                     >
                         <option value="">Tipo Inmueble</option>
@@ -225,6 +228,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     <select
                         value={habitaciones}
                         onChange={(e) => setHabitaciones(e.target.value)}
+                        aria-label="Seleccionar número de habitaciones"
                         className={`w-full pl-11 pr-10 ${isCompact ? 'py-2' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
                     >
                         <option value="">Habitaciones</option>

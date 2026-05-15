@@ -110,6 +110,13 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth light" data-scroll-behavior="smooth" style={{ colorScheme: 'light' }}>
       <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
+        {/* Skip Link for Accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:text-brand focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:font-bold focus:outline-none focus:ring-2 focus:ring-brand"
+        >
+          Saltar al contenido principal
+        </a>
         {metaPixelId ? (
           <>
             <Script id="meta-pixel-base" strategy="afterInteractive">

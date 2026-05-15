@@ -37,7 +37,7 @@ export async function generateMetadata({ searchParams }: ArriendoPageProps): Pro
         description,
         alternates: { canonical: canonicalUrl },
         robots: {
-            index: properties.length >= 2,
+            index: true,
             follow: true,
         },
         openGraph: {
