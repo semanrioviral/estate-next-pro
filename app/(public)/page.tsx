@@ -246,7 +246,9 @@ function FeaturedPropertiesFallback() {
 
 export default function Home() {
   return (
-    <div className="flex flex-col bg-white">
+    <>
+      <link rel="preload" as="image" href="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_640/hero/hero-homepage" fetchpriority="high" />
+      <div className="flex flex-col bg-white">
       <HomeHeroV3 />
       <div className="-mt-12 relative z-30 flex justify-center">
         <div className="w-full"><SearchBarV3 /></div>
@@ -260,5 +262,6 @@ export default function Home() {
       <TestimonialsSection />
       <ConversionSection />
     </div>
+    </>
   );
 }
