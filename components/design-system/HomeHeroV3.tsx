@@ -16,6 +16,7 @@ export default function HomeHeroV3() {
                     fetchPriority="high"
                     sizes="100vw"
                     className="object-cover opacity-60"
+                    unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
             </div>
