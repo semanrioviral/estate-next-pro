@@ -12,9 +12,9 @@ export default async function Home() {
   const featuredProperties = await getFeaturedProperties(6);
 
   const cities = [
-    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://images.unsplash.com/photo-1596487640076-9289196b6534?q=80&w=1200&auto=format&fit=crop" },
-    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1200&auto=format&fit=crop" },
-    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=1200&auto=format&fit=crop" }
+    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/cucuta" },
+    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/los-patios" },
+    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/villa-del-rosario" }
   ];
 
   return (

@@ -46,8 +46,11 @@ export default function PropertyCardV3({ property, priority = false }: { propert
                 aria-label={`Ver información de ${optimizedTitle}`}
             />
 
-            {/* 1. Media Carrier - 16:9 Ratio [V24 Desktop Scale] */}
-            <div className="relative aspect-video w-full rounded-t-xl overflow-hidden block transition-all duration-500 ease-out">
+            {/* 1. Media Carrier - 16:9 Ratio with fixed dimensions to prevent CLS */}
+            <div 
+                className="relative w-full rounded-t-xl overflow-hidden block transition-all duration-500 ease-out"
+                style={{ aspectRatio: '16/9', minHeight: '200px' }}
+            >
                 <Image
                     src={optimizeCloudinaryUrl(property.imagen_principal)}
                     alt={optimizedTitle}
@@ -55,6 +58,7 @@ export default function PropertyCardV3({ property, priority = false }: { propert
                     priority={priority}
                     className="object-cover transition-transform duration-700 lg:group-hover/card:scale-[1.03]"
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    style={{ objectFit: 'cover' }}
                 />
 
                 {/* Status Badge */}

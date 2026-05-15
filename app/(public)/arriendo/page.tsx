@@ -126,6 +126,11 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
             />
 
             <div className="container-wide px-4 py-8 md:py-20">
+                {/* Section heading for accessibility - creates proper H1->H2->H3 hierarchy */}
+                <h2 className="sr-only">
+                    {totalCount} propiedades en arriendo disponibles
+                </h2>
+
                 {/* Properties Grid */}
                 {properties.length > 0 ? (
                     <>
