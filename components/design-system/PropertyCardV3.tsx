@@ -19,7 +19,13 @@ interface Property {
     imagen_principal: string;
 }
 
-export default function PropertyCardV3({ property, priority = false }: { property: Property; priority?: boolean }) {
+interface PropertyCardV3Props {
+    property: Property;
+    priority?: boolean;
+    variant?: 'default' | 'homepage';
+}
+
+export default function PropertyCardV3({ property, priority = false, variant = 'default' }: PropertyCardV3Props) {
     const formattedPrice = new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
@@ -52,12 +58,15 @@ export default function PropertyCardV3({ property, priority = false }: { propert
                 style={{ aspectRatio: '16/9', minHeight: '200px' }}
             >
                 <Image
-                    src={optimizeCloudinaryUrl(property.imagen_principal)}
+                    src={variant === 'homepage' 
+                        ? property.imagen_principal.replace('/upload/', '/upload/f_webp,q_50,w_400/')
+                        : optimizeCloudinaryUrl(property.imagen_principal)}
                     alt={optimizedTitle}
                     fill
-                    priority={priority}
+                    priority={variant === 'homepage' ? false : priority}
+                    loading={variant === 'homepage' ? 'lazy' : undefined}
                     className="object-cover transition-transform duration-700 lg:group-hover/card:scale-[1.03]"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes={variant === 'homepage' ? '(max-width: 768px) 50vw, 33vw' : '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
                     style={{ objectFit: 'cover' }}
                 />
 

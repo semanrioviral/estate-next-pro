@@ -46,13 +46,12 @@ export default function NavbarV3() {
                         <Link href="/" className="flex items-center gap-3 group">
                             <div className="relative w-40 h-16 transition-transform group-active:scale-95">
                                 <Image
-                                    src="/logo.png"
+                                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_80,w_200/logo/logo"
                                     alt="Inmobiliaria Tucasa Los Patios"
                                     fill
                                     className="object-contain"
                                     priority
                                     sizes="160px"
-                                    quality={85}
                                 />
                             </div>
                         </Link>

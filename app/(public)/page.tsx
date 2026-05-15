@@ -12,9 +12,9 @@ export default async function Home() {
   const featuredProperties = await getFeaturedProperties(6);
 
   const cities = [
-    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/cucuta" },
-    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/los-patios" },
-    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/ciudades/villa-del-rosario" }
+    { name: "Cúcuta", slug: "cucuta", count: "120+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_600/ciudades/cucuta" },
+    { name: "Los Patios", slug: "los-patios", count: "80+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_600/ciudades/los-patios" },
+    { name: "Villa del Rosario", slug: "villa-del-rosario", count: "45+ inmuebles", image: "https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_600/ciudades/villa-del-rosario" }
   ];
 
   return (
@@ -90,7 +90,7 @@ export default async function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {featuredProperties.map((property) => (
                   <div key={property.id} className="transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-3xl">
-                    <PropertyCardV3 property={property} />
+                    <PropertyCardV3 property={property} variant="homepage" />
                   </div>
                 ))}
               </div>

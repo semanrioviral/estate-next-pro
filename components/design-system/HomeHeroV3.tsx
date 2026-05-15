@@ -9,13 +9,12 @@ export default function HomeHeroV3() {
             {/* Background Image with optimized overlay */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_auto,q_auto,w_800/hero/hero-homepage"
+                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_60,w_640/hero/hero-homepage"
                     alt="Propiedad de Lujo"
                     fill
                     priority
                     fetchPriority="high"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
-                    quality={75}
+                    sizes="100vw"
                     className="object-cover opacity-60"
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
