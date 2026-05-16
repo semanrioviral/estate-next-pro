@@ -114,7 +114,7 @@ export default async function VillaRosarioPillarPage({
                     </div>
                     <div className="max-w-4xl mx-auto text-center mb-6 md:mb-12">
                         <h1 className="mb-3 md:mb-4 leading-tight text-slate-900 tracking-tight">
-                            Inmobiliaria en <span className="text-brand">Villa Rosario</span>
+                            Inmobiliaria en <span className="text-brand">Villa del Rosario</span>
                         </h1>
                         <div className="text-sm md:text-lg text-text-secondary font-medium max-w-2xl mx-auto leading-relaxed">
                             Oportunidades únicas de <Link href="/venta/villa-del-rosario" className="text-text-primary border-b border-brand/30 hover:border-brand transition-colors">vivienda en Villa del Rosario</Link> con el respaldo de nuestra red metropolitana.
@@ -175,7 +175,7 @@ export default async function VillaRosarioPillarPage({
                             <span className="text-xs font-black uppercase tracking-widest text-brand">Ver Guía →</span>
                         </Link>
                         <div className="p-10 bg-brand rounded-xl shadow-xl">
-                            <h3 className="text-xl font-black mb-2 text-white">Villa Rosario</h3>
+                            <h3 className="text-xl font-black mb-2 text-white">Villa del Rosario</h3>
                             <p className="text-sm text-white/80 mb-6 font-medium">Patrimonio y expansión.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-white">Página Actual</span>
                         </div>
@@ -191,7 +191,7 @@ export default async function VillaRosarioPillarPage({
                             <HelpCircle className="w-3 h-3 text-brand" />
                             <span className="text-[10px] font-black text-brand uppercase tracking-widest">Consultas</span>
                         </div>
-                        <h2 className="mb-4">Inversión en <span className="text-brand">Villa Rosario</span></h2>
+                        <h2 className="mb-4">Inversión en <span className="text-brand">Villa del Rosario</span></h2>
                         <p className="text-text-secondary font-medium">Resolvemos sus dudas sobre el mercado histórico.</p>
                     </div>
                     <div className="max-w-4xl mx-auto">
@@ -202,7 +202,7 @@ export default async function VillaRosarioPillarPage({
 
             {/* PROPIEDADES — CatalogHeader + Grid */}
             <CatalogHeader
-                title={<>Oportunidades en <span className="text-brand">Villa Rosario</span></>}
+                title={<>Oportunidades en <span className="text-brand">Villa del Rosario</span></>}
                 totalCount={totalCount}
                 breadcrumbs={[
                     { label: 'Inmuebles en Villa del Rosario' }

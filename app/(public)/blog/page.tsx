@@ -13,13 +13,13 @@ export async function generateMetadata(): Promise<Metadata> {
     const canonicalUrl = `${siteUrl}/blog`;
 
     return {
-        title,
+        title: { absolute: `${title} | Inmobiliaria Tucasa Los Patios` },
         description,
         alternates: {
             canonical: canonicalUrl,
         },
         openGraph: {
-            title,
+            title: `${title} | Inmobiliaria Tucasa Los Patios`,
             description,
             type: 'website',
             url: canonicalUrl,

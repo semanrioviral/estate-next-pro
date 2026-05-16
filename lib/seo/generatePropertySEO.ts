@@ -35,11 +35,6 @@ export interface PropertySEOContext {
   brand?: string;
 }
 
-interface TitleVariation {
-  type: 'primary' | 'characteristic' | 'price';
-  template: string;
-}
-
 const BRAND = 'Inmobiliaria Tucasa Los Patios';
 const SITE_NAME = 'Inmobiliaria Tucasa Los Patios';
 const LOCALE = 'es_CO';
@@ -117,34 +112,13 @@ function getAbsoluteImageUrl(imageUrl: string, siteUrl: string): string {
   return `${normalizeSiteUrl(siteUrl)}${imageUrl}`;
 }
 
-function selectTitleVariation(titles: TitleVariation[]): string {
-  const index = Math.floor(Math.random() * titles.length);
-  return titles[index].template;
-}
-
-export function generatePropertyTitle(property: Property, variationIndex = 0): string {
+export function generatePropertyTitle(property: Property): string {
   const tipo = getTipoDisplay(property.tipo);
   const operacion = getOperacionText(property.operacion);
   const barrio = getBarrioDisplay(property.barrio);
   const ciudad = getCiudadDisplay(property.ciudad);
 
-  const variations: TitleVariation[] = [
-    {
-      type: 'primary',
-      template: `${tipo} en ${operacion} en ${barrio}, ${ciudad}`
-    },
-    {
-      type: 'characteristic',
-      template: `${tipo} ${property.habitaciones || ''} habitaciones en ${operacion} en ${barrio}`.replace(/  /g, ' ')
-    },
-    {
-      type: 'price',
-      template: `${tipo} en ${operacion} en ${barrio}, ${ciudad} - $${formatPriceCOP(property.precio)}`
-    }
-  ];
-
-  const selectedVariation = variations[variationIndex % variations.length];
-  return `${selectedVariation.template} | ${BRAND}`;
+  return `${tipo} en ${operacion} en ${barrio}, ${ciudad} | ${BRAND}`;
 }
 
 export function generatePropertyDescription(property: Property): string {

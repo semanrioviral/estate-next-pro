@@ -2,10 +2,25 @@ import { Suspense } from 'react';
 import HomeHeroV3 from "@/components/design-system/HomeHeroV3";
 import Link from 'next/link';
 import Image from 'next/image';
+import type { Metadata } from 'next';
 import { ChevronRight, Building2, ShieldCheck, Star, CheckCircle2, Home as HomeIcon, Building, Map, LayoutGrid } from 'lucide-react';
 import SearchBarV3 from "@/components/design-system/SearchBarV3";
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+    title: { absolute: 'Casas y Apartamentos en Venta en Los Patios y Cúcuta | Inmobiliaria Tucasa Los Patios' },
+    description: 'Casas y apartamentos en venta en Los Patios, Cúcuta y Norte de Santander. Encuentra tu próxima propiedad con la mejor inmobiliaria de la región.',
+    alternates: {
+        canonical: 'https://tucasalospatios.com',
+    },
+    openGraph: {
+        title: 'Casas y Apartamentos en Venta en Los Patios y Cúcuta | Inmobiliaria Tucasa Los Patios',
+        description: 'Casas y apartamentos en venta en Los Patios, Cúcuta y Norte de Santander.',
+        type: 'website',
+        url: 'https://tucasalospatios.com',
+    },
+};
 
 import { FeaturedPropertiesSection, FeaturedPropertiesFallback } from './FeaturedPropertiesSection';
 

@@ -22,7 +22,7 @@ export async function generateMetadata({ searchParams }: ArriendoPageProps): Pro
 
     const { properties } = await getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage);
     const siteUrl = 'https://tucasalospatios.com';
-    let title = 'Propiedades en arriendo';
+    let title = 'Casas y Apartamentos en Arriendo en Cúcuta y Los Patios';
     let description = 'Encuentra las mejores propiedades en arriendo en Norte de Santander. Casas, apartamentos, locales y más.';
 
     if (numHabitaciones) {

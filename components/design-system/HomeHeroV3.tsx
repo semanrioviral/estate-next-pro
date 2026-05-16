@@ -30,7 +30,7 @@ export default function HomeHeroV3() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-bold !text-white leading-tight tracking-tight drop-shadow-2xl">
-                        Encuentra tu próximo hogar
+                        Casas y Apartamentos en Venta en Los Patios y Cúcuta
                     </h1>
 
                     <p className="text-lg md:text-xl !text-white/80 font-medium max-w-2xl mx-auto leading-relaxed drop-shadow-lg">

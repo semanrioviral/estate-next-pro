@@ -67,7 +67,7 @@ export default function VenderVillaPage() {
                             <span className="text-[10px] font-black text-brand uppercase tracking-widest">Respaldo Metropolitano 2026</span>
                         </div>
                         <h1 className="text-white mb-8">
-                            Venda en <span className="text-brand">Villa Rosario</span>
+                            Venda su Inmueble en <span className="text-brand">Villa del Rosario</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-12 font-medium leading-relaxed">
                             Potenciamos el valor histórico y moderno de su inmueble mediante estrategias de marketing digital de alto impacto.

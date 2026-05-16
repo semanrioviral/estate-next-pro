@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: BlogCityPageProps): Promise<M
     const canonicalUrl = `${siteUrl}/blog/ciudad/${ciudadRaw}`;
 
     return {
-        title,
+        title: { absolute: `${title} | Inmobiliaria Tucasa Los Patios` },
         description,
         alternates: {
             canonical: canonicalUrl,
