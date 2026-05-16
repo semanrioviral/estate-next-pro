@@ -51,6 +51,9 @@ export async function generateMetadata({ params, searchParams }: BarrioPageProps
             index: properties && properties.length > 0,
             follow: true,
         },
+        other: {
+            'googlebot': 'index, follow, max-image-preview:large',
+        },
     };
 }
 

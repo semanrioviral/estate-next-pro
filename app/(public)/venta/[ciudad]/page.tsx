@@ -58,6 +58,9 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadPage
                 ]
             },
             twitter: { title, description },
+            other: {
+                'googlebot': 'index, follow, max-image-preview:large',
+            },
         };
     }
 
@@ -106,6 +109,9 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadPage
             ]
         },
         twitter: { title: normalizedTitle, description },
+        other: {
+            'googlebot': 'index, follow, max-image-preview:large',
+        },
     };
 }
 

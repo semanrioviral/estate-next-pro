@@ -95,6 +95,9 @@ export async function generateMetadata({ params }: Props) {
         alternates: seo.alternates,
         openGraph: seo.openGraph,
         twitter: seo.twitter,
+        other: {
+            'googlebot': 'index, follow, max-image-preview:large',
+        },
     };
 }
 

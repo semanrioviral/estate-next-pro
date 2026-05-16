@@ -1,6 +1,5 @@
 import type { Property } from '../supabase/properties';
 import { CIUDAD_MAP } from '../supabase/constants';
-import { getCloudinaryOGImage } from '../supabase/seo-helpers';
 
 export interface SEOOutput {
   title: string;
@@ -199,16 +198,32 @@ export function generatePropertyOGDescription(property: Property): string {
 export function generatePropertyJSONLD(property: Property, siteUrl: string): Record<string, unknown> {
   siteUrl = normalizeSiteUrl(siteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
-  const absoluteImage = getAbsoluteImageUrl(property.imagen_principal, siteUrl);
-  const ogImage = getCloudinaryOGImage(absoluteImage);
+  const brandedOgImage = `${siteUrl}/api/og/propiedad/${property.slug}`;
 
   const propertyImages = Array.from(
     new Set([property.imagen_principal, ...(property.galeria || [])].filter(Boolean))
   );
 
+  const tipo = getTipoDisplay(property.tipo);
+  const operacion = getOperacionText(property.operacion);
+  const barrio = getBarrioDisplay(property.barrio);
+  const imageCaption = `${tipo} en ${operacion} en ${barrio} - $${formatPriceCOP(property.precio)}`;
+
   return {
     '@context': 'https://schema.org',
     '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${propertyUrl}#webpage`,
+        'url': propertyUrl,
+        'primaryImageOfPage': {
+          '@type': 'ImageObject',
+          'url': brandedOgImage,
+          'width': 1200,
+          'height': 630,
+          'caption': imageCaption
+        }
+      },
       {
         '@type': 'RealEstateListing',
         '@id': `${propertyUrl}#listing`,
@@ -285,8 +300,7 @@ export function generatePropertySEO(
   const { siteUrl: rawSiteUrl } = context;
   const siteUrl = normalizeSiteUrl(rawSiteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
-  const absoluteImage = getAbsoluteImageUrl(property.imagen_principal, siteUrl);
-  const ogImage = getCloudinaryOGImage(absoluteImage);
+  const ogImage = `${siteUrl}/api/og/propiedad/${property.slug}`;
 
   const title = generatePropertyTitle(property);
   const description = generatePropertyDescription(property);

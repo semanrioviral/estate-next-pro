@@ -12,3 +12,4 @@ Disallow: /?fbclid=
 Disallow: /*?paged
 
 Sitemap: https://tucasalospatios.com/sitemap.xml
+Sitemap: https://tucasalospatios.com/image-sitemap

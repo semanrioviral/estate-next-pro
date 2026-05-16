@@ -59,6 +59,9 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
             title: baseTitle,
             description: baseDescription,
         },
+        other: {
+            'googlebot': 'index, follow, max-image-preview:large',
+        },
     };
 }
 
