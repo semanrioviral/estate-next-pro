@@ -113,7 +113,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
-        <link rel="preload" as="image" href="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_40,w_400/hero/hero-homepage" fetchPriority="high" />
       </head>
       <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
         {/* Skip Link for Accessibility */}
