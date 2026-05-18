@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 import { ChevronRight, Building2, ShieldCheck, Star, CheckCircle2, Home as HomeIcon, Building, Map, LayoutGrid } from 'lucide-react';
 import SearchBarV3 from "@/components/design-system/SearchBarV3";
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
     title: { absolute: 'Casas y Apartamentos en Venta en Los Patios y Cúcuta | Inmobiliaria Tucasa Los Patios' },
@@ -199,7 +199,11 @@ export default function Home() {
     <div className="flex flex-col bg-white">
       <HomeHeroV3 />
       <div className="-mt-12 relative z-30 flex justify-center">
-        <div className="w-full"><SearchBarV3 /></div>
+        <div className="w-full">
+          <Suspense fallback={<div className="h-[320px] md:h-[72px] bg-slate-50 animate-pulse rounded-3xl md:rounded-[6px]" />}>
+            <SearchBarV3 />
+          </Suspense>
+        </div>
       </div>
       <StatsSection />
       <Suspense fallback={<FeaturedPropertiesFallback />}>
