@@ -74,7 +74,7 @@ export default function CatalogHeader({
                 {/* Search Bar Container */}
                 <div className="w-full max-w-6xl mx-auto relative z-20 mb-5 md:mb-12">
                     <div className="py-1 md:py-2">
-                        <Suspense fallback={<div className="h-16 bg-slate-50 animate-pulse rounded-xl border border-slate-100" />}>
+                        <Suspense fallback={<div className="h-[336px] md:h-16 bg-slate-50 animate-pulse rounded-xl border border-slate-100" />}>
                             <SearchBarV3 variant="compact" />
                         </Suspense>
                     </div>
