@@ -3,6 +3,7 @@ import BlogCard from '@/components/BlogCard';
 import { Metadata } from 'next';
 import { MapPin, ArrowLeft, Search, Building } from 'lucide-react';
 import Link from 'next/link';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface BlogCityPageProps {
     params: { ciudad: string };
@@ -11,7 +12,7 @@ interface BlogCityPageProps {
 export async function generateMetadata({ params }: BlogCityPageProps): Promise<Metadata> {
     const { ciudad: ciudadRaw } = await params;
     const ciudad = ciudadRaw.charAt(0).toUpperCase() + ciudadRaw.slice(1);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = `Guía Inmobiliaria en ${ciudad} | Blog TLP`;
     const description = `Descubra las mejores oportunidades y consejos expertos para el mercado inmobiliario específicamente en ${ciudad}, Norte de Santander.`;
     const canonicalUrl = `${siteUrl}/blog/ciudad/${ciudadRaw}`;

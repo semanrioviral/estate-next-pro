@@ -1,11 +1,12 @@
 import { ShieldCheck, Users, TrendingUp, Award, Eye, Target } from 'lucide-react';
 import type { Metadata } from 'next';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const metadata: Metadata = {
     title: 'Sobre Nosotros',
     description: 'Conoce la historia, misión y visión de Inmobiliaria Tucasa Los Patios. Expertos en finca raíz en Norte de Santander con más de 10 años de experiencia.',
     alternates: {
-        canonical: 'https://tucasalospatios.com/nosotros',
+        canonical: `${SITE_URL}/nosotros`,
     },
 };
 

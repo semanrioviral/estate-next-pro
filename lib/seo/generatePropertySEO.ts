@@ -1,5 +1,5 @@
 import type { Property } from '../supabase/properties';
-import { CIUDAD_MAP } from '../supabase/constants';
+import { CIUDAD_MAP, SITE_URL, normalizeSiteUrl } from '../supabase/constants';
 
 export interface SEOOutput {
   title: string;
@@ -93,10 +93,6 @@ function getCiudadDisplay(ciudad: string): string {
 
 function getBarrioDisplay(barrio: string): string {
   return capitalize(barrio);
-}
-
-function normalizeSiteUrl(url: string): string {
-  return url.replace(/^(https?:\/\/)www\./, '$1');
 }
 
 function buildPropertyURL(property: Property, siteUrl: string): string {
@@ -269,7 +265,7 @@ export function generatePropertyJSONLD(property: Property, siteUrl: string): Rec
 
 export function generatePropertySEO(
   property: Property,
-  context: PropertySEOContext = { siteUrl: 'https://tucasalospatios.com' }
+  context: PropertySEOContext = { siteUrl: SITE_URL }
 ): SEOOutput {
   const { siteUrl: rawSiteUrl } = context;
   const siteUrl = normalizeSiteUrl(rawSiteUrl);
@@ -411,7 +407,7 @@ export function generateBarrioSEO(
   ciudad: string,
   totalCount: number,
   barrioSlug: string,
-  context: BarrioSEOContext = { siteUrl: 'https://tucasalospatios.com' },
+  context: BarrioSEOContext = { siteUrl: SITE_URL },
   operacion?: string
 ): SEOOutput {
   const { siteUrl: rawSiteUrl } = context;

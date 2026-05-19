@@ -12,7 +12,7 @@ interface Props {
     searchParams: Promise<{ orden?: string; page?: string }>;
 }
 
-import { CIUDAD_MAP } from "@/lib/supabase/constants";
+import { CIUDAD_MAP, SITE_URL, normalizeSiteUrl } from "@/lib/supabase/constants";
 
 const CITY_SEO_DATA: Record<string, { title: string; description: string; text: string }> = {
     "cucuta": {
@@ -34,14 +34,10 @@ const CITY_SEO_DATA: Record<string, { title: string; description: string; text: 
 
 export const dynamic = 'force-dynamic';
 
-function normalizeSiteUrl(url: string): string {
-    return url.replace(/^(https?:\/\/)www\./, '$1');
-}
-
 export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
     const { ciudad } = await params;
     const { orden } = await searchParams;
-    const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com");
+    const siteUrl = normalizeSiteUrl(SITE_URL);
     const seo = CITY_SEO_DATA[ciudad];
 
     if (!seo) return { title: "Ciudad no encontrada" };
@@ -85,7 +81,7 @@ export default async function CiudadPage({ params, searchParams }: Props) {
     }
 
     const { properties, totalCount } = await getPropertiesByCity(cityName, orden, currentPage);
-    const siteUrl = normalizeSiteUrl(process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com");
+    const siteUrl = normalizeSiteUrl(SITE_URL);
 
     const jsonLd = {
         "@context": "https://schema.org",

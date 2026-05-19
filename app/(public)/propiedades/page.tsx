@@ -4,6 +4,7 @@ import PropertyCardV3 from "@/components/design-system/PropertyCardV3";
 import CatalogHeader from "@/components/design-system/CatalogHeader";
 import { Search } from "lucide-react";
 import Pagination from "@/components/design-system/Pagination";
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     title: { absolute: "Casas, Apartamentos y Lotes en Venta - Catálogo Completo | Inmobiliaria Tucasa Los Patios" },
     description: "Explora nuestra amplia oferta de casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Tu hogar ideal está aquí.",
     alternates: {
-        canonical: "https://tucasalospatios.com/propiedades",
+        canonical: `${SITE_URL}/propiedades`,
     },
 };
 

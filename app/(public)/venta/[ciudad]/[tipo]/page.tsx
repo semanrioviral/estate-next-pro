@@ -8,6 +8,7 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import ExploreAlso from '@/components/ExploreAlso';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface VentaCiudadTipoPageProps {
     params: Promise<{
@@ -27,7 +28,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadTipo
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // Parsing combo (tipo-tag)
     let tipoSlug = tipoParam;
@@ -157,7 +158,7 @@ export default async function VentaCiudadTipoPage({ params, searchParams }: Vent
     const tipoPluralizado = tipoNombre.toLowerCase().endsWith('s') ? tipoNombre : `${tipoNombre}s`;
     const displayBarrio = barrio ? barrio.replace(/-/g, ' ') : '';
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const canonicalUrl =
         currentPage > 1
             ? `${siteUrl}/venta/${ciudadSlug}/${tipoParam}?page=${currentPage}`

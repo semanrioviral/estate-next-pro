@@ -1,9 +1,8 @@
 import { ImageResponse } from 'next/og';
 import { createPublicClient } from '@/lib/supabase-server';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const runtime = 'edge';
-
-const SITE_URL = 'https://tucasalospatios.com';
 
 function formatCOP(price: number): string {
     return '$' + price.toLocaleString('es-CO', { style: 'decimal', maximumFractionDigits: 0 }) + ' COP';

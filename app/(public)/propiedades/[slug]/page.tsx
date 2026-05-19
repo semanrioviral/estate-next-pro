@@ -29,6 +29,7 @@ import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 const PropertyViewTracker = dynamic(() => import('@/components/PropertyViewTracker'));
 const RecentlyViewed = dynamic(() => import('@/components/RecentlyViewed'));
@@ -85,7 +86,7 @@ export async function generateMetadata({ params }: Props) {
 
     if (!property) return { title: 'Propiedad no encontrada' };
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const seo = generatePropertySEO(property, { siteUrl });
 
@@ -105,7 +106,7 @@ export default async function PropertyDetailPage({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlugCached(slug);
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     if (!property) {
         notFound();

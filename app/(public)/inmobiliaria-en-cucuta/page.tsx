@@ -6,9 +6,10 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
 import Link from 'next/link';
 import FAQAccordion from '@/components/FAQAccordion';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = 'Expertos en Inmobiliaria en Cúcuta';
     const description = "Tu inmobiliaria de confianza en Cúcuta y el Área Metropolitana. Expertos en venta y arriendo con asesoría legal profesional y el mejor catálogo de inmuebles.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-cucuta`;
@@ -43,7 +44,7 @@ export default async function CucutaPillarPage({
 }) {
     const { orden, page: pageParam } = await searchParams;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // Data fetching
     const [propertiesData, featuredBarrios] = await Promise.all([

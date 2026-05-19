@@ -4,8 +4,9 @@ import { unstable_cache } from 'next/cache';
 
 import { attachImagesToProperties, type Property } from '@/lib/supabase/properties';
 import { createPublicClient } from '@/lib/supabase-server';
+import { SITE_URL } from '@/lib/supabase/constants';
 
-const BASE_URL = 'https://tucasalospatios.com';
+const BASE_URL = SITE_URL;
 const FEED_SELECT_FIELDS: string = `
     id,
     titulo,

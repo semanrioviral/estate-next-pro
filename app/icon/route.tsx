@@ -1,9 +1,10 @@
 import { ImageResponse } from 'next/og';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const runtime = 'edge';
 
 export async function GET() {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     return new ImageResponse(
         (

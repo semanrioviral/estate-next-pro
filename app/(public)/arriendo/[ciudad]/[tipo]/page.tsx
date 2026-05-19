@@ -7,6 +7,7 @@ import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import ExploreAlso from '@/components/ExploreAlso';
 import Pagination from '@/components/design-system/Pagination';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface ArriendoCiudadTipoPageProps {
     params: Promise<{
@@ -26,7 +27,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadT
     const { barrio, habitaciones, orden, page } = await searchParams; // Destructure 'page' here
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(page) || 1; // Define currentPage for metadata
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // Parsing combo (tipo-tag)
     let tipoSlug = tipoParam;
@@ -132,7 +133,7 @@ export default async function ArriendoCiudadTipoPage({ params, searchParams }: A
     const tipoPluralizado = tipoNombre.toLowerCase().endsWith('s') ? tipoNombre : `${tipoNombre}s`;
     const displayBarrio = barrio ? barrio.replace(/-/g, ' ') : '';
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/arriendo/${ciudadSlug}/${tipoParam}`;
 
     let displayTitle = tagNombre

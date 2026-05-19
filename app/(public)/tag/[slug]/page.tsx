@@ -6,6 +6,7 @@ import { Metadata } from 'next';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import Pagination from '@/components/design-system/Pagination';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface TagPageProps {
     params: { slug: string };
@@ -18,7 +19,7 @@ export async function generateMetadata({ params, searchParams }: TagPageProps): 
     const { slug } = params;
     const { orden } = searchParams ?? {};
     const tag = await getTagBySlugCached(slug);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     if (!tag) {
         return {
@@ -58,7 +59,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
 
     const { properties, totalCount } = await getPropertiesByTagSlug(slug, orden, currentPage);
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/tag/${slug}`;
 
     const jsonLd = {

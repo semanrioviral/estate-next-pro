@@ -1,3 +1,5 @@
+import { SITE_URL } from '@/lib/supabase/constants';
+
 interface GenerateListingFAQParams {
   operacion: string;
   ciudad?: string;
@@ -48,7 +50,7 @@ export function generateListingFAQ({ operacion, ciudad, tipo }: GenerateListingF
     }
   ];
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://tucasalospatios.com";
+  const siteUrl = SITE_URL;
   const absoluteUrl = `${siteUrl}/venta${ciudad ? `/${ciudad}` : ""}${tipo ? `/${tipo}` : ""}#faq`;
 
   const faqJsonLd = {

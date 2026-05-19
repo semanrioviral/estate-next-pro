@@ -13,6 +13,7 @@ import {
     Sparkles
 } from 'lucide-react';
 import Link from 'next/link';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 // Force dynamic so newly published posts appear immediately
 export const dynamic = 'force-dynamic';
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const post = await getBlogPostBySlugCached(slug);
     if (!post) return {};
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = post.meta_titulo || `${post.titulo}`;
     const description = post.meta_descripcion || post.excerpt || '';
     const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
@@ -62,7 +63,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ]);
 
     const headings = extractHeadings(post.contenido);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const blogJsonLd = {
         "@context": "https://schema.org",

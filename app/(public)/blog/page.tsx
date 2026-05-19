@@ -3,11 +3,12 @@ import BlogCard from '@/components/BlogCard';
 import { Metadata } from 'next';
 import { BookOpen, ArrowRight, Rss, Info } from 'lucide-react';
 import Link from 'next/link';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const dynamic = 'force-dynamic';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = "Blog Inmobiliario Norte de Santander | Noticias y Guías 2026";
     const description = "Las últimas noticias, guías de inversión y consejos del mercado inmobiliario en Cúcuta, Los Patios y Villa del Rosario. Expertos en propiedad raíz.";
     const canonicalUrl = `${siteUrl}/blog`;

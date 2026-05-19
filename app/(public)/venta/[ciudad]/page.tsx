@@ -11,6 +11,7 @@ import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface VentaCiudadPageProps {
     params: Promise<{
@@ -28,7 +29,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadPage
     const { ciudad: slug } = await params;
     const { barrio, habitaciones, orden } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const tag = await getTagBySlug(slug);
     if (tag) {
@@ -120,7 +121,7 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // 1. Check for Tag
     const tag = await getTagBySlug(slug);

@@ -6,9 +6,10 @@ import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import FAQAccordion from '@/components/FAQAccordion';
 import Pagination from '@/components/design-system/Pagination';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = 'Inmobiliaria en Villa del Rosario';
     const description = "Tu inmobiliaria experta en Villa del Rosario. Descubre casas y apartamentos en venta y arriendo en el municipio histórico.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-villa-del-rosario`;
@@ -43,7 +44,7 @@ export default async function VillaRosarioPillarPage({
 }) {
     const { orden, page: pageParam } = await searchParams;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // Data fetching
     const [propertiesData] = await Promise.all([

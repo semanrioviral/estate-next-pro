@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createPublicClient } from '@/lib/supabase-server';
-
-const SITE_URL = 'https://tucasalospatios.com';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export async function GET() {
     const supabase = createPublicClient();

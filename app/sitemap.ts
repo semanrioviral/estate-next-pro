@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase-server';
 import { slugify } from '@/lib/supabase/seo-helpers';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const supabase = await createClient();
 
     const now = new Date().toISOString();

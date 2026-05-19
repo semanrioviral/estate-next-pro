@@ -3,6 +3,17 @@
  * Este archivo no contiene dependencias de servidor (como next/headers).
  */
 
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+
+export function normalizeSiteUrl(url: string): string {
+  return url.replace(/^(https?:\/\/)www\./, '$1');
+}
+
+export function getAbsoluteUrl(path: string): string {
+  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
 export const VALID_CITIES = ['cucuta', 'los-patios', 'villa-del-rosario'];
 export const VALID_TYPES = ['casa', 'apartamento', 'lote', 'proyecto', 'local', 'oficina', 'bodega', 'finca', 'comercial'];
 

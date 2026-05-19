@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { Search, Flame, Building2 } from 'lucide-react';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface VentaPageProps {
     searchParams: Promise<{
@@ -22,7 +23,7 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
     const currentPage = Number(pageParam) || 1;
 
     const { properties, totalCount } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage);
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const baseTitle = numHabitaciones
         ? `${numHabitaciones}+ Hab | Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario`
@@ -74,7 +75,7 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
         getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage),
         getTrendingProperties(7, 3)
     ]);
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/venta`;
     const itemListId = `${canonicalUrl}#itemlist`;
     const { faqItems, faqJsonLd } = generateListingFAQ({ operacion: 'venta' });

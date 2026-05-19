@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase-server';
 import { getGoogleAccessToken } from '@/lib/google/auth';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export const runtime = 'nodejs'; // Ensure server-side execution
 
@@ -52,7 +53,7 @@ export async function GET(request: Request) {
             maximumFractionDigits: 0
         }).format(property.precio);
 
-        const propertyUrl = `https://tucasalospatios.com/propiedades/${property.slug}`;
+        const propertyUrl = `${SITE_URL}/propiedades/${property.slug}`;
         const postText = `🏡 ${property.titulo}\n📍 ${property.barrio}, ${property.ciudad}\n💰 ${formattedPrecio}\n\nAgenda tu visita hoy:\n${propertyUrl}`;
 
         // 5. Publish to Google Business Profile

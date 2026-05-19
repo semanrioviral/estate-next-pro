@@ -6,9 +6,10 @@ import {
 import Link from 'next/link';
 import PropertyOwnerForm from '@/components/PropertyOwnerForm';
 import FAQAccordion from '@/components/FAQAccordion';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = "Vender Inmueble en Villa del Rosario";
     const description = "¿Quiere vender su propiedad en Villa del Rosario? Valoración técnica y marketing profesional para captar el interés de compradores.";
     const canonicalUrl = `${siteUrl}/vender-casa-en-villa-del-rosario`;
@@ -29,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function VenderVillaPage() {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const faqs = [
         { q: "¿En qué sectores de Villa del Rosario operan?", a: "Operamos en todo el municipio, con especial énfasis en Lomitas, Centro y las nuevas zonas residenciales de la autopista." },

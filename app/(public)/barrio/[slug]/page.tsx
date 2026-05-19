@@ -9,6 +9,7 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Link from 'next/link';
 import Pagination from '@/components/design-system/Pagination';
 import { generateBarrioSEO, generateBarrioJSONLD } from '@/lib/seo/generatePropertySEO';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface BarrioPageProps {
     params: { slug: string };
@@ -28,7 +29,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params, searchParams }: BarrioPageProps): Promise<Metadata> {
     const { slug } = params;
     const barrio = await getBarrioBySlugCached(slug);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     if (!barrio) {
         return {
@@ -68,7 +69,7 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
     }
 
     const { properties, totalCount } = await getPropertiesByBarrioSlug(slug, orden, currentPage);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const jsonLd = generateBarrioJSONLD(barrio.nombre, barrio.nombre, totalCount, siteUrl, slug);
 

@@ -6,6 +6,7 @@ import ListingConversionBanner from '@/components/ListingConversionBanner';
 import { Metadata } from 'next';
 import { Search, Flame, Building2 } from 'lucide-react';
 import Pagination from '@/components/design-system/Pagination';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface ArriendoPageProps {
     searchParams: Promise<{
@@ -21,7 +22,7 @@ export async function generateMetadata({ searchParams }: ArriendoPageProps): Pro
     const currentPage = Number(pageParam) || 1;
 
     const { properties } = await getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage);
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     let title = 'Casas y Apartamentos en Arriendo en Cúcuta y Los Patios';
     let description = 'Encuentra las mejores propiedades en arriendo en Norte de Santander. Casas, apartamentos, locales y más.';
 
@@ -62,7 +63,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
         getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage),
         getTrendingProperties(7, 3)
     ]);
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/arriendo`;
 
     const jsonLd = {

@@ -8,6 +8,7 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
 import ExploreAlso from '@/components/ExploreAlso';
 import ListingConversionBanner from '@/components/ListingConversionBanner';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 interface ArriendoCiudadPageProps {
     params: Promise<{
@@ -25,7 +26,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadP
     const { ciudad: slug } = await params;
     const { barrio, habitaciones, orden } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
-    const siteUrl = 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const tag = await getTagBySlug(slug);
     if (tag) {
@@ -87,7 +88,7 @@ export default async function ArriendoCiudadPage({ params, searchParams }: Arrie
     const { barrio, habitaciones, orden, page: pageParam } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     const tag = await getTagBySlug(slug);
 

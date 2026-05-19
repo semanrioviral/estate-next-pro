@@ -6,9 +6,10 @@ import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import FAQAccordion from '@/components/FAQAccordion';
 import Pagination from '@/components/design-system/Pagination';
+import { SITE_URL } from '@/lib/supabase/constants';
 
 export async function generateMetadata(): Promise<Metadata> {
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
     const title = 'Inmobiliaria en Los Patios';
     const description = "Autoridad definitiva en bienes raíces en Los Patios, Norte de Santander. Guía de inversión 2026, datos de mercado, servicios integrales y seguridad jurídica total.";
     const canonicalUrl = `${siteUrl}/inmobiliaria-en-los-patios`;
@@ -43,7 +44,7 @@ export default async function LosPatiosDominanceAuthorityPage({
 }) {
     const { orden, page: pageParam } = await searchParams;
     const currentPage = Number(pageParam) || 1;
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+    const siteUrl = SITE_URL;
 
     // Data fetching
     const [propertiesData, featuredBarrios, allBarrios] = await Promise.all([
