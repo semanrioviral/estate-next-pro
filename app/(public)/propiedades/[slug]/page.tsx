@@ -220,9 +220,6 @@ Referencia: ${propertyUrl}
                     {/* Header Title Section - Anchored */}
                     <div className="mb-5 md:mb-8 pt-1 pb-4 md:pt-0 md:pb-6 md:border-b border-slate-200 space-y-4 md:space-y-6">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="bg-slate-100 text-slate-700 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-slate-200">
-                                ID: {property.id.toString().slice(0, 8)}
-                            </span>
                             <span className="bg-brand text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 {operationText}
                             </span>
@@ -234,10 +231,10 @@ Referencia: ${propertyUrl}
                                     {property.estado}
                                 </span>
                             )}
-                            <span className="bg-gray-100 text-gray-900 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
+                            <span className="bg-slate-100 text-slate-700 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-slate-200">
                                 {property.tipo}
                             </span>
-                            {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.slice(0, 3).map((tag, idx) => (
+                            {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.slice(0, 1).map((tag, idx) => (
                                 <span key={idx} className="bg-brand/10 text-brand text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-brand/20">
                                     {tag}
                                 </span>
@@ -275,55 +272,8 @@ Referencia: ${propertyUrl}
                                 />
                             </div>
 
-                            {/* 4. Characteristics Card */}
-                            <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-5">
-                                <div className="space-y-5">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
-                                        Características principales
-                                    </h2>
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-                                        <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                                <Maximize className="h-4 w-4 text-brand" />
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.area_m2} m²</span>
-                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Área total</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                                <BedDouble className="h-4 w-4 text-brand" />
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.habitaciones || '--'}</span>
-                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Habitaciones</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                                <Bath className="h-4 w-4 text-brand" />
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.baños || '--'}</span>
-                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Baños</span>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
-                                                <Car className="h-4 w-4 text-brand" />
-                                            </div>
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{parkingDisplay}</span>
-                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Parqueadero</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </section>
-
-                            {/* 5. Description Section */}
-                            <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-4">
+                            {/* Description — The Story First */}
+                            <section className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6 md:p-8 space-y-4">
                                 <h2 className="text-xl lg:text-3xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
                                     Descripción de la propiedad
                                 </h2>
@@ -336,87 +286,117 @@ Referencia: ${propertyUrl}
                                 )}
                             </section>
 
-                            {/* 6. Amenities */}
-                            {displayServicios.length > 0 && (
-                                <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-4">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
-                                        Amenidades y Servicios
-                                    </h2>
-                                    <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 ${displayServicios.length > 10 ? 'max-h-60 overflow-y-auto pr-1' : ''}`}>
-                                        {displayServicios.map((amenity, index) => (
-                                            <div key={index} className="flex items-start gap-2.5 group rounded-md border border-slate-100 bg-slate-50/40 px-2.5 py-2">
-                                                <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center border border-slate-200 group-hover:bg-brand/5 group-hover:border-brand/10 transition-colors shrink-0 mt-0.5">
-                                                    <Check className="h-2.5 w-2.5 text-brand/70 group-hover:text-brand" />
-                                                </div>
-                                                <span className="text-slate-600 font-medium text-sm tracking-tight leading-snug">{amenity}</span>
-                                            </div>
-                                        ))}
+                            {/* Características y Servicios — Unified Block */}
+                            <section className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6 md:p-8 space-y-8">
+                                <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
+                                    Características y Servicios
+                                </h2>
+                                
+                                {/* Stats Grid */}
+                                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                                    <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
+                                        <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                            <Maximize className="h-4 w-4 text-brand" />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.area_m2} m²</span>
+                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Área total</span>
+                                        </div>
                                     </div>
-                                </section>
-                            )}
-
-                            {/* 7. Technical and Legal Details */}
-                            {(property.medidas_lote || property.tipo_uso || property.financiamiento) && (
-                                <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-5">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
-                                        Detalles Técnicos y Legales
-                                    </h2>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
-                                        {property.medidas_lote && (
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Medidas del Lote</span>
-                                                <span className="text-slate-900 font-semibold">{property.medidas_lote}</span>
-                                            </div>
-                                        )}
-                                        {property.tipo_uso && (
-                                            <div className="flex flex-col gap-1">
-                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Uso</span>
-                                                <span className="text-slate-900 font-semibold capitalize">{property.tipo_uso}</span>
-                                            </div>
-                                        )}
-                                        {property.financiamiento && (
-                                            <div className="flex flex-col gap-1 md:col-span-2">
-                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Financiamiento / Información Adicional</span>
-                                                <span className="text-slate-600 font-medium bg-slate-50 p-4 rounded-lg border border-slate-100 leading-relaxed italic">
-                                                    {property.financiamiento}
-                                                </span>
-                                            </div>
-                                        )}
+                                    <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
+                                        <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                            <BedDouble className="h-4 w-4 text-brand" />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.habitaciones || '--'}</span>
+                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Habitaciones</span>
+                                        </div>
                                     </div>
-                                </section>
-                            )}
-
-                            {/* 6. Location Section - Integrated & Clean */}
-                            <section className="rounded-lg border border-slate-200 bg-white p-6 space-y-6">
-                                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                                    <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-4">
-                                        Ubicación Estratégica
-                                    </h2>
-                                    <div className="text-[12px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                                        <MapPin className="h-3 w-3 text-brand" />
-                                        Exacta bajo solicitud
+                                    <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
+                                        <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                            <Bath className="h-4 w-4 text-brand" />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{property.baños || '--'}</span>
+                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Baños</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
+                                        <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                            <Car className="h-4 w-4 text-brand" />
+                                        </div>
+                                        <div className="flex flex-col gap-1">
+                                            <span className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight">{parkingDisplay}</span>
+                                            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Parqueadero</span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="aspect-[21/9] w-full rounded-lg overflow-hidden border border-slate-200 bg-white group relative">
-                                    <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80')] bg-cover bg-center grayscale opacity-[0.03]" />
-                                    <div className="relative z-10 w-full h-full flex items-center justify-center p-8">
-                                        <div className="text-center max-w-md">
-                                            <div className="h-12 w-12 bg-brand/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-brand/10">
-                                                <MapPin className="h-6 w-6 text-brand" />
-                                            </div>
-                                            <h3 className="text-xl font-bold text-slate-900 mb-2">{property.barrio}, {property.ciudad}</h3>
-                                            <p className="text-slate-500 text-sm leading-relaxed mb-6 font-medium">
-                                                La ubicación exacta es compartida de manera privada por motivos de seguridad y privacidad.
-                                            </p>
-                                            <TrackedWhatsappButton
-                                                url={whatsappUrl}
-                                                className="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95"
-                                            >
-                                                Agendar visita física
-                                            </TrackedWhatsappButton>
+                                {/* Amenities — only if they exist */}
+                                {displayServicios.length > 0 && (
+                                    <div className="pt-6 border-t border-slate-100">
+                                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Servicios incluidos</h3>
+                                        <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 ${displayServicios.length > 10 ? 'max-h-60 overflow-y-auto pr-1' : ''}`}>
+                                            {displayServicios.map((amenity, index) => (
+                                                <div key={index} className="flex items-start gap-2.5 group rounded-md border border-slate-100 bg-slate-50/40 px-2.5 py-2">
+                                                    <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center border border-slate-200 group-hover:bg-brand/5 group-hover:border-brand/10 transition-colors shrink-0 mt-0.5">
+                                                        <Check className="h-2.5 w-2.5 text-brand/70 group-hover:text-brand" />
+                                                    </div>
+                                                    <span className="text-slate-600 font-medium text-sm tracking-tight leading-snug">{amenity}</span>
+                                                </div>
+                                            ))}
                                         </div>
                                     </div>
+                                )}
+
+                                {/* Technical Details — only if they exist */}
+                                {(property.medidas_lote || property.tipo_uso || property.financiamiento) && (
+                                    <div className="pt-6 border-t border-slate-100">
+                                        <h3 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Detalles técnicos y legales</h3>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
+                                            {property.medidas_lote && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Medidas del Lote</span>
+                                                    <span className="text-slate-900 font-semibold">{property.medidas_lote}</span>
+                                                </div>
+                                            )}
+                                            {property.tipo_uso && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Uso</span>
+                                                    <span className="text-slate-900 font-semibold capitalize">{property.tipo_uso}</span>
+                                                </div>
+                                            )}
+                                            {property.financiamiento && (
+                                                <div className="flex flex-col gap-1 md:col-span-2">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Financiamiento / Información Adicional</span>
+                                                    <span className="text-slate-600 font-medium bg-slate-50 p-4 rounded-lg border border-slate-100 leading-relaxed italic">
+                                                        {property.financiamiento}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                            </section>
+
+                            {/* Location Section — Compact & Editorial */}
+                            <section className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6 md:p-8">
+                                <div className="flex items-center justify-between gap-4">
+                                    <div>
+                                        <h2 className="text-lg font-semibold text-slate-900 mb-2">
+                                            <MapPin className="h-4 w-4 text-brand inline mr-2 -mt-0.5" />
+                                            {property.barrio}, {property.ciudad}
+                                        </h2>
+                                        <p className="text-sm text-slate-500 font-medium">
+                                            Ubicación exacta compartida de manera privada por seguridad.
+                                        </p>
+                                    </div>
+                                    <TrackedWhatsappButton
+                                        url={whatsappUrl}
+                                        className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 shrink-0"
+                                    >
+                                        Agendar visita
+                                    </TrackedWhatsappButton>
                                 </div>
                             </section>
                         </div>
@@ -547,23 +527,16 @@ Referencia: ${propertyUrl}
                 </div>
             </div>
 
-            {/* --- SIMILAR PROPERTIES SECTION --- */}
-            <div className="bg-white py-10 md:py-16 mt-8 md:mt-12 border-t border-slate-100">
+            {/* --- EXPLORAR MÁS PROPIEDADES --- */}
+            <section className="bg-white py-12 md:py-20 mt-8 border-t border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 lg:px-8">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-6 md:mb-12">
-                        <div className="space-y-2 md:space-y-4">
-                            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-4">
-                                Inmuebles similares en esta zona
-                            </h2>
-                            <p className="text-slate-500 text-sm md:text-lg font-medium">Explora inmuebles con características similares en {property.barrio}</p>
-                        </div>
-                        <Link
-                            href="/propiedades"
-                            className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-brand transition-colors group bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm"
-                        >
-                            Ver todo el inventario
-                            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                    <div className="mb-8 md:mb-12">
+                        <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 mb-3">
+                            Explorar más propiedades
+                        </h2>
+                        <p className="text-slate-500 text-sm md:text-lg font-medium">
+                            Inmuebles similares en {property.barrio}, {property.ciudad}
+                        </p>
                     </div>
 
                     <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
@@ -576,30 +549,33 @@ Referencia: ${propertyUrl}
                             </div>
                         ))}
                     </div>
-                </div>
-            </div>
 
-            {/* Barrio Popular Section */}
-            {popularInBarrio && popularInBarrio.length > 0 && (
-                <section className="py-10 md:py-20 bg-white border-t border-slate-100">
-                    <div className="max-w-7xl mx-auto px-4 lg:px-8">
-                        <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-10">
-                            <div className="h-1 lg:h-px flex-1 bg-slate-100" />
-                            <h2 className="text-xl font-black text-slate-900 uppercase tracking-[0.3em] text-center">
+                    {popularInBarrio && popularInBarrio.length > 0 && (
+                        <>
+                            <h3 className="text-sm font-bold text-slate-500 uppercase tracking-[0.2em] mt-12 md:mt-16 mb-5">
                                 Destacados en {property.barrio}
-                            </h2>
-                            <div className="h-1 lg:h-px flex-1 bg-slate-100" />
-                        </div>
-                        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
-                            {popularInBarrio.map((prop) => (
-                                <div key={prop.id} className="min-w-[85%] snap-start md:min-w-0">
-                                    <PropertyCardV3 property={prop} />
-                                </div>
-                            ))}
-                        </div>
+                            </h3>
+                            <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
+                                {popularInBarrio.map((prop) => (
+                                    <div key={prop.id} className="min-w-[85%] snap-start md:min-w-0">
+                                        <PropertyCardV3 property={prop} />
+                                    </div>
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    <div className="text-center mt-10">
+                        <Link
+                            href="/propiedades"
+                            className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-brand transition-colors group bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm"
+                        >
+                            Ver todo el inventario
+                            <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </Link>
                     </div>
-                </section>
-            )}
+                </div>
+            </section>
 
             <div className="max-w-7xl mx-auto px-4 lg:px-8">
                 <RecentlyViewed />
