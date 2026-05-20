@@ -35,7 +35,7 @@ export default function SortingControls() {
 
     return (
         <div className="flex flex-col md:flex-row items-end md:items-center justify-end gap-3 mb-8">
-            <label htmlFor="sort-select" className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+            <label htmlFor="sort-select" className="text-[12px] font-black text-slate-400 uppercase tracking-[0.2em]">
                 Ordenar por
             </label>
             <div className="relative group w-full md:w-auto">

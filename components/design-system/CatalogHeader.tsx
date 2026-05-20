@@ -32,7 +32,7 @@ export default function CatalogHeader({
             <div className="container-wide px-4">
                 {/* Breadcrumbs & Badge */}
                 <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
-                    <nav className="flex items-center text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
+                    <nav className="flex items-center text-[12px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
                         <Link href="/" className="hover:text-brand transition-colors flex items-center gap-1.5">
                             <Home className="w-3 h-3" />
                             Inicio
@@ -54,7 +54,7 @@ export default function CatalogHeader({
                     {badge && (
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-bg-alt border border-border-clean rounded-full mb-3 md:mb-6">
                             <badge.icon className="w-3.5 h-3.5 text-brand" />
-                            <span className="text-[10px] font-black text-text-primary uppercase tracking-widest">{badge.text}</span>
+                            <span className="text-[12px] font-black text-text-primary uppercase tracking-widest">{badge.text}</span>
                         </div>
                     )}
                 </div>
@@ -91,7 +91,7 @@ export default function CatalogHeader({
                         </div>
                         <div className="flex items-center gap-1.5 text-slate-400">
                             <Clock className="w-3.5 h-3.5" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">Actualizado hoy</span>
+                            <span className="text-[12px] font-bold uppercase tracking-wider">Actualizado hoy</span>
                         </div>
                     </div>
 

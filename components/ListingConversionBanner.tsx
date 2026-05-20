@@ -9,7 +9,7 @@ export default function ListingConversionBanner() {
 
     return (
         <section className="mt-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#fb2c36] to-zinc-900 rounded-[3rem]"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-brand to-zinc-900 rounded-[3rem]"></div>
 
             {/* Decorative elements */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
@@ -34,7 +34,7 @@ export default function ListingConversionBanner() {
                         href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-3 px-8 py-5 bg-white text-[#fb2c36] rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-zinc-100 transition-all shadow-xl shadow-black/20 active:scale-95 w-full sm:w-auto"
+                        className="flex items-center justify-center gap-3 px-8 py-5 bg-white text-brand rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-zinc-100 transition-all shadow-xl shadow-black/20 active:scale-95 w-full sm:w-auto"
                     >
                         <MessageCircle className="w-5 h-5" />
                         Solicitar por WhatsApp

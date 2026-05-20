@@ -18,7 +18,7 @@ export default function MobileStickyCTA({ whatsappUrl, callUrl, price }: MobileS
                     <div className="rounded-2xl border border-zinc-200 bg-white shadow-[0_-10px_24px_rgba(0,0,0,0.1)] p-2.5">
                         <div className="flex items-center gap-2.5">
                             <div className="rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5">
-                                <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Precio</p>
+                                <p className="text-[11px] font-bold text-zinc-500 uppercase tracking-[0.2em]">Precio</p>
                                 <p className="text-[1.05rem] font-black text-zinc-900 tracking-tight leading-none truncate mt-1">{price}</p>
                             </div>
                             <button

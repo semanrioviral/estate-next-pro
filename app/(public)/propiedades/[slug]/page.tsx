@@ -220,25 +220,25 @@ Referencia: ${propertyUrl}
                     {/* Header Title Section - Anchored */}
                     <div className="mb-5 md:mb-8 pt-1 pb-4 md:pt-0 md:pb-6 md:border-b border-slate-200 space-y-4 md:space-y-6">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="bg-zinc-900 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded">
+                            <span className="bg-zinc-900 text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 ID: {property.id.toString().slice(0, 8)}
                             </span>
-                            <span className="bg-brand text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded">
+                            <span className="bg-brand text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 {operationText}
                             </span>
                             {property.estado && (
-                                <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded ${property.estado.toLowerCase() === 'disponible'
+                                <span className={`text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded ${property.estado.toLowerCase() === 'disponible'
                                     ? 'bg-emerald-500 text-white'
                                     : 'bg-zinc-500 text-white'
                                     }`}>
                                     {property.estado}
                                 </span>
                             )}
-                            <span className="bg-gray-100 text-gray-900 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded">
+                            <span className="bg-gray-100 text-gray-900 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 {property.tipo}
                             </span>
                             {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.map((tag, idx) => (
-                                <span key={idx} className="bg-brand/10 text-brand text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-brand/20">
+                                <span key={idx} className="bg-brand/10 text-brand text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-brand/20">
                                     {tag}
                                 </span>
                             ))}
@@ -255,7 +255,7 @@ Referencia: ${propertyUrl}
                             </div>
                             {/* Mobile Price - Shown only on small screens */}
                             <div className="md:hidden mt-3 flex flex-col gap-1">
-                                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Precio de {operationText}</p>
+                                <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em]">Precio de {operationText}</p>
                                 <p className="text-4xl font-black text-zinc-900 tracking-tighter leading-none">
                                     {priceDisplay}
                                 </p>
@@ -288,7 +288,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-lg sm:text-xl font-semibold text-zinc-900 tracking-tight">{property.area_m2} m²</span>
-                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Área total</span>
+                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Área total</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
@@ -297,7 +297,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-lg sm:text-xl font-semibold text-zinc-900 tracking-tight">{property.habitaciones || '--'}</span>
-                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Habitaciones</span>
+                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Habitaciones</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
@@ -306,7 +306,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-lg sm:text-xl font-semibold text-zinc-900 tracking-tight">{property.baños || '--'}</span>
-                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Baños</span>
+                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Baños</span>
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
@@ -315,7 +315,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-lg sm:text-xl font-semibold text-zinc-900 tracking-tight">{parkingDisplay}</span>
-                                                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Parqueadero</span>
+                                                <span className="text-[12px] font-bold text-slate-500 uppercase tracking-widest">Parqueadero</span>
                                             </div>
                                         </div>
                                     </div>
@@ -364,19 +364,19 @@ Referencia: ${propertyUrl}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
                                         {property.medidas_lote && (
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Medidas del Lote</span>
+                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Medidas del Lote</span>
                                                 <span className="text-zinc-900 font-semibold">{property.medidas_lote}</span>
                                             </div>
                                         )}
                                         {property.tipo_uso && (
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Uso</span>
+                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Tipo de Uso</span>
                                                 <span className="text-zinc-900 font-semibold capitalize">{property.tipo_uso}</span>
                                             </div>
                                         )}
                                         {property.financiamiento && (
                                             <div className="flex flex-col gap-1 md:col-span-2">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Financiamiento / Información Adicional</span>
+                                                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Financiamiento / Información Adicional</span>
                                                 <span className="text-zinc-600 font-medium bg-slate-50 p-4 rounded-lg border border-slate-100 leading-relaxed italic">
                                                     {property.financiamiento}
                                                 </span>
@@ -392,7 +392,7 @@ Referencia: ${propertyUrl}
                                     <h2 className="text-xl lg:text-2xl font-semibold text-zinc-900 border-l-4 border-brand-600 pl-4">
                                         Ubicación Estratégica
                                     </h2>
-                                    <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-2">
+                                    <div className="text-[12px] font-bold uppercase tracking-widest text-zinc-400 flex items-center gap-2">
                                         <MapPin className="h-3 w-3 text-brand" />
                                         Exacta bajo solicitud
                                     </div>
@@ -429,7 +429,7 @@ Referencia: ${propertyUrl}
                                     {/* Price and Operation */}
                                     <div>
                                         <div className="flex items-center justify-between mb-3">
-                                            <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">
+                                            <span className="text-[12px] font-bold text-zinc-400 uppercase tracking-[0.2em]">
                                                 Precio de {operationText}
                                             </span>
                                             <div className="flex items-center gap-1.5 text-[10px] font-black text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider border border-emerald-100">
@@ -469,7 +469,7 @@ Referencia: ${propertyUrl}
 
                                         <Link
                                             href={callUrl}
-                                            className="w-full h-12 flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-zinc-900 font-extrabold text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-95"
+                                            className="w-full h-12 flex items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white text-zinc-900 font-extrabold text-[12px] uppercase tracking-widest hover:bg-slate-50 transition-all active:scale-95"
                                         >
                                             <Phone className="h-3.5 w-3.5 text-zinc-400" />
                                             Llamar ahora
@@ -495,7 +495,7 @@ Referencia: ${propertyUrl}
                                             )}
                                             <div>
                                                 <div className="text-sm font-bold text-zinc-900">{assignedAgentName}</div>
-                                                <div className="text-[10px] text-brand font-black uppercase tracking-widest">Inmobiliaria Premium</div>
+                                                <div className="text-[12px] text-brand font-black uppercase tracking-widest">Inmobiliaria Premium</div>
                                                 <div className="flex items-center gap-1 mt-1">
                                                     {[1, 2, 3, 4, 5].map((s) => (
                                                         <Star key={s} className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
@@ -514,25 +514,25 @@ Referencia: ${propertyUrl}
                                             <div className="h-8 w-8 rounded-full bg-zinc-50 flex items-center justify-center mb-1 border border-zinc-100">
                                                 <ShieldCheck className="h-4 w-4 text-brand" />
                                             </div>
-                                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-tighter">Verificado</span>
+                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">Verificado</span>
                                         </div>
                                         <div className="flex flex-col items-center text-center">
                                             <div className="h-8 w-8 rounded-full bg-zinc-50 flex items-center justify-center mb-1 border border-zinc-100">
                                                 <CheckCircle2 className="h-4 w-4 text-brand" />
                                             </div>
-                                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-tighter">Legal</span>
+                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">Legal</span>
                                         </div>
                                         <div className="flex flex-col items-center text-center">
                                             <div className="h-8 w-8 rounded-full bg-zinc-50 flex items-center justify-center mb-1 border border-zinc-100">
                                                 <Award className="h-4 w-4 text-brand" />
                                             </div>
-                                            <span className="text-[8px] font-black text-zinc-400 uppercase tracking-tighter">Premium</span>
+                                            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-tighter">Premium</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Share & Report */}
-                                <div className="flex items-center justify-between px-4 mt-6 text-zinc-400 text-[10px] font-bold uppercase tracking-widest">
+                                <div className="flex items-center justify-between px-4 mt-6 text-zinc-400 text-[12px] font-bold uppercase tracking-widest">
                                     <button className="hover:text-brand transition-colors flex items-center gap-1.5">
                                         <Share2 className="h-3.5 w-3.5" />
                                         Compartir

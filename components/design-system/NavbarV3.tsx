@@ -36,7 +36,7 @@ export default function NavbarV3() {
                 className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
                     ? "bg-white shadow-sm py-4 border-b border-slate-200"
                     : isHome
-                        ? "bg-transparent py-8 border-transparent"
+                        ? "bg-transparent py-4 md:py-8 border-transparent"
                         : "bg-white py-4 border-b border-slate-200"
                     }`}
             >
@@ -139,7 +139,7 @@ export default function NavbarV3() {
                         </div>
 
                         <div className="mt-auto pt-12 space-y-4">
-                            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Canales de Atención</p>
+                            <p className="text-[12px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Canales de Atención</p>
                             <button
                                 type="button"
                                 onClick={() => openWhatsapp(`https://wa.me/${whatsappNumber}`)}

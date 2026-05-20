@@ -138,7 +138,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 <div className={`flex bg-slate-50 p-1 ${isCompact ? 'rounded-xl' : 'rounded-2xl md:rounded-[4px]'} md:min-w-[160px]`}>
                     <button
                         onClick={() => setOperacion('venta')}
-                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[10px] font-black uppercase tracking-widest transition-all ${operacion === 'venta'
+                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'venta'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
                             : 'text-slate-400 hover:text-slate-600'
                             }`}
@@ -147,7 +147,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     </button>
                     <button
                         onClick={() => setOperacion('arriendo')}
-                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[10px] font-black uppercase tracking-widest transition-all ${operacion === 'arriendo'
+                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'arriendo'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
                             : 'text-slate-400 hover:text-slate-600'
                             }`}
@@ -245,7 +245,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 {/* 6. Search Button */}
                 <button
                     onClick={handleSearch}
-                    className={`bg-[#fb2c36] text-white ${isCompact ? 'px-6 py-4' : 'px-8 py-4 md:py-0'} ${isCompact ? 'rounded-[4px]' : 'rounded-xl md:rounded-[4px]'} font-black text-[10px] uppercase tracking-[0.2em] hover:bg-brand-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group min-w-[120px]`}
+                    className={`bg-brand text-white ${isCompact ? 'px-6 py-4' : 'px-8 py-4 md:py-0'} ${isCompact ? 'rounded-[4px]' : 'rounded-xl md:rounded-[4px]'} font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group min-w-[120px]`}
                 >
                     <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
                     {isCompact ? 'Filtrar' : 'Buscar'}

@@ -115,7 +115,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
-      <body className={`${outfit.variable} font-sans antialiased min-h-screen bg-white text-zinc-900`}>
+      <body className={`${outfit.variable} ${outfit.className} antialiased min-h-screen bg-white text-slate-900`}>
         {/* Skip Link for Accessibility */}
         <a
           href="#main-content"
