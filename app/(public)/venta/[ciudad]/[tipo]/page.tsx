@@ -5,10 +5,12 @@ import { Metadata } from 'next';
 import { Search, Building2, ArrowLeft, Clock } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import ExploreAlso from '@/components/ExploreAlso';
+import dynamic from 'next/dynamic';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
 import { SITE_URL } from '@/lib/supabase/constants';
+
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 
 interface VentaCiudadTipoPageProps {
     params: Promise<{

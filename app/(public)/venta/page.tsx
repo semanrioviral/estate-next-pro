@@ -1,13 +1,15 @@
 import { getPropertiesByOperacion, getTrendingProperties } from '@/lib/supabase/properties';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import ExploreAlso from '@/components/ExploreAlso';
-import ListingConversionBanner from '@/components/ListingConversionBanner';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Search, Flame, Building2 } from 'lucide-react';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
 import { SITE_URL } from '@/lib/supabase/constants';
+
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
+const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
 
 interface VentaPageProps {
     searchParams: Promise<{

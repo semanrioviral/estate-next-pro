@@ -1,13 +1,15 @@
 import { cache } from 'react';
 import { getBarrioBySlug, getPropertiesByBarrioSlug, getAllBarrios } from '@/lib/supabase/properties';
 import { notFound } from 'next/navigation';
+import Link from 'next/link';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
-import ExploreAlso from '@/components/ExploreAlso';
 import { Metadata } from 'next';
 import { MapPin, Search, ArrowLeft, Building2 } from 'lucide-react';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import Pagination from '@/components/design-system/Pagination';
+
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 import { generateBarrioSEO, generateBarrioJSONLD } from '@/lib/seo/generatePropertySEO';
 import { SITE_URL } from '@/lib/supabase/constants';
 

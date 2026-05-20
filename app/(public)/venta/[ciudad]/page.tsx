@@ -3,8 +3,7 @@ import { notFound } from 'next/navigation';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import SearchBarV3 from '@/components/design-system/SearchBarV3';
 import { Suspense } from 'react';
-import ExploreAlso from '@/components/ExploreAlso';
-import ListingConversionBanner from '@/components/ListingConversionBanner';
+import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 import { Search, MapPin, ArrowLeft, Building2, Award, Clock } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +11,9 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
 import { SITE_URL } from '@/lib/supabase/constants';
+
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
+const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
 
 interface VentaCiudadPageProps {
     params: Promise<{

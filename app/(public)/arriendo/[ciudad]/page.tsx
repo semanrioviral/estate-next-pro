@@ -2,13 +2,15 @@ import { getPropertiesByOperacionAndCiudad, getTagBySlug, getPropertiesByOperaci
 import { notFound } from 'next/navigation';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import { Search, MapPin, Award } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import Pagination from '@/components/design-system/Pagination';
-import ExploreAlso from '@/components/ExploreAlso';
-import ListingConversionBanner from '@/components/ListingConversionBanner';
 import { SITE_URL } from '@/lib/supabase/constants';
+
+const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
+const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
 
 interface ArriendoCiudadPageProps {
     params: Promise<{
