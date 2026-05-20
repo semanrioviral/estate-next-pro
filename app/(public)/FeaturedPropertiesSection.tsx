@@ -24,8 +24,7 @@ export async function FeaturedPropertiesSection() {
       <div className="container-wide">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div className="max-w-2xl relative">
-            <div className="absolute -top-10 -left-10 w-32 h-32 bg-brand-600/5 blur-3xl rounded-full"></div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-[10px] font-bold uppercase tracking-widest mb-6 relative z-10"><Star className="w-3 h-3 fill-brand-600" /> Selección Premium</div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-[12px] font-bold uppercase tracking-widest mb-6 relative z-10"><Star className="w-3 h-3 fill-brand-600" /> Selección Premium</div>
             <h2 className="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-6 relative z-10">Propiedades <span className="text-brand-600">Recomendadas</span></h2>
             <p className="text-lg text-slate-600 font-medium leading-relaxed max-w-xl relative z-10">Inmobiliaria líder en Cúcuta y Los Patios. Explore las oportunidades de inversión más seguras de la región.</p>
           </div>
@@ -34,16 +33,15 @@ export async function FeaturedPropertiesSection() {
             <div className="w-11 h-11 rounded-full bg-white flex items-center justify-center text-slate-400 group-hover:bg-brand-600 group-hover:text-white transition-all shadow-sm border border-slate-100 group-hover:scale-110 group-hover:shadow-brand-200"><ChevronRight className="w-5 h-5" /></div>
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {featuredProperties.map((property) => (
-            <div key={property.id} className="transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 rounded-3xl">
+            <div key={property.id} className="rounded-3xl">
               <PropertyCardV3 property={property} variant="homepage" />
             </div>
           ))}
         </div>
         <div className="flex flex-col items-center mt-16">
-          <Link href="/venta" className="group relative inline-flex items-center gap-3 bg-brand-600 text-white px-10 md:px-14 h-16 md:h-[4.5rem] rounded-full font-black text-sm md:text-base uppercase tracking-[0.15em] hover:bg-brand-700 transition-all shadow-xl shadow-brand-600/25 active:scale-[0.97] hover:shadow-2xl hover:shadow-brand-600/30 hover:-translate-y-0.5 overflow-hidden">
-            <span className="absolute inset-0 rounded-full border-2 border-brand-600 animate-ping opacity-15"></span>
+          <Link href="/venta" className="group relative inline-flex items-center gap-3 bg-brand-600 text-white px-10 md:px-14 h-16 md:h-[4.5rem] rounded-full font-black text-sm md:text-base uppercase tracking-[0.15em] hover:bg-brand-700 transition-all shadow-xl shadow-brand-600/25 active:scale-[0.97] hover:-translate-y-0.5 overflow-hidden">
             Ver Todas las Propiedades
             <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>

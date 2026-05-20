@@ -52,7 +52,7 @@ const testimonials = [
 
 function StatsSection() {
   return (
-    <section className="pt-24 pb-16 bg-slate-50 relative overflow-hidden">
+    <section className="pt-24 pb-24 bg-slate-50 relative overflow-hidden">
       <div className="container-wide relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {navItems.map((nav, i) => (

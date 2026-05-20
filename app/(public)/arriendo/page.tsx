@@ -135,7 +135,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
                 {/* Properties Grid */}
                 {properties.length > 0 ? (
                     <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                             {properties.map((property) => (
                                 <PropertyCardV3 key={property.id} property={property} />
                             ))}
@@ -172,7 +172,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
                                 </p>
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
                             {trendingProperties.map((prop) => (
                                 <PropertyCardV3 key={prop.id} property={prop} />
                             ))}
