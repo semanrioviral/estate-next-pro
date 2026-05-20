@@ -409,9 +409,12 @@ Referencia: ${propertyUrl}
                                             <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-medium">
                                                 La ubicación exacta es compartida de manera privada por motivos de seguridad y privacidad.
                                             </p>
-                                            <button className="bg-zinc-900 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95">
+                                            <TrackedWhatsappButton
+                                                url={whatsappUrl}
+                                                className="bg-zinc-900 text-white px-8 py-3 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-zinc-800 transition-all active:scale-95"
+                                            >
                                                 Agendar visita física
-                                            </button>
+                                            </TrackedWhatsappButton>
                                         </div>
                                     </div>
                                 </div>
