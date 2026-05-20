@@ -41,7 +41,7 @@ export default async function PropiedadesPage({
                 <div className="container-wide px-4">
                     {/* Section heading for accessibility - creates proper H1->H2->H3 hierarchy */}
                     <h2 className="sr-only">
-                        {totalCount} propiedades disponibles en el catálogo
+                        {totalCount} {totalCount === 1 ? 'propiedad disponible' : 'propiedades disponibles'} en el catálogo
                     </h2>
 
                     {properties.length > 0 ? (

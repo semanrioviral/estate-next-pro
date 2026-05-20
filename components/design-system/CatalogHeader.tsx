@@ -86,7 +86,7 @@ export default function CatalogHeader({
                         <div className="flex items-center gap-2 text-slate-900 mb-1">
                             <Building2 className="w-5 h-5 text-brand" />
                             <span className="text-lg md:text-xl font-medium tracking-tight">
-                                {totalCount} propiedades disponibles
+                                {totalCount} {totalCount === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
                             </span>
                         </div>
                         <div className="flex items-center gap-1.5 text-slate-400">
