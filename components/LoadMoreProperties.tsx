@@ -56,7 +56,7 @@ export default function LoadMoreProperties({
     const loadedPagesRef = useRef(loadedPages);
     useEffect(() => { loadedPagesRef.current = loadedPages; }, [loadedPages]);
 
-    // ── On mount: hide static pagination fallback ──────────────────
+    // ── On mount: hide static pagination fallback + restore loaded pages ──
     useEffect(() => {
         if (initialized.current) return;
         initialized.current = true;
@@ -66,7 +66,51 @@ export default function LoadMoreProperties({
         if (fallback) {
             fallback.style.display = 'none';
         }
-    }, []);
+
+        // Restore previously loaded pages from sessionStorage
+        // (set by CatalogContextTracker when returning from PDP)
+        (async () => {
+            try {
+                const stored = sessionStorage.getItem('catalog_loaded_pages');
+                if (!stored) return;
+
+                sessionStorage.removeItem('catalog_loaded_pages');
+                const previouslyLoaded: number[] = JSON.parse(stored);
+
+                // Pages we need to re-fetch (loaded before, but not the current SSR page)
+                const pagesToFetch = previouslyLoaded
+                    .filter(p => p !== initialPage)
+                    .sort((a, b) => a - b);
+
+                if (pagesToFetch.length === 0) return;
+
+                // Fetch each missing page sequentially
+                let allProperties: Property[] = [];
+                for (const page of pagesToFetch) {
+                    const response = await fetch('/api/properties/search', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ ...fetchParams, page }),
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        allProperties = [...allProperties, ...(data.properties || [])];
+                    }
+                }
+
+                setProperties(allProperties);
+                setLoadedPages(prev => {
+                    const merged = new Set([...prev, ...pagesToFetch]);
+                    return Array.from(merged);
+                });
+                // Check if there are still more pages to load
+                const maxPage = Math.max(initialPage, ...previouslyLoaded);
+                setHasMore(maxPage < totalPages);
+            } catch {
+                // Silently fail — restoration is progressive enhancement
+            }
+        })();
+    }, [initialPage, fetchParams, totalPages]);
 
     // ── Save loaded pages to sessionStorage when a property card is clicked ──
     // This lets us preserve the full browsing context when user returns from PDP.

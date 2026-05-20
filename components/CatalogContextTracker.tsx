@@ -51,6 +51,12 @@ export default function CatalogContextTracker() {
             // Only restore if we're on the exact same URL (pathname + query params)
             // that was saved — this prevents restoring on unrelated navigations
             if (ctx.pathname === pathname && currentQuery === savedQuery) {
+                // Remove scroll context after restoring position.
+                // Keep loadedPages in context for LoadMoreProperties to restore.
+                const loadedPages = ctx.loadedPages;
+                if (loadedPages) {
+                    sessionStorage.setItem('catalog_loaded_pages', JSON.stringify(loadedPages));
+                }
                 sessionStorage.removeItem('catalog_context');
 
                 // Double rAF ensures the DOM has fully painted with all fetched data
