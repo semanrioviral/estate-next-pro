@@ -4,8 +4,10 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import dynamic from 'next/dynamic';
 import { Metadata } from 'next';
 import { Search, Flame, Building2 } from 'lucide-react';
-import Pagination from '@/components/design-system/Pagination';
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
@@ -68,6 +70,12 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
     const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/arriendo`;
 
+    // Build filters query string for static pagination links
+    const aFiltersParams = new URLSearchParams();
+    if (habitaciones) aFiltersParams.set('habitaciones', habitaciones);
+    if (orden) aFiltersParams.set('orden', orden);
+    const aFiltersQueryString = aFiltersParams.toString();
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -110,6 +118,7 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -126,6 +135,8 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
                     icon: Building2,
                     text: 'Alquiler Garantizado'
                 }}
+                currentPage={currentPage}
+                itemsPerPage={12}
             />
 
             <div className="container-wide px-4 py-8 md:py-20">
@@ -144,11 +155,25 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
                         </div>
 
                         <div className="mt-12">
-                            <Pagination
-                                totalItems={totalCount}
-                                itemsPerPage={12}
-                                currentPage={currentPage}
-                            />
+                        <LoadMoreProperties
+                            totalCount={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            fetchParams={{
+                                source: 'operacion',
+                                operacion: 'arriendo',
+                                habitaciones: numHabitaciones,
+                                orden: orden,
+                            }}
+                            basePath="/arriendo"
+                        />
+                        <StaticPagination
+                            totalItems={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            basePath="/arriendo"
+                            filtersQueryString={aFiltersQueryString}
+                        />
                         </div>
                     </>
                 ) : (

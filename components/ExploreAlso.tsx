@@ -16,7 +16,7 @@ export default async function ExploreAlso({ currentOperacion = 'venta', currentS
     ]);
 
     // Limitar para mantener el diseño limpio
-    const displayTags = tags.filter(t => (t as any).slug !== currentSlug).slice(0, 6);
+    const displayTags = tags.filter(t => t.slug !== currentSlug).slice(0, 6);
     const displayBarrios = barrios.filter(b => b.slug !== currentSlug).slice(0, 6);
     const displayCities = cities.filter(c => slugify(c) !== currentSlug).slice(0, 6);
 
@@ -45,7 +45,7 @@ export default async function ExploreAlso({ currentOperacion = 'venta', currentS
                             {displayTags.map((tag) => (
                                 <Link
                                     key={tag.id}
-                                    href={`/${currentOperacion}/${(tag as any).slug}`}
+                                    href={`/${currentOperacion}/${tag.slug}`}
                                     className="px-4 py-2 bg-white border border-zinc-100 hover:border-brand hover:text-brand text-text-secondary text-sm font-bold rounded-xl transition-all flex items-center gap-2 group"
                                 >
                                     {tag.nombre}

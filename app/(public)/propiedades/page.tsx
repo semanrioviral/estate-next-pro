@@ -3,8 +3,10 @@ import { getProperties } from "@/lib/supabase/properties";
 import PropertyCardV3 from "@/components/design-system/PropertyCardV3";
 import CatalogHeader from "@/components/design-system/CatalogHeader";
 import { Search } from "lucide-react";
-import Pagination from "@/components/design-system/Pagination";
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 
 export const dynamic = "force-dynamic";
 
@@ -25,8 +27,14 @@ export default async function PropiedadesPage({
     const currentPage = Number(pageParam) || 1;
     const { properties, totalCount } = await getProperties(orden, currentPage);
 
+    // Build filters query string for static pagination links
+    const pFiltersParams = new URLSearchParams();
+    if (orden) pFiltersParams.set('orden', orden);
+    const pFiltersQueryString = pFiltersParams.toString();
+
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <CatalogHeader
                 title={<>Explora Todas las <span className="text-brand">Propiedades</span></>}
                 description="Nuestra selección completa de inmuebles en Cúcuta, Los Patios y Villa del Rosario."
@@ -34,6 +42,8 @@ export default async function PropiedadesPage({
                 breadcrumbs={[
                     { label: 'Catálogo General' }
                 ]}
+                currentPage={currentPage}
+                itemsPerPage={12}
             />
 
             {/* Results Section */}
@@ -53,11 +63,23 @@ export default async function PropiedadesPage({
                             </div>
 
                             <div className="mt-12">
-                                <Pagination
-                                    totalItems={totalCount}
-                                    itemsPerPage={12}
-                                    currentPage={currentPage}
-                                />
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={{
+                                    source: 'all',
+                                    orden: orden,
+                                }}
+                                basePath="/propiedades"
+                            />
+                            <StaticPagination
+                                totalItems={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                basePath="/propiedades"
+                                filtersQueryString={pFiltersQueryString}
+                            />
                             </div>
                         </>
                     ) : (

@@ -6,8 +6,10 @@ import dynamic from 'next/dynamic';
 import { Search, MapPin, Award } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import Pagination from '@/components/design-system/Pagination';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
@@ -122,6 +124,7 @@ export default async function ArriendoCiudadPage({ params, searchParams }: Arrie
 
         return (
             <main className="min-h-screen bg-white">
+                <CatalogContextTracker />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
                 <CatalogHeader
@@ -147,10 +150,24 @@ export default async function ArriendoCiudadPage({ params, searchParams }: Arrie
                                 ))}
                             </div>
 
-                            <Pagination
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={{
+                                    source: 'operacion_tag',
+                                    operacion: 'arriendo',
+                                    tagSlug: slug,
+                                    orden: orden,
+                                }}
+                                basePath={`/arriendo/${slug}`}
+                            />
+                            <StaticPagination
                                 totalItems={totalCount}
                                 itemsPerPage={12}
                                 currentPage={currentPage}
+                                basePath={`/arriendo/${slug}`}
+                                filtersQueryString={new URLSearchParams({ ...(orden && { orden }) }).toString()}
                             />
                         </>
                     ) : (
@@ -244,10 +261,30 @@ export default async function ArriendoCiudadPage({ params, searchParams }: Arrie
                             ))}
                         </div>
 
-                        <Pagination
+                        <LoadMoreProperties
+                            totalCount={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            fetchParams={{
+                                source: 'operacion_ciudad',
+                                operacion: 'arriendo',
+                                ciudadSlug: slug,
+                                barrioSlug: barrio,
+                                habitaciones: numHabitaciones,
+                                orden: orden,
+                            }}
+                            basePath={`/arriendo/${slug}`}
+                        />
+                        <StaticPagination
                             totalItems={totalCount}
                             itemsPerPage={12}
                             currentPage={currentPage}
+                            basePath={`/arriendo/${slug}`}
+                            filtersQueryString={new URLSearchParams({
+                                ...(barrio && { barrio }),
+                                ...(habitaciones && { habitaciones }),
+                                ...(orden && { orden }),
+                            }).toString()}
                         />
                     </>
                 ) : (

@@ -13,17 +13,19 @@ import {
     Maximize,
     Car,
     ChevronRight,
+    ChevronLeft,
     Phone,
     Star,
     Check
 } from 'lucide-react';
-import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
+import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, getAdjacentProperties, Property } from '@/lib/supabase/properties';
 import { generatePropertySEO, generatePropertyJSONLD } from '@/lib/seo/generatePropertySEO';
 import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import ExpandableText from '@/components/ExpandableText';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
+import VolverResultados from '@/components/VolverResultados';
 import { SITE_URL } from '@/lib/supabase/constants';
 
 const PropertyViewTracker = dynamic(() => import('@/components/PropertyViewTracker'));
@@ -154,6 +156,8 @@ export default async function PropertyDetailPage({ params }: Props) {
             property.precio
         );
 
+    const { prev: prevSlug, next: nextSlug } = await getAdjacentProperties(property.id, property.operacion);
+
     const whatsappMessage = `Hola, estoy interesado en la propiedad:
 ${property.titulo}.
 Precio: $${formattedPrice} COP
@@ -186,18 +190,58 @@ Referencia: ${propertyUrl}
                 currency="COP"
             />
 
-            {/* Breadcrumb - Institutional Style */}
-            <div className="bg-gray-50 border-b border-gray-100 py-3 hidden md:block">
-                <div className="max-w-7xl mx-auto px-4 lg:px-8">
-                    <nav className="flex items-center text-[11px] font-medium text-gray-500 uppercase tracking-wider">
-                        <Link href="/" className="hover:text-brand transition-colors">Inicio</Link>
-                        <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
-                        <Link href={`/${property.operacion}`} className="hover:text-brand transition-colors">{operationText}</Link>
-                        <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
-                        <Link href={`/${slugify(property.ciudad)}`} className="hover:text-brand transition-colors">{property.ciudad}</Link>
-                        <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
-                        <span className="text-gray-900 truncate max-w-[200px]">{property.titulo}</span>
-                    </nav>
+            {/* Breadcrumb - Institutional Style (visible all breakpoints) */}
+            <div className="bg-gray-50 border-b border-gray-100 py-2 md:py-3">
+                <div className="max-w-7xl mx-auto px-3 md:px-4 lg:px-8">
+                    {/* Mobile: simplified "← Volver" (contextual or generic fallback) */}
+                    <div className="flex md:hidden items-center justify-between">
+                        <VolverResultados
+                            mobileFallbackHref={`/${property.operacion}`}
+                            mobileFallbackLabel={`Volver a ${operationText}`}
+                        />
+                        {/* Prev / Next Mobile inline */}
+                        <div className="flex items-center gap-1">
+                            {prevSlug ? (
+                                <Link
+                                    href={`/propiedades/${prevSlug}`}
+                                    className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-slate-100 transition-all"
+                                    aria-label="Propiedad anterior"
+                                >
+                                    <ChevronLeft className="w-4 h-4" />
+                                </Link>
+                            ) : (
+                                <span className="p-1.5 rounded-lg text-slate-200 cursor-not-allowed">
+                                    <ChevronLeft className="w-4 h-4" />
+                                </span>
+                            )}
+                            {nextSlug ? (
+                                <Link
+                                    href={`/propiedades/${nextSlug}`}
+                                    className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-slate-100 transition-all"
+                                    aria-label="Propiedad siguiente"
+                                >
+                                    <ChevronRight className="w-4 h-4" />
+                                </Link>
+                            ) : (
+                                <span className="p-1.5 rounded-lg text-slate-200 cursor-not-allowed">
+                                    <ChevronRight className="w-4 h-4" />
+                                </span>
+                            )}
+                        </div>
+                    </div>
+                    {/* Desktop: full breadcrumb path + contextual "Volver a resultados" */}
+                    <div className="hidden md:flex items-center justify-between">
+                        <nav className="flex items-center text-[11px] font-medium text-gray-500 uppercase tracking-wider">
+                            <Link href="/" className="hover:text-brand transition-colors">Inicio</Link>
+                            <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
+                            <Link href={`/${property.operacion}`} className="hover:text-brand transition-colors">{operationText}</Link>
+                            <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
+                            <Link href={`/${slugify(property.ciudad)}`} className="hover:text-brand transition-colors">{property.ciudad}</Link>
+                            <ChevronRight className="w-3 h-3 mx-2 text-gray-300" />
+                            <span className="text-gray-900 truncate max-w-[200px]">{property.titulo}</span>
+                        </nav>
+                        <VolverResultados />
+                    </div>
                 </div>
             </div>
 
@@ -390,7 +434,7 @@ Referencia: ${propertyUrl}
                                         url={whatsappUrl}
                                         className="bg-slate-900 text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 shrink-0"
                                     >
-                                        Agendar visita
+                                        Contactar
                                     </TrackedWhatsappButton>
                                 </div>
                             </section>
@@ -470,6 +514,47 @@ Referencia: ${propertyUrl}
                 </div>
             </div>
 
+            {/* --- PREV / NEXT NAVIGATION (Desktop) --- */}
+            <div className="max-w-7xl mx-auto px-3 md:px-4 lg:px-8 mt-8 md:mt-12">
+                <div className="hidden md:flex items-center justify-between border-t border-b border-slate-100 py-4">
+                    <div className="flex-1">
+                        {prevSlug ? (
+                            <Link
+                                href={`/propiedades/${prevSlug}`}
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand transition-colors group"
+                            >
+                                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                                <span>Anterior</span>
+                            </Link>
+                        ) : (
+                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
+                                <ChevronLeft className="w-5 h-5" />
+                                <span>Anterior</span>
+                            </span>
+                        )}
+                    </div>
+                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                        Navegar propiedades
+                    </div>
+                    <div className="flex-1 flex justify-end">
+                        {nextSlug ? (
+                            <Link
+                                href={`/propiedades/${nextSlug}`}
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand transition-colors group"
+                            >
+                                <span>Siguiente</span>
+                                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        ) : (
+                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
+                                <span>Siguiente</span>
+                                <ChevronRight className="w-5 h-5" />
+                            </span>
+                        )}
+                    </div>
+                </div>
+            </div>
+
             {/* --- EXPLORAR MÁS PROPIEDADES --- */}
             <section className="bg-white py-12 md:py-20 mt-8 border-t border-slate-100">
                 <div className="max-w-7xl mx-auto px-4 lg:px-8">
@@ -521,7 +606,7 @@ Referencia: ${propertyUrl}
             </section>
 
             <div className="max-w-7xl mx-auto px-4 lg:px-8">
-                <RecentlyViewed />
+                <RecentlyViewed currentPropertyId={property.id} />
                 <div className="mt-10 pt-10 md:mt-20 md:pt-20 border-t border-slate-100">
                     <ExploreAlso currentOperacion={property.operacion as 'venta' | 'arriendo'} currentSlug={slugify(property.ciudad)} />
                 </div>

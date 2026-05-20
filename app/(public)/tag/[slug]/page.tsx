@@ -5,7 +5,9 @@ import { Search, Hash, Building2 } from 'lucide-react';
 import { Metadata } from 'next';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
-import Pagination from '@/components/design-system/Pagination';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 import { SITE_URL } from '@/lib/supabase/constants';
 
 interface TagPageProps {
@@ -62,6 +64,11 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
     const siteUrl = SITE_URL;
     const canonicalUrl = `${siteUrl}/tag/${slug}`;
 
+    // Build filters query string for static pagination links
+    const tFiltersParams = new URLSearchParams();
+    if (orden) tFiltersParams.set('orden', orden);
+    const tFiltersQueryString = tFiltersParams.toString();
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -86,6 +93,7 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -116,11 +124,24 @@ export default async function TagPage({ params, searchParams }: TagPageProps) {
                             </div>
 
                             <div className="mt-12">
-                                <Pagination
-                                    totalItems={totalCount}
-                                    itemsPerPage={12}
-                                    currentPage={currentPage}
-                                />
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={{
+                                    source: 'tag',
+                                    tagSlug: slug,
+                                    orden: orden,
+                                }}
+                                basePath={`/tag/${slug}`}
+                            />
+                            <StaticPagination
+                                totalItems={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                basePath={`/tag/${slug}`}
+                                filtersQueryString={tFiltersQueryString}
+                            />
                             </div>
                         </>
                     ) : (

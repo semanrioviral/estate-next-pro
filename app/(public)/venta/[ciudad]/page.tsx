@@ -8,9 +8,11 @@ import { Metadata } from 'next';
 import { Search, MapPin, ArrowLeft, Building2, Award, Clock } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import Pagination from '@/components/design-system/Pagination';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
@@ -159,6 +161,7 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
 
         return (
             <main className="min-h-screen bg-white">
+                <CatalogContextTracker />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
                 <CatalogHeader
@@ -184,11 +187,25 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
                                 ))}
                             </div>
 
-                            <Pagination
-                                totalItems={totalCount}
-                                itemsPerPage={12}
-                                currentPage={currentPage}
-                            />
+                <LoadMoreProperties
+                    totalCount={totalCount}
+                    itemsPerPage={12}
+                    currentPage={currentPage}
+                    fetchParams={{
+                        source: 'operacion_tag',
+                        operacion: 'venta',
+                        tagSlug: slug,
+                        orden: orden,
+                    }}
+                    basePath={`/venta/${slug}`}
+                />
+                <StaticPagination
+                    totalItems={totalCount}
+                    itemsPerPage={12}
+                    currentPage={currentPage}
+                    basePath={`/venta/${slug}`}
+                    filtersQueryString={new URLSearchParams({ ...(orden && { orden }) }).toString()}
+                />
                         </>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-32 bg-bg-alt rounded-2xl border border-border-clean border-dashed">
@@ -329,6 +346,8 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
                     icon: MapPin,
                     text: barrio ? `Barrio ${displayBarrio}` : (isTypeFilter ? `Tipo: ${filter.dbName}` : 'Ubicación Estratégica')
                 }}
+                currentPage={currentPage}
+                itemsPerPage={12}
             />
 
             <div className="container-wide px-4 py-8 md:py-20">
@@ -340,13 +359,31 @@ export default async function VentaCiudadPage({ params, searchParams }: VentaCiu
                             ))}
                         </div>
 
-                        <div className="mt-12">
-                            <Pagination
+                        <LoadMoreProperties
+                            totalCount={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            fetchParams={{
+                                source: 'operacion_ciudad',
+                                operacion: 'venta',
+                                ciudadSlug: slug,
+                                barrioSlug: barrio,
+                                habitaciones: numHabitaciones,
+                                orden: orden,
+                            }}
+                            basePath={`/venta/${slug}`}
+                        />
+                        <StaticPagination
                             totalItems={totalCount}
                             itemsPerPage={12}
                             currentPage={currentPage}
+                            basePath={`/venta/${slug}`}
+                            filtersQueryString={new URLSearchParams({
+                                ...(barrio && { barrio }),
+                                ...(habitaciones && { habitaciones }),
+                                ...(orden && { orden }),
+                            }).toString()}
                         />
-                        </div>
                     </>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-32 bg-bg-alt rounded-2xl border border-border-clean border-dashed">

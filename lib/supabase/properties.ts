@@ -377,12 +377,12 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
 /**
  * Obtiene el catálogo completo de etiquetas para sugerencias en el admin.
  */
-export async function getAllTags(): Promise<{ id: string; nombre: string }[]> {
+export async function getAllTags(): Promise<{ id: string; nombre: string; slug: string }[]> {
     try {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('tags')
-            .select('id, nombre')
+            .select('id, nombre, slug')
             .order('nombre', { ascending: true });
 
         if (error) {
@@ -1442,6 +1442,43 @@ export const getSimilarProperties = unstable_cache(
         }
     },
     ['similar-properties-v2'],
+    { revalidate: 3600, tags: ['properties'] }
+);
+
+/**
+ * Obtiene slugs de propiedad anterior y siguiente para navegación secuencial.
+ * Busca dentro de la misma operación (venta/arriendo) ordenado por created_at descendente.
+ */
+export const getAdjacentProperties = unstable_cache(
+    async (propertyId: string, operacion: string): Promise<{ prev: string | null; next: string | null }> => {
+        try {
+            const supabase = createPublicClient();
+
+            // Obtener todos los IDs y slugs de la misma operación, ordenados
+            const { data: allProps, error } = await supabase
+                .from('properties')
+                .select('id, slug')
+                .eq('operacion', operacion)
+                .order('created_at', { ascending: false });
+
+            if (error || !allProps) {
+                console.error('[DB] Error fetching adjacent properties:', error?.message);
+                return { prev: null, next: null };
+            }
+
+            const currentIndex = allProps.findIndex(p => p.id === propertyId);
+            if (currentIndex === -1) return { prev: null, next: null };
+
+            return {
+                prev: currentIndex < allProps.length - 1 ? allProps[currentIndex + 1].slug : null,
+                next: currentIndex > 0 ? allProps[currentIndex - 1].slug : null,
+            };
+        } catch (err: any) {
+            console.error('[DB] Critical exception in getAdjacentProperties:', err.message);
+            return { prev: null, next: null };
+        }
+    },
+    ['adjacent-properties'],
     { revalidate: 3600, tags: ['properties'] }
 );
 

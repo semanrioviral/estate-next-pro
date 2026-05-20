@@ -1,15 +1,21 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { openWhatsapp } from '@/lib/trackWhatsapp';
 
 export default function WhatsAppFloatingButton() {
     const pathname = usePathname();
     const [showTooltip, setShowTooltip] = useState(false);
+    const [isPDP, setIsPDP] = useState(true); // default to hidden on SSR to avoid layout shift
+
+    useEffect(() => {
+        // After hydration, show only if NOT on PDP
+        setIsPDP(pathname.startsWith('/propiedades/'));
+    }, [pathname]);
 
     // Hide on PDP pages (they have their own sticky CTA)
-    if (pathname.startsWith('/propiedades/')) return null;
+    if (isPDP) return null;
 
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';
     const message = encodeURIComponent('Hola, estoy interesado en sus propiedades. ¿Podrían ayudarme?');

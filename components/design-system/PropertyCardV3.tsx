@@ -143,7 +143,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                             href={`/propiedades/${property.slug}`}
                             className="w-full h-10 bg-brand hover:bg-brand-700 text-white text-[13px] font-semibold uppercase rounded-[6px] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] tracking-wider"
                         >
-                            Ver inmueble
+                            Ver propiedad
                             <ChevronRight className="w-4 h-4" />
                         </Link>
                     </div>

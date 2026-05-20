@@ -31,7 +31,7 @@ export default function ListingConversionBanner() {
                         className="flex items-center justify-center gap-3 px-8 py-5 bg-white text-brand rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-zinc-100 transition-all shadow-xl shadow-black/20 active:scale-95 w-full sm:w-auto"
                     >
                         <MessageCircle className="w-5 h-5" />
-                        Solicitar por WhatsApp
+                        Contactar
                     </a>
                     <button
                         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}

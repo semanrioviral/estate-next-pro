@@ -18,6 +18,8 @@ interface CatalogHeaderProps {
         icon: React.ElementType;
         text: string;
     };
+    currentPage?: number;
+    itemsPerPage?: number;
 }
 
 export default function CatalogHeader({
@@ -25,7 +27,9 @@ export default function CatalogHeader({
     description,
     totalCount,
     breadcrumbs,
-    badge
+    badge,
+    currentPage,
+    itemsPerPage
 }: CatalogHeaderProps) {
     return (
         <section className="bg-white pt-20 md:pt-28 pb-8 md:pb-16 relative border-b border-border-clean">
@@ -89,9 +93,18 @@ export default function CatalogHeader({
                                 {totalCount} {totalCount === 1 ? 'propiedad disponible' : 'propiedades disponibles'}
                             </span>
                         </div>
-                        <div className="flex items-center gap-1.5 text-slate-400">
-                            <Clock className="w-3.5 h-3.5" />
-                            <span className="text-[12px] font-bold uppercase tracking-wider">Actualizado hoy</span>
+                        <div className="flex items-center gap-3 text-slate-400">
+                            <div className="flex items-center gap-1.5">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span className="text-[12px] font-bold uppercase tracking-wider">Actualizado hoy</span>
+                            </div>
+                            {currentPage && itemsPerPage && totalCount > itemsPerPage && (
+                                <span className="text-[12px] font-bold uppercase tracking-wider text-slate-400">
+                                    <span className="text-slate-300 mx-1.5">·</span>
+                                    Mostrando {((currentPage - 1) * itemsPerPage) + 1}-
+                                    {Math.min(currentPage * itemsPerPage, totalCount)} de {totalCount}
+                                </span>
+                            )}
                         </div>
                     </div>
 

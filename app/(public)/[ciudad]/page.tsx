@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 import Link from 'next/link';
 import { Home, Building2 } from 'lucide-react';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
-import Pagination from '@/components/design-system/Pagination';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 
 interface Props {
     params: Promise<{ ciudad: string }>;
@@ -83,6 +85,11 @@ export default async function CiudadPage({ params, searchParams }: Props) {
     const { properties, totalCount } = await getPropertiesByCity(cityName, orden, currentPage);
     const siteUrl = normalizeSiteUrl(SITE_URL);
 
+    // Build filters query string for static pagination links
+    const cFiltersParams = new URLSearchParams();
+    if (orden) cFiltersParams.set('orden', orden);
+    const cFiltersQueryString = cFiltersParams.toString();
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -135,6 +142,7 @@ export default async function CiudadPage({ params, searchParams }: Props) {
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -152,6 +160,8 @@ export default async function CiudadPage({ params, searchParams }: Props) {
                     icon: Building2,
                     text: 'Enfoque Regional'
                 }}
+                currentPage={currentPage}
+                itemsPerPage={12}
             />
 
             <section className="py-20">
@@ -171,11 +181,23 @@ export default async function CiudadPage({ params, searchParams }: Props) {
                                 ))}
                             </div>
                             <div className="mt-12">
-                                <Pagination
-                                    totalItems={totalCount}
-                                    itemsPerPage={12}
-                                    currentPage={currentPage}
-                                />
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={{
+                                    source: 'city',
+                                    ciudadSlug: ciudad,
+                                }}
+                                basePath={`/${ciudad}`}
+                            />
+                            <StaticPagination
+                                totalItems={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                basePath={`/${ciudad}`}
+                                filtersQueryString={cFiltersQueryString}
+                            />
                             </div>
                         </>
                     ) : (

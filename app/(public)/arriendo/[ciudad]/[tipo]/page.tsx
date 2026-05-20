@@ -5,9 +5,11 @@ import { Metadata } from 'next';
 import { Search, Building2, ArrowLeft, Clock } from 'lucide-react';
 import Link from 'next/link';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 import dynamic from 'next/dynamic';
-import Pagination from '@/components/design-system/Pagination';
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 
@@ -172,6 +174,7 @@ export default async function ArriendoCiudadTipoPage({ params, searchParams }: A
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -215,11 +218,39 @@ export default async function ArriendoCiudadTipoPage({ params, searchParams }: A
                             </div>
 
                             <div className="mt-12">
-                                <Pagination
-                                    totalItems={totalCount}
-                                    itemsPerPage={12}
-                                    currentPage={currentPage}
-                                />
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={tagSlug ? {
+                                    source: 'operacion_ciudad_tipo_tag',
+                                    operacion: 'arriendo',
+                                    ciudadSlug,
+                                    tipoSlug,
+                                    tagSlug,
+                                    orden,
+                                } : {
+                                    source: 'operacion_ciudad_tipo',
+                                    operacion: 'arriendo',
+                                    ciudadSlug,
+                                    tipoSlug,
+                                    barrioSlug: barrio,
+                                    habitaciones: numHabitaciones,
+                                    orden,
+                                }}
+                                basePath={`/arriendo/${ciudadSlug}/${tipoParam}`}
+                            />
+                            <StaticPagination
+                                totalItems={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                basePath={`/arriendo/${ciudadSlug}/${tipoParam}`}
+                                filtersQueryString={new URLSearchParams({
+                                    ...(barrio && { barrio }),
+                                    ...(habitaciones && { habitaciones }),
+                                    ...(orden && { orden }),
+                                }).toString()}
+                            />
                             </div>
                         </>
                     ) : (

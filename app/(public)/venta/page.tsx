@@ -4,9 +4,11 @@ import CatalogHeader from '@/components/design-system/CatalogHeader';
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { Search, Flame, Building2 } from 'lucide-react';
-import Pagination from '@/components/design-system/Pagination';
 import { generateListingFAQ } from '@/lib/seo/generateListingFAQ';
 import { SITE_URL } from '@/lib/supabase/constants';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 const ListingConversionBanner = dynamic(() => import('@/components/ListingConversionBanner'));
@@ -82,6 +84,12 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
     const itemListId = `${canonicalUrl}#itemlist`;
     const { faqItems, faqJsonLd } = generateListingFAQ({ operacion: 'venta' });
 
+    // Build filters query string for static pagination links (preserves filters without JS)
+    const vFiltersParams = new URLSearchParams();
+    if (habitaciones) vFiltersParams.set('habitaciones', habitaciones);
+    if (orden) vFiltersParams.set('orden', orden);
+    const vFiltersQueryString = vFiltersParams.toString();
+
     const jsonLd = {
         "@context": "https://schema.org",
         "@graph": [
@@ -130,6 +138,7 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -147,6 +156,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                     icon: Building2,
                     text: 'Inversión Patrimonial'
                 }}
+                currentPage={currentPage}
+                itemsPerPage={12}
             />
 
             <div className="container-wide px-4 py-8 md:py-20">
@@ -164,13 +175,25 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                             ))}
                         </div>
 
-                        <div className="mt-8 md:mt-12">
-                            <Pagination
-                                totalItems={totalCount}
-                                itemsPerPage={12}
-                                currentPage={currentPage}
-                            />
-                        </div>
+                        <LoadMoreProperties
+                            totalCount={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            fetchParams={{
+                                source: 'operacion',
+                                operacion: 'venta',
+                                habitaciones: numHabitaciones,
+                                orden: orden,
+                            }}
+                            basePath="/venta"
+                        />
+                        <StaticPagination
+                            totalItems={totalCount}
+                            itemsPerPage={12}
+                            currentPage={currentPage}
+                            basePath="/venta"
+                            filtersQueryString={vFiltersQueryString}
+                        />
                     </>
                 ) : (
                     <div className="flex flex-col items-center justify-center py-32 bg-bg-alt rounded-2xl border border-border-clean border-dashed">

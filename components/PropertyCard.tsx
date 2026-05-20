@@ -72,7 +72,7 @@ export default function PropertyCard({ property, priority = false, matchType }: 
                         href={`/propiedades/${property.slug}`}
                         className="w-full inline-flex items-center justify-center bg-[#fb2c36] text-white py-4 rounded-xl text-sm font-black transition-all active:scale-95 shadow-sm"
                     >
-                        Ver Detalles
+                        Ver propiedad
                     </Link>
                 </div>
             </div>

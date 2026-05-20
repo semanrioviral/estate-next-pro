@@ -6,8 +6,10 @@ import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import { Metadata } from 'next';
 import { MapPin, Search, ArrowLeft, Building2 } from 'lucide-react';
 import CatalogHeader from '@/components/design-system/CatalogHeader';
+import CatalogContextTracker from '@/components/CatalogContextTracker';
+import LoadMoreProperties from '@/components/LoadMoreProperties';
+import StaticPagination from '@/components/StaticPagination';
 import dynamic from 'next/dynamic';
-import Pagination from '@/components/design-system/Pagination';
 
 const ExploreAlso = dynamic(() => import('@/components/ExploreAlso'));
 import { generateBarrioSEO, generateBarrioJSONLD } from '@/lib/seo/generatePropertySEO';
@@ -73,10 +75,16 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
     const { properties, totalCount } = await getPropertiesByBarrioSlug(slug, orden, currentPage);
     const siteUrl = SITE_URL;
 
+    // Build filters query string for static pagination links
+    const bFiltersParams = new URLSearchParams();
+    if (orden) bFiltersParams.set('orden', orden);
+    const bFiltersQueryString = bFiltersParams.toString();
+
     const jsonLd = generateBarrioJSONLD(barrio.nombre, barrio.nombre, totalCount, siteUrl, slug);
 
     return (
         <main className="min-h-screen bg-white">
+            <CatalogContextTracker />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -107,11 +115,24 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
                             </div>
 
                             <div className="mt-12">
-                                <Pagination
-                                    totalItems={totalCount}
-                                    itemsPerPage={12}
-                                    currentPage={currentPage}
-                                />
+                            <LoadMoreProperties
+                                totalCount={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                fetchParams={{
+                                    source: 'barrio',
+                                    barrioSlug: slug,
+                                    orden: orden,
+                                }}
+                                basePath={`/barrio/${slug}`}
+                            />
+                            <StaticPagination
+                                totalItems={totalCount}
+                                itemsPerPage={12}
+                                currentPage={currentPage}
+                                basePath={`/barrio/${slug}`}
+                                filtersQueryString={bFiltersQueryString}
+                            />
                             </div>
                         </>
                     ) : (

@@ -5,7 +5,11 @@ import type { Property } from '@/lib/supabase/properties';
 import PropertyCard from './PropertyCard';
 import { History, EyeOff } from 'lucide-react';
 
-export default function RecentlyViewed() {
+interface RecentlyViewedProps {
+    currentPropertyId?: string;
+}
+
+export default function RecentlyViewed({ currentPropertyId }: RecentlyViewedProps) {
     const [recentProperties, setRecentProperties] = useState<Property[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -18,21 +22,17 @@ export default function RecentlyViewed() {
                     return;
                 }
 
-                const ids = JSON.parse(stored) as string[];
+                let ids = JSON.parse(stored) as string[];
+
+                // Filter out current property so "recently viewed" shows *other* properties
+                if (currentPropertyId) {
+                    ids = ids.filter(id => id !== currentPropertyId);
+                }
+
                 if (ids.length === 0) {
                     setLoading(false);
                     return;
                 }
-
-                // Fetch details for these IDs
-                // We'll use a fetch to a search endpoint or just the properties data
-                // For simplicity, we can fetch them via a Server Action or just use the IDs
-                // Since we don't have a bulk fetch by ID client-side easily exposed, 
-                // we'll fetch from the public API if available or just use a small fetch.
-
-                // For now, we'll assume there's a way to get them. 
-                // Given the constraints, I'll create a small helper in properties.ts 
-                // to fetch properties by multiple IDs safely.
 
                 const response = await fetch(`/api/properties/bulk?ids=${ids.join(',')}`);
                 if (response.ok) {
@@ -47,7 +47,7 @@ export default function RecentlyViewed() {
         };
 
         loadRecent();
-    }, []);
+    }, [currentPropertyId]);
 
     if (loading || recentProperties.length === 0) return null;
 
