@@ -59,18 +59,18 @@ export default function VenderVillaPage() {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             {/* HERO - Phase 20 Aesthetic */}
-            <section className="bg-zinc-950 py-32 relative overflow-hidden">
+            <section className="bg-slate-900 py-32 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-brand/5 blur-[120px] rounded-full translate-x-1/2"></div>
                 <div className="container-wide px-4 relative z-10">
                     <div className="max-w-4xl">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/10 border border-brand/20 rounded-xl mb-8">
                             <TrendingUp className="w-4 h-4 text-brand" />
-                            <span className="text-[10px] font-black text-brand uppercase tracking-widest">Respaldo Metropolitano 2026</span>
+                            <span className="text-[12px] font-black text-brand uppercase tracking-widest">Respaldo Metropolitano 2026</span>
                         </div>
                         <h1 className="text-white mb-8">
                             Venda su Inmueble en <span className="text-brand">Villa del Rosario</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-12 font-medium leading-relaxed">
+                        <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mb-12 font-medium leading-relaxed">
                             Potenciamos el valor histórico y moderno de su inmueble mediante estrategias de marketing digital de alto impacto.
                         </p>
                         <div className="flex flex-wrap gap-6">
@@ -90,7 +90,7 @@ export default function VenderVillaPage() {
             <section className="py-24 bg-white">
                 <div className="container-wide px-4">
                     <div className="text-center mb-20">
-                        <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Nuestro Método</p>
+                        <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Nuestro Método</p>
                         <h2 className="mb-4">Compromiso de <span className="text-brand">Venta</span></h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -112,22 +112,22 @@ export default function VenderVillaPage() {
             </section>
 
             {/* FORMULARIO & METRICS */}
-            <section className="py-24 bg-bg-alt border-y border-zinc-100" id="vender">
+            <section className="py-24 bg-bg-alt border-y border-slate-200" id="vender">
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
                         <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Propietarios</p>
+                            <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Propietarios</p>
                             <h2 className="mb-8">¿Vende en <span className="text-brand">Villa del Rosario</span>?</h2>
                             <p className="text-xl text-text-secondary mb-12 font-medium">Confíe en la agencia con mayor cobertura y resultados probados en el área metropolitana.</p>
 
                             <div className="grid grid-cols-2 gap-8 mb-12">
-                                <div className="p-6 bg-white rounded-xl border border-zinc-100 shadow-sm">
+                                <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                                     <div className="text-4xl font-black text-brand mb-1">12 d</div>
-                                    <div className="text-[10px] font-black uppercase text-zinc-400 tracking-wider">Captación Promedio</div>
+                                    <div className="text-[12px] font-black uppercase text-slate-400 tracking-wider">Captación Promedio</div>
                                 </div>
-                                <div className="p-6 bg-white rounded-xl border border-zinc-100 shadow-sm">
+                                <div className="p-6 bg-white rounded-xl border border-slate-200 shadow-sm">
                                     <div className="text-4xl font-black text-brand mb-1">+2k</div>
-                                    <div className="text-[10px] font-black uppercase text-zinc-400 tracking-wider">Compradores Activos</div>
+                                    <div className="text-[12px] font-black uppercase text-slate-400 tracking-wider">Compradores Activos</div>
                                 </div>
                             </div>
 
@@ -136,7 +136,7 @@ export default function VenderVillaPage() {
                                 <span className="text-sm font-bold text-zinc-800">Especialistas en el sector fronterizo</span>
                             </div>
                         </div>
-                        <div className="bg-white p-1 rounded-xl shadow-xl border border-zinc-100">
+                        <div className="bg-white p-1 rounded-xl shadow-xl border border-slate-200">
                             <PropertyOwnerForm defaultCity="Villa del Rosario" whatsappNumber={whatsappNumber} />
                         </div>
                     </div>
@@ -150,7 +150,7 @@ export default function VenderVillaPage() {
                         <div className="text-center mb-16">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/10 border border-brand/20 rounded-xl mb-4">
                                 <HelpCircle className="w-3 h-3 text-brand" />
-                                <span className="text-[10px] font-black text-brand uppercase tracking-widest">Dudas</span>
+                                <span className="text-[12px] font-black text-brand uppercase tracking-widest">Dudas</span>
                             </div>
                             <h2 className="mb-4">Consultas <span className="text-brand">Frecuentes</span></h2>
                         </div>

@@ -59,18 +59,18 @@ export default function VenderLosPatiosPage() {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             {/* HERO - Phase 20 Aesthetic */}
-            <section className="bg-zinc-950 py-32 relative overflow-hidden">
+            <section className="bg-slate-900 py-32 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/3 h-full bg-brand/5 blur-[120px] rounded-full translate-x-1/2"></div>
                 <div className="container-wide px-4 relative z-10">
                     <div className="max-w-4xl">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/10 border border-brand/20 rounded-xl mb-8">
                             <TrendingUp className="w-4 h-4 text-brand" />
-                            <span className="text-[10px] font-black text-brand uppercase tracking-widest">Maximización de Activos 2026</span>
+                            <span className="text-[12px] font-black text-brand uppercase tracking-widest">Maximización de Activos 2026</span>
                         </div>
                         <h1 className="text-white mb-8">
                             Venda su Inmueble en <span className="text-brand">Los Patios</span>
                         </h1>
-                        <p className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-12 font-medium leading-relaxed">
+                        <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mb-12 font-medium leading-relaxed">
                             Valoración técnica, marketing inmersivo y asesoría legal de principio a fin. Conectamos su patrimonio con inversionistas reales.
                         </p>
                         <div className="flex flex-wrap gap-6">
@@ -90,7 +90,7 @@ export default function VenderLosPatiosPage() {
             <section id="proceso" className="py-24 bg-white">
                 <div className="container-wide px-4">
                     <div className="text-center mb-20">
-                        <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Estrategia</p>
+                        <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Estrategia</p>
                         <h2 className="mb-4">Su Venta en <span className="text-brand">3 Pasos</span></h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -99,8 +99,8 @@ export default function VenderLosPatiosPage() {
                             { title: "Marketing Profesional", text: "Captura de alta fidelidad y difusión masiva en canales digitales premium para mayor alcance.", icon: Zap },
                             { title: "Cierre Seguro", text: "Gestión documental y legal exhaustiva para garantizar una transacción transparente y exitosa.", icon: ShieldCheck }
                         ].map((step, i) => (
-                            <div key={i} className="p-10 bg-bg-alt rounded-xl border border-zinc-100 group hover:border-brand transition-all">
-                                <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-zinc-100 flex items-center justify-center mb-8 group-hover:bg-brand group-hover:text-white transition-all">
+                            <div key={i} className="p-10 bg-bg-alt rounded-xl border border-slate-200 group hover:border-brand transition-all">
+                                <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center mb-8 group-hover:bg-brand group-hover:text-white transition-all">
                                     <step.icon className="w-7 h-7" />
                                 </div>
                                 <h3 className="text-xl font-black mb-4">{step.title}</h3>
@@ -112,7 +112,7 @@ export default function VenderLosPatiosPage() {
             </section>
 
             {/* AUTHORITY - Phase 20 Metric Section */}
-            <section className="py-24 bg-zinc-950 text-white rounded-[5rem] mx-4 overflow-hidden relative">
+            <section className="py-24 bg-slate-900 text-white rounded-[5rem] mx-4 overflow-hidden relative">
                 <div className="container-wide px-8 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div>
@@ -120,19 +120,19 @@ export default function VenderLosPatiosPage() {
                             <div className="grid grid-cols-2 gap-10">
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">+450</div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Casas Vendidas</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Casas Vendidas</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">98%</div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Satisfacción</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Satisfacción</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">60d</div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Venta Promedio</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Venta Promedio</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">$0</div>
-                                    <div className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Inversión Inicial</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Inversión Inicial</div>
                                 </div>
                             </div>
                         </div>
@@ -144,7 +144,7 @@ export default function VenderLosPatiosPage() {
                                 <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center font-black">M</div>
                                 <div>
                                     <div className="font-black text-sm">Melissa Ortiz</div>
-                                    <div className="text-[10px] uppercase tracking-widest text-zinc-500">Vendedora Satisfecha</div>
+                                    <div className="text-[12px] uppercase tracking-widest text-zinc-500">Vendedora Satisfecha</div>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +157,7 @@ export default function VenderLosPatiosPage() {
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
                         <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Consignación</p>
+                            <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Consignación</p>
                             <h2 className="mb-8">Inicie la Venta <br /> de su <span className="text-brand">Propiedad</span></h2>
                             <p className="text-xl text-text-secondary mb-12 font-medium">Complete el formulario y reciba un diagnóstico de mercado profesional para su inmueble.</p>
                             <ul className="space-y-6">
@@ -174,7 +174,7 @@ export default function VenderLosPatiosPage() {
                                 ))}
                             </ul>
                         </div>
-                        <div className="bg-bg-alt p-1 rounded-xl border border-zinc-100">
+                        <div className="bg-bg-alt p-1 rounded-xl border border-slate-200">
                             <PropertyOwnerForm defaultCity="Los Patios" whatsappNumber={whatsappNumber} />
                         </div>
                     </div>
@@ -182,13 +182,13 @@ export default function VenderLosPatiosPage() {
             </section>
 
             {/* FAQ */}
-            <section className="py-24 bg-bg-alt border-t border-zinc-100">
+            <section className="py-24 bg-bg-alt border-t border-slate-200">
                 <div className="container-wide px-4">
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-16">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/10 border border-brand/20 rounded-xl mb-4">
                                 <HelpCircle className="w-3 h-3 text-brand" />
-                                <span className="text-[10px] font-black text-brand uppercase tracking-widest">Dudas</span>
+                                <span className="text-[12px] font-black text-brand uppercase tracking-widest">Dudas</span>
                             </div>
                             <h2 className="mb-4">Preguntas <span className="text-brand">Frecuentes</span></h2>
                         </div>

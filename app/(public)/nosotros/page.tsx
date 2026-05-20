@@ -14,17 +14,17 @@ export default function NosotrosPage() {
     return (
         <main className="min-h-screen bg-white">
             {/* Hero Section - Minimalist & Bold */}
-            <section className="bg-zinc-950 py-32">
+            <section className="bg-slate-900 py-32">
                 <div className="container-wide px-4">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-lg text-[10px] font-black uppercase tracking-widest mb-8 border border-brand/20">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-lg text-[12px] font-black uppercase tracking-widest mb-8 border border-brand/20">
                             <ShieldCheck className="w-3 h-3" />
                             <span>Confianza Verificada</span>
                         </div>
                         <h1 className="text-white mb-8">
                             Sobre <span className="text-brand">Nosotros</span>
                         </h1>
-                        <p className="text-xl text-zinc-400 font-medium max-w-2xl leading-relaxed">
+                        <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">
                             En <span className="text-white">Inmobiliaria Tucasa Los Patios</span> no solo vendemos propiedades; construimos el patrimonio de las familias en el Norte de Santander con transparencia y rigor técnico.
                         </p>
                     </div>
@@ -32,7 +32,7 @@ export default function NosotrosPage() {
             </section>
 
             {/* Stats Section - High Contrast */}
-            <section className="py-24 border-b border-zinc-50">
+            <section className="py-24 border-b border-slate-100">
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
                         {[
@@ -43,7 +43,7 @@ export default function NosotrosPage() {
                         ].map((stat, i) => (
                             <div key={i}>
                                 <p className="text-[26px] font-black text-brand mb-2">{stat.val}</p>
-                                <p className="text-[10px] font-black text-text-muted uppercase tracking-widest leading-tight">{stat.label}</p>
+                                <p className="text-[12px] font-black text-text-muted uppercase tracking-widest leading-tight">{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -56,7 +56,7 @@ export default function NosotrosPage() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
                         {/* Vision & Mission Cards */}
                         <div className="space-y-12">
-                            <div className="p-10 bg-zinc-50 rounded-xl border border-zinc-100 group hover:border-brand/30 transition-all">
+                            <div className="p-10 bg-slate-50 rounded-xl border border-slate-200 group hover:border-brand/30 transition-all">
                                 <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-8 shadow-sm">
                                     <Target className="w-6 h-6 text-brand" />
                                 </div>
@@ -66,7 +66,7 @@ export default function NosotrosPage() {
                                 </p>
                             </div>
 
-                            <div className="p-10 bg-zinc-50 rounded-xl border border-zinc-100 group hover:border-brand/30 transition-all">
+                            <div className="p-10 bg-slate-50 rounded-xl border border-slate-200 group hover:border-brand/30 transition-all">
                                 <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-8 shadow-sm">
                                     <Eye className="w-6 h-6 text-brand" />
                                 </div>
@@ -79,7 +79,7 @@ export default function NosotrosPage() {
 
                         {/* Why Us? */}
                         <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">¿Por qué elegirnos?</p>
+                            <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">¿Por qué elegirnos?</p>
                             <h2 className="mb-12">Autoridad que genera <span className="text-brand">resultados</span></h2>
                             <div className="space-y-8">
                                 {[

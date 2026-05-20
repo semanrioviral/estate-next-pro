@@ -18,17 +18,17 @@ export default function ContactoPage() {
     return (
         <main className="min-h-screen bg-white">
             {/* Hero Section - Direct & Impactful */}
-            <section className="bg-zinc-950 py-32">
+            <section className="bg-slate-900 py-32">
                 <div className="container-wide px-4">
                     <div className="max-w-3xl">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-lg text-[10px] font-black uppercase tracking-widest mb-8 border border-brand/20">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-lg text-[12px] font-black uppercase tracking-widest mb-8 border border-brand/20">
                             <MessageCircle className="w-3 h-3" />
                             <span>Respuesta Inmediata</span>
                         </div>
                         <h1 className="text-white mb-8">
                             Estamos para <span className="text-brand">ayudarle</span>
                         </h1>
-                        <p className="text-xl text-zinc-400 font-medium max-w-2xl leading-relaxed">
+                        <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">
                             Resuelva sus dudas sobre inversiones, arriendos o tasaciones en el <span className="text-white">Norte de Santander</span>. Mi equipo le atenderá de forma personalizada.
                         </p>
                     </div>
@@ -42,7 +42,7 @@ export default function ContactoPage() {
                         {/* WhatsApp Card - Primary Priority */}
                         <Link
                             href={`https://wa.me/${whatsappNumber}`}
-                            className="p-10 bg-zinc-50 rounded-xl border border-zinc-100 hover:border-brand transition-all group relative overflow-hidden"
+                            className="p-10 bg-slate-50 rounded-xl border border-slate-200 hover:border-brand transition-all group relative overflow-hidden"
                         >
                             <div className="absolute top-0 right-0 w-24 h-24 bg-brand/5 -translate-y-12 translate-x-12 rounded-full group-hover:bg-brand/10 transition-colors"></div>
                             <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
@@ -52,36 +52,36 @@ export default function ContactoPage() {
                             <p className="text-sm text-text-secondary font-medium leading-relaxed mb-8">
                                 La forma más rápida de agendar una visita o consultar disponibilidad de una propiedad.
                             </p>
-                            <span className="text-[10px] font-black uppercase tracking-widest text-brand flex items-center gap-2">
+                            <span className="text-[12px] font-black uppercase tracking-widest text-brand flex items-center gap-2">
                                 Chatear ahora <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                             </span>
                         </Link>
 
                         {/* Email Card */}
-                        <div className="p-10 bg-white rounded-xl border border-zinc-100 hover:border-brand transition-all group">
+                        <div className="p-10 bg-white rounded-xl border border-slate-200 hover:border-brand transition-all group">
                             <div className="w-12 h-12 bg-bg-alt rounded-lg flex items-center justify-center mb-8 shadow-sm">
-                                <Mail className="w-6 h-6 text-zinc-400 group-hover:text-brand" />
+                                <Mail className="w-6 h-6 text-slate-400 group-hover:text-brand" />
                             </div>
                             <h3 className="mb-4">Propuestas <span className="text-brand">Formales</span></h3>
                             <p className="text-sm text-text-secondary font-medium leading-relaxed mb-8">
                                 Ideal para envío de documentos, propuestas comerciales o consultas técnicas legales.
                             </p>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">
+                            <p className="text-[12px] font-black uppercase tracking-widest text-zinc-950">
                                 contacto@tucasalospatios.com
                             </p>
                         </div>
 
                         {/* Office Card */}
-                        <div className="p-10 bg-white rounded-xl border border-zinc-100 hover:border-brand transition-all group">
+                        <div className="p-10 bg-white rounded-xl border border-slate-200 hover:border-brand transition-all group">
                             <div className="w-12 h-12 bg-bg-alt rounded-lg flex items-center justify-center mb-8 shadow-sm">
-                                <MapPin className="w-6 h-6 text-zinc-400 group-hover:text-brand" />
+                                <MapPin className="w-6 h-6 text-slate-400 group-hover:text-brand" />
                             </div>
                             <h3 className="mb-4">Nuestra <span className="text-brand">Sede</span></h3>
                             <p className="text-sm text-text-secondary font-medium leading-relaxed mb-8">
                                 Los Patios, Norte de Santander.<br />
                                 Centro de Negocios Regional.
                             </p>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-zinc-950">
+                            <p className="text-[12px] font-black uppercase tracking-widest text-zinc-950">
                                 Cita previa requerida
                             </p>
                         </div>
@@ -117,11 +117,11 @@ export default function ContactoPage() {
                             </div>
                         </div>
 
-                        <div className="md:w-1/2 p-10 bg-white rounded-xl border border-zinc-100 shadow-sm text-center">
+                        <div className="md:w-1/2 p-10 bg-white rounded-xl border border-slate-200 shadow-sm text-center">
                             <Phone className="w-8 h-8 text-brand mx-auto mb-6" />
                             <h4 className="mb-4">Línea Directa</h4>
                             <p className="text-2xl font-black text-zinc-950 mb-2">+57 {phoneNumber}</p>
-                            <p className="text-[10px] font-black text-text-muted uppercase tracking-widest">Atención en Español e Inglés</p>
+                            <p className="text-[12px] font-black text-text-muted uppercase tracking-widest">Atención en Español e Inglés</p>
                         </div>
                     </div>
                 </div>

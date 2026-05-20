@@ -72,22 +72,22 @@ export default function VenderCucutaPage() {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             {/* HERO - Phase 20 Style */}
-            <section className="bg-zinc-950 py-32 relative overflow-hidden">
+            <section className="bg-slate-900 py-32 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-1/2 h-full bg-brand/5 blur-[120px] rounded-full translate-x-1/2"></div>
                 <div className="container-wide px-4 relative z-10">
                     <div className="max-w-4xl">
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand/10 border border-brand/20 rounded-xl mb-8">
                             <TrendingUp className="w-4 h-4 text-brand" />
-                            <span className="text-[10px] font-black text-brand uppercase tracking-widest">Maximización de Activos</span>
+                            <span className="text-[12px] font-black text-brand uppercase tracking-widest">Maximización de Activos</span>
                         </div>
                         <h1 className="!text-white mb-8 drop-shadow-2xl">
                             Venda su Inmueble en <span className="text-brand">Cúcuta</span>
                         </h1>
-                        <p className="text-xl md:text-2xl !text-zinc-400 max-w-2xl mb-12 font-medium leading-relaxed drop-shadow-lg">
+                        <p className="text-xl md:text-2xl !text-slate-400 max-w-2xl mb-12 font-medium leading-relaxed drop-shadow-lg">
                             Conectamos su propiedad con los mejores inversores mediante estrategias de marketing digital de alto impacto.
                         </p>
                         <div className="flex flex-wrap gap-6">
-                            <a href="#proceso" className="px-10 py-5 bg-white text-zinc-950 rounded-xl font-black text-lg hover:bg-zinc-100 transition-colors">
+                            <a href="#proceso" className="px-10 py-5 bg-white text-slate-900 rounded-xl font-black text-lg hover:bg-zinc-100 transition-colors">
                                 Nuestro Método
                             </a>
                             <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="px-10 py-5 bg-brand text-white rounded-xl font-black text-lg hover:bg-red-600 transition-colors flex items-center gap-3">
@@ -103,7 +103,7 @@ export default function VenderCucutaPage() {
             <section id="proceso" className="py-24 bg-white">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
-                        <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Metodología TLP</p>
+                        <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Metodología TLP</p>
                         <h2 className="mb-4">Estrategia de Venta <span className="text-brand">Profesional</span></h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -112,8 +112,8 @@ export default function VenderCucutaPage() {
                             { title: "Exposición Digital", text: "Su inmueble aparecerá en portales premium y campañas segmentadas en Google y Meta.", icon: Zap },
                             { title: "Gestión Integral", text: "Coordinamos trámites bancarios, notariales y de registro para garantizar un cierre seguro.", icon: ShieldCheck }
                         ].map((step, i) => (
-                            <div key={i} className="p-10 bg-bg-alt rounded-xl border border-zinc-100 group hover:border-brand transition-colors">
-                                <div className="w-14 h-14 bg-white rounded-lg shadow-sm flex items-center justify-center mb-8 border border-zinc-100 text-zinc-950 group-hover:bg-brand group-hover:text-white transition-colors">
+                            <div key={i} className="p-10 bg-bg-alt rounded-xl border border-slate-200 group hover:border-brand transition-colors">
+                                <div className="w-14 h-14 bg-white rounded-lg shadow-sm flex items-center justify-center mb-8 border border-slate-200 text-slate-900 group-hover:bg-brand group-hover:text-white transition-colors">
                                     <step.icon className="w-7 h-7" />
                                 </div>
                                 <h3 className="text-xl font-black mb-4 uppercase tracking-tight">{step.title}</h3>
@@ -125,13 +125,13 @@ export default function VenderCucutaPage() {
             </section>
 
             {/* FORMULARIO - High Contrast Block */}
-            <section className="py-24 bg-zinc-950">
+            <section className="py-24 bg-slate-900">
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Consignación Directa</p>
+                            <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Consignación Directa</p>
                             <h2 className="!text-white mb-8 drop-shadow-xl">Empiece Hoy el Camino <span className="text-brand">a la Venta</span></h2>
-                            <p className="text-xl !text-zinc-400 mb-12 font-medium max-w-xl drop-shadow-md">Únase a los cientos de propietarios que ya vendieron con éxito en tiempo récord.</p>
+                            <p className="text-xl !text-slate-400 mb-12 font-medium max-w-xl drop-shadow-md">Únase a los cientos de propietarios que ya vendieron con éxito en tiempo récord.</p>
                             <div className="space-y-6">
                                 <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 bg-brand/10 border border-brand/20 rounded-lg flex items-center justify-center font-black text-brand">1</div>
@@ -148,7 +148,7 @@ export default function VenderCucutaPage() {
                             </div>
                         </div>
                         <div className="bg-white p-2 rounded-2xl shadow-2xl">
-                            <div className="p-2 border border-zinc-100 rounded-xl">
+                            <div className="p-2 border border-slate-200 rounded-xl">
                                 <PropertyOwnerForm defaultCity="Cúcuta" whatsappNumber={whatsappNumber} />
                             </div>
                         </div>
