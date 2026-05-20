@@ -28,7 +28,7 @@ export default function CatalogHeader({
     badge
 }: CatalogHeaderProps) {
     return (
-        <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-12 relative border-b border-border-clean">
+        <section className="bg-white pt-20 md:pt-28 pb-8 md:pb-16 relative border-b border-border-clean">
             <div className="container-wide px-4">
                 {/* Breadcrumbs & Badge */}
                 <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
@@ -61,7 +61,7 @@ export default function CatalogHeader({
 
                 {/* Title & Description */}
                 <div className="max-w-4xl mx-auto text-center mb-6 md:mb-12">
-                    <h1 className="mb-3 md:mb-4 leading-tight text-slate-900 tracking-tight">
+                    <h1 className="mb-4 md:mb-6 leading-tight text-slate-900 tracking-tight">
                         {title}
                     </h1>
                     {description && (

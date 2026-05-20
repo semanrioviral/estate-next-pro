@@ -81,11 +81,11 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                 <div className="absolute inset-0 bg-slate-950/10 opacity-0 group-hover/card:opacity-10 transition-opacity pointer-events-none"></div>
             </div>
 
-            {/* 2. Content Section - Elite Scan Architecture */}
-            <div className="p-4 pt-4 flex flex-col flex-grow relative z-20 bg-white rounded-b-xl">
+            {/* 2. Content Section - Editorial Spacing */}
+            <div className="p-5 pt-5 flex flex-col flex-grow relative z-20 bg-white rounded-b-xl">
 
                 {/* 2.1 Price - Connected to Media */}
-                <div className="mb-1">
+                <div className="mb-2">
                     <span className="text-[24px] font-black text-slate-900 tracking-tighter flex items-baseline gap-1 leading-none">
                         {formattedPrice}
                         <span className="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">COP</span>
@@ -93,21 +93,21 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                 </div>
 
                 {/* 2.2 Title - Professional Contrast */}
-                <h3 className="text-[14px] font-bold text-slate-900 leading-snug line-clamp-2 mb-2 antialiased">
+                <h3 className="text-[15px] font-semibold text-slate-900 leading-snug line-clamp-2 mb-3 antialiased !text-[15px]">
                     {optimizedTitle}
                 </h3>
 
                 {/* 2.3 Location - Secondary Scanner */}
-                <div className="flex items-center gap-1 mb-3">
+                <div className="flex items-center gap-1 mb-4">
                     <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="text-[13px] font-medium text-slate-600 uppercase tracking-tight truncate">
+                    <span className="text-[13px] font-medium text-slate-500 uppercase tracking-tight truncate">
                         {property.barrio ? `${property.barrio}, ` : ''}{property.ciudad}
                     </span>
                 </div>
 
-                {/* 3. Technical Attributes - High Density [Centered V23] */}
+                {/* 3. Technical Attributes - Editorial Density */}
                 <div className="flex flex-col border-t border-slate-100/60 transition-all duration-500 group-hover/card:border-slate-200">
-                    <div className="flex items-center justify-center gap-6 py-3 px-0.5">
+                    <div className="flex items-center justify-center gap-6 py-4 px-0.5">
                         {property.habitaciones ? (
                             <div className="flex items-center gap-1.5 grayscale opacity-70 group-hover/card:grayscale-0 group-hover/card:opacity-100 transition-all">
                                 <Bed className="w-4 h-4 text-slate-600 group-hover/card:text-brand-600 transition-colors" />
@@ -136,12 +136,12 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                     </div>
                 </div>
 
-                {/* 4. Single Focused CTA — Clean & Premium */}
-                <div className="mt-auto mb-1">
+                {/* 4. Single Focused CTA — Editorial & Refined */}
+                <div className="mt-auto pt-2">
                     <div className="relative z-30">
                         <Link
                             href={`/propiedades/${property.slug}`}
-                            className="w-full h-9 bg-brand hover:bg-brand-700 text-white text-[13px] font-extrabold uppercase rounded-[4px] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] tracking-wider"
+                            className="w-full h-10 bg-brand hover:bg-brand-700 text-white text-[13px] font-semibold uppercase rounded-[6px] flex items-center justify-center gap-2 transition-all shadow-sm active:scale-[0.98] tracking-wider"
                         >
                             Ver inmueble
                             <ChevronRight className="w-4 h-4" />
