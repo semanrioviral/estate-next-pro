@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import { ChevronDown, Loader2 } from 'lucide-react';
 import type { Property } from '@/lib/supabase/properties';
@@ -37,8 +37,6 @@ export default function LoadMoreProperties({
     fetchParams,
     basePath,
 }: LoadMorePropertiesProps) {
-    const router = useRouter();
-    const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const totalPages = Math.ceil(totalCount / itemsPerPage);
@@ -139,10 +137,11 @@ export default function LoadMoreProperties({
             setProperties(prev => [...prev, ...newProperties]);
             setLoadedPages(prev => [...prev, nextPage]);
 
-            // Update URL to reflect the latest page loaded
+            // Silently update URL without triggering a re-render
+            // (window.history.replaceState avoids losing the SSR-rendered page 1)
             const params = new URLSearchParams(searchParams.toString());
             params.set('page', String(nextPage));
-            router.replace(`${basePath}?${params.toString()}`, { scroll: false });
+            window.history.replaceState(null, '', `${basePath}?${params.toString()}`);
 
             // Check if there are more pages
             setHasMore(nextPage < totalPages);
@@ -152,7 +151,7 @@ export default function LoadMoreProperties({
         } finally {
             setLoading(false);
         }
-    }, [loading, hasMore, loadedPages, fetchParams, totalPages, basePath, router, searchParams]);
+    }, [loading, hasMore, loadedPages, fetchParams, totalPages, basePath, searchParams]);
 
     // ── Nothing to render if no more pages and no appended properties ──
     if (!hasMore && properties.length === 0 && loadedPages.length <= 1) {
