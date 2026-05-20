@@ -87,7 +87,7 @@ export default function VenderCucutaPage() {
                             Conectamos su propiedad con los mejores inversores mediante estrategias de marketing digital de alto impacto.
                         </p>
                         <div className="flex flex-wrap gap-6">
-                            <a href="#proceso" className="px-10 py-5 bg-white text-slate-900 rounded-xl font-black text-lg hover:bg-zinc-100 transition-colors">
+                            <a href="#proceso" className="px-10 py-5 bg-white text-slate-900 rounded-xl font-black text-lg hover:bg-slate-100 transition-colors">
                                 Nuestro Método
                             </a>
                             <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="px-10 py-5 bg-brand text-white rounded-xl font-black text-lg hover:bg-red-600 transition-colors flex items-center gap-3">

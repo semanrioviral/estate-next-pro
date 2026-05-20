@@ -66,7 +66,7 @@ export default function ContactoPage() {
                             <p className="text-sm text-text-secondary font-medium leading-relaxed mb-8">
                                 Ideal para envío de documentos, propuestas comerciales o consultas técnicas legales.
                             </p>
-                            <p className="text-[12px] font-black uppercase tracking-widest text-zinc-950">
+                            <p className="text-[12px] font-black uppercase tracking-widest text-slate-950">
                                 contacto@tucasalospatios.com
                             </p>
                         </div>
@@ -81,7 +81,7 @@ export default function ContactoPage() {
                                 Los Patios, Norte de Santander.<br />
                                 Centro de Negocios Regional.
                             </p>
-                            <p className="text-[12px] font-black uppercase tracking-widest text-zinc-950">
+                            <p className="text-[12px] font-black uppercase tracking-widest text-slate-950">
                                 Cita previa requerida
                             </p>
                         </div>
@@ -101,7 +101,7 @@ export default function ContactoPage() {
                                         <Clock className="w-4 h-4 text-brand" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs font-black uppercase tracking-widest text-zinc-950">Lunes a Viernes</span>
+                                        <span className="text-xs font-black uppercase tracking-widest text-slate-950">Lunes a Viernes</span>
                                         <span className="text-sm text-text-secondary font-medium">08:00 AM - 06:00 PM</span>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@ export default function ContactoPage() {
                                         <Clock className="w-4 h-4 text-brand" />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="text-xs font-black uppercase tracking-widest text-zinc-950">Sábados</span>
+                                        <span className="text-xs font-black uppercase tracking-widest text-slate-950">Sábados</span>
                                         <span className="text-sm text-text-secondary font-medium">08:00 AM - 12:00 PM</span>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@ export default function ContactoPage() {
                         <div className="md:w-1/2 p-10 bg-white rounded-xl border border-slate-200 shadow-sm text-center">
                             <Phone className="w-8 h-8 text-brand mx-auto mb-6" />
                             <h4 className="mb-4">Línea Directa</h4>
-                            <p className="text-2xl font-black text-zinc-950 mb-2">+57 {phoneNumber}</p>
+                            <p className="text-2xl font-black text-slate-950 mb-2">+57 {phoneNumber}</p>
                             <p className="text-[12px] font-black text-text-muted uppercase tracking-widest">Atención en Español e Inglés</p>
                         </div>
                     </div>

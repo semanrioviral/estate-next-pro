@@ -74,7 +74,7 @@ export default function VenderVillaPage() {
                             Potenciamos el valor histórico y moderno de su inmueble mediante estrategias de marketing digital de alto impacto.
                         </p>
                         <div className="flex flex-wrap gap-6">
-                            <a href="#vender" className="px-10 py-5 bg-white text-zinc-950 rounded-xl font-black text-lg hover:bg-zinc-100 transition-colors">
+                            <a href="#vender" className="px-10 py-5 bg-white text-slate-950 rounded-xl font-black text-lg hover:bg-slate-100 transition-colors">
                                 Consignar Ahora
                             </a>
                             <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="px-10 py-5 bg-brand text-white rounded-xl font-black text-lg hover:bg-red-600 transition-colors flex items-center gap-3">
@@ -133,7 +133,7 @@ export default function VenderVillaPage() {
 
                             <div className="flex items-center gap-3 p-4 bg-brand/5 rounded-xl border border-brand/10">
                                 <CheckCircle2 className="w-5 h-5 text-brand" />
-                                <span className="text-sm font-bold text-zinc-800">Especialistas en el sector fronterizo</span>
+                                <span className="text-sm font-bold text-slate-800">Especialistas en el sector fronterizo</span>
                             </div>
                         </div>
                         <div className="bg-white p-1 rounded-xl shadow-xl border border-slate-200">

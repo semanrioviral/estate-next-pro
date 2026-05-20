@@ -74,7 +74,7 @@ export default function VenderLosPatiosPage() {
                             Valoración técnica, marketing inmersivo y asesoría legal de principio a fin. Conectamos su patrimonio con inversionistas reales.
                         </p>
                         <div className="flex flex-wrap gap-6">
-                            <a href="#proceso" className="px-10 py-5 bg-white text-zinc-950 rounded-xl font-black text-lg hover:bg-zinc-100 transition-colors">
+                            <a href="#proceso" className="px-10 py-5 bg-white text-slate-950 rounded-xl font-black text-lg hover:bg-slate-100 transition-colors">
                                 Nuestro Método
                             </a>
                             <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="px-10 py-5 bg-brand text-white rounded-xl font-black text-lg hover:bg-red-600 transition-colors flex items-center gap-3">
@@ -120,31 +120,31 @@ export default function VenderLosPatiosPage() {
                             <div className="grid grid-cols-2 gap-10">
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">+450</div>
-                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Casas Vendidas</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-slate-500">Casas Vendidas</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">98%</div>
-                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Satisfacción</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-slate-500">Satisfacción</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">60d</div>
-                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Venta Promedio</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-slate-500">Venta Promedio</div>
                                 </div>
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">$0</div>
-                                    <div className="text-[12px] font-black uppercase tracking-widest text-zinc-500">Inversión Inicial</div>
+                                    <div className="text-[12px] font-black uppercase tracking-widest text-slate-500">Inversión Inicial</div>
                                 </div>
                             </div>
                         </div>
                         <div className="bg-white/5 p-12 rounded-xl border border-white/10">
-                            <blockquote className="text-2xl font-medium italic mb-8 leading-relaxed text-zinc-300">
+                            <blockquote className="text-2xl font-medium italic mb-8 leading-relaxed text-slate-300">
                                 "La venta de mi casa en Pinar del Río fue impecable. Profesionalismo y rapidez absoluta."
                             </blockquote>
                             <div className="flex items-center gap-4">
                                 <div className="w-10 h-10 bg-brand rounded-lg flex items-center justify-center font-black">M</div>
                                 <div>
                                     <div className="font-black text-sm">Melissa Ortiz</div>
-                                    <div className="text-[12px] uppercase tracking-widest text-zinc-500">Vendedora Satisfecha</div>
+                                    <div className="text-[12px] uppercase tracking-widest text-slate-500">Vendedora Satisfecha</div>
                                 </div>
                             </div>
                         </div>
@@ -167,7 +167,7 @@ export default function VenderLosPatiosPage() {
                                     "Asesoría jurídica integral",
                                     "Reportes periódicos de gestión"
                                 ].map((item, i) => (
-                                    <li key={i} className="flex items-center gap-4 font-bold text-zinc-800">
+                                    <li key={i} className="flex items-center gap-4 font-bold text-slate-800">
                                         <CheckCircle2 className="w-5 h-5 text-green-500" />
                                         {item}
                                     </li>

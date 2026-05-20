@@ -42,7 +42,7 @@ export default async function BlogListingPage() {
     return (
         <main className="min-h-screen bg-white">
             {/* Header Section - Minimalist Phase 20 */}
-            <section className="bg-zinc-950 py-32">
+            <section className="bg-slate-900 py-32">
                 <div className="container-wide px-4">
                     <div className="max-w-3xl">
                         <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-lg text-[10px] font-black uppercase tracking-widest mb-8 border border-brand/20">
@@ -52,7 +52,7 @@ export default async function BlogListingPage() {
                         <h1 className="text-white mb-8">
                             Blog <span className="text-brand">Inmobiliario</span>
                         </h1>
-                        <p className="text-xl text-zinc-400 font-medium max-w-2xl leading-relaxed">
+                        <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">
                             Descubra por qué somos la <span className="text-white">autoridad inmobiliaria</span> en el Norte de Santander. Guías técnicas, consejos de inversión y actualidad del mercado.
                         </p>
                     </div>
@@ -60,7 +60,7 @@ export default async function BlogListingPage() {
             </section>
 
             {/* Sticky Filter Section */}
-            <section className="py-8 border-b border-zinc-50 sticky top-[70px] bg-white/90 backdrop-blur-sm z-40">
+            <section className="py-8 border-b border-slate-50 sticky top-[70px] bg-white/90 backdrop-blur-sm z-40">
                 <div className="container-wide px-4">
                     <div className="flex flex-wrap items-center justify-between gap-8">
                         <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
@@ -69,7 +69,7 @@ export default async function BlogListingPage() {
                                     key={cat}
                                     className={`px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${cat === 'Todos'
                                         ? 'bg-brand text-white shadow-sm'
-                                        : 'bg-zinc-50 text-zinc-400 hover:bg-zinc-100 border border-zinc-100'
+                                        : 'bg-slate-50 text-slate-400 hover:bg-slate-100 border border-slate-100'
                                         }`}
                                 >
                                     {cat}
@@ -97,8 +97,8 @@ export default async function BlogListingPage() {
                             ))}
                         </div>
                     ) : (
-                        <div className="py-32 text-center max-w-xl mx-auto bg-zinc-50 rounded-xl border border-zinc-100">
-                            <BookOpen className="w-16 h-16 text-zinc-200 mx-auto mb-8 stroke-[1px]" />
+                        <div className="py-32 text-center max-w-xl mx-auto bg-slate-50 rounded-xl border border-slate-100">
+                            <BookOpen className="w-16 h-16 text-slate-200 mx-auto mb-8 stroke-[1px]" />
                             <h3 className="mb-4">Próximamente</h3>
                             <p className="text-text-secondary font-medium mb-12">
                                 Estamos redactando las mejores guías para que venda o compre su propiedad al mejor precio de 2026.
@@ -112,9 +112,9 @@ export default async function BlogListingPage() {
             </section>
 
             {/* CTA Section - Simplified Phase 20 */}
-            <section className="py-24 border-t border-zinc-50">
+            <section className="py-24 border-t border-slate-50">
                 <div className="container-wide px-4">
-                    <div className="bg-zinc-50 p-12 md:p-20 rounded-xl border border-zinc-100 flex flex-col md:flex-row items-center justify-between gap-16 overflow-hidden relative">
+                    <div className="bg-slate-50 p-12 md:p-20 rounded-xl border border-slate-100 flex flex-col md:flex-row items-center justify-between gap-16 overflow-hidden relative">
                         <div className="max-w-2xl relative z-10">
                             <h2 className="mb-8">¿Necesita asesoría personalizada ahora?</h2>
                             <p className="text-lg text-text-secondary font-medium leading-relaxed mb-12">
@@ -126,7 +126,7 @@ export default async function BlogListingPage() {
                         </div>
 
                         <div className="hidden lg:block relative z-10">
-                            <div className="p-10 bg-white rounded-xl border border-zinc-100 max-w-sm shadow-sm">
+                            <div className="p-10 bg-white rounded-xl border border-slate-100 max-w-sm shadow-sm">
                                 <div className="flex items-center gap-4 mb-6">
                                     <div className="w-10 h-10 bg-brand/5 rounded-lg flex items-center justify-center">
                                         <Info className="w-5 h-5 text-brand" />

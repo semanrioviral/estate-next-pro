@@ -129,7 +129,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             />
 
             {/* Breadcrumb Visual - Simplified Phase 20 */}
-            <div className="bg-bg-alt border-b border-zinc-50 py-4">
+            <div className="bg-bg-alt border-b border-slate-50 py-4">
                 <div className="container-wide px-4">
                     <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted">
                         <Link href="/" className="hover:text-brand transition-colors flex items-center gap-1">
@@ -138,20 +138,20 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         <ChevronRight className="w-3 h-3" />
                         <Link href="/blog" className="hover:text-brand transition-colors">Blog</Link>
                         <ChevronRight className="w-3 h-3" />
-                        <span className="text-zinc-400 truncate max-w-[200px] md:max-w-none">{post.titulo}</span>
+                        <span className="text-slate-400 truncate max-w-[200px] md:max-w-none">{post.titulo}</span>
                     </nav>
                 </div>
             </div>
 
             {/* Minimalist Hero Section */}
-            <header className="bg-zinc-950 pt-32 pb-24">
+            <header className="bg-slate-900 pt-32 pb-24">
                 <div className="container-wide px-4 text-center">
                     <div className="max-w-4xl mx-auto">
                         <div className="inline-flex items-center gap-4 mb-10">
                             <span className="px-6 py-2 bg-brand text-white rounded-lg text-[10px] font-black uppercase tracking-widest">
                                 {post.categoria || 'Actualidad'}
                             </span>
-                            <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-black uppercase tracking-widest">
+                            <div className="flex items-center gap-2 text-[10px] text-slate-400 font-black uppercase tracking-widest">
                                 <Calendar className="w-3 h-3" />
                                 {new Date(post.created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </div>
@@ -168,7 +168,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                 </div>
                                 <div className="text-left">
                                     <p className="text-[10px] font-black text-white uppercase tracking-widest">Equipo Inmobiliaria Tucasa Los Patios</p>
-                                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Autoridad Verificada</p>
+                                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Autoridad Verificada</p>
                                 </div>
                             </div>
                             <button className="flex items-center gap-2 px-6 py-3 bg-white/5 border border-white/10 rounded-lg text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-colors">
@@ -185,8 +185,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <div className="lg:w-2/3">
                     {/* Table of Contents (Mobile Widget) */}
                     {headings.length > 0 && (
-                        <div className="mb-16 p-8 bg-bg-alt rounded-xl border border-zinc-100 lg:hidden">
-                            <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-6 border-b border-zinc-200 pb-4">
+                        <div className="mb-16 p-8 bg-bg-alt rounded-xl border border-slate-100 lg:hidden">
+                            <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-6 border-b border-slate-200 pb-4">
                                 <List className="w-4 h-4 text-brand" />
                                 Tabla de Contenidos
                             </h3>
@@ -201,16 +201,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     )}
 
                     {/* Article Body */}
-                    <div className="prose prose-zinc prose-base max-w-none text-zinc-700 font-normal leading-[1.8] article-content">
+                    <div className="prose prose-slate prose-base max-w-none text-slate-700 font-normal leading-[1.8] article-content">
                         <IntelligentLinker content={post.contenido} />
                     </div>
 
                     {/* Intermediate CTA */}
-                    <div className="my-24 p-12 bg-zinc-950 rounded-xl flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden relative group">
+                    <div className="my-24 p-12 bg-slate-900 rounded-xl flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden relative group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-brand"></div>
                         <div className="relative z-10">
                             <h3 className="text-2xl font-black mb-2 text-white">¿Busca asesoría inmediata?</h3>
-                            <p className="text-zinc-400 font-medium mb-0">Atención prioritaria para su inversión en Cúcuta.</p>
+                            <p className="text-slate-400 font-medium mb-0">Atención prioritaria para su inversión en Cúcuta.</p>
                         </div>
                         <Link
                             href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
@@ -221,8 +221,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     </div>
 
                     {/* Final Authority Block */}
-                    <div className="mt-24 pt-20 border-t border-zinc-50 flex flex-col md:flex-row gap-8 items-center">
-                        <div className="w-16 h-16 bg-zinc-50 rounded-xl flex items-center justify-center border border-zinc-100 shrink-0">
+                    <div className="mt-24 pt-20 border-t border-slate-50 flex flex-col md:flex-row gap-8 items-center">
+                        <div className="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 shrink-0">
                             <Award className="w-8 h-8 text-brand" />
                         </div>
                         <div className="text-center md:text-left">
@@ -240,7 +240,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         {/* TOC Widget - Desktop */}
                         {headings.length > 0 && (
                             <div className="hidden lg:block p-10 bg-bg-alt rounded-xl border border-border-subtle shadow-sm">
-                                <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-8 border-b border-zinc-100 pb-4">
+                                <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-8 border-b border-slate-100 pb-4">
                                     <List className="w-4 h-4 text-brand" />
                                     Contenido
                                 </h3>
@@ -260,7 +260,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                         {/* Featured Properties Widget */}
                         <div className="p-10 bg-white border border-border-subtle rounded-xl shadow-sm">
-                            <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-10 border-b border-zinc-50 pb-4">
+                            <h3 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest mb-10 border-b border-slate-50 pb-4">
                                 <TrendingUp className="w-4 h-4 text-brand" />
                                 Oportunidades
                             </h3>
@@ -276,7 +276,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                                 />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center">
-                                                    <Building2 className="w-6 h-6 text-zinc-200" />
+                                                    <Building2 className="w-6 h-6 text-slate-200" />
                                                 </div>
                                             )}
                                             <div className="absolute top-1 left-1 px-1.5 py-0.5 bg-brand text-white text-[7px] font-black uppercase rounded shadow-sm">
@@ -284,7 +284,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                             </div>
                                         </div>
                                         <div className="flex flex-col justify-center min-w-0">
-                                            <h4 className="text-[10px] font-black leading-tight text-zinc-950 group-hover:text-brand transition-colors mb-2 uppercase tracking-tight line-clamp-2">
+                                            <h4 className="text-[10px] font-black leading-tight text-slate-950 group-hover:text-brand transition-colors mb-2 uppercase tracking-tight line-clamp-2">
                                                 {prop.titulo}
                                             </h4>
                                             <p className="text-[10px] font-black text-brand uppercase tracking-widest">
@@ -301,8 +301,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                         </div>
 
                         {/* Quick Context Navigation */}
-                        <div className="p-10 bg-zinc-950 rounded-xl text-white shadow-sm relative overflow-hidden group">
-                            <h3 className="text-[10px] font-black uppercase tracking-widest mb-8 border-b border-white/10 pb-4 relative z-10 text-zinc-400">Explora también</h3>
+                        <div className="p-10 bg-slate-900 rounded-xl text-white shadow-sm relative overflow-hidden group">
+                            <h3 className="text-[10px] font-black uppercase tracking-widest mb-8 border-b border-white/10 pb-4 relative z-10 text-slate-400">Explora también</h3>
                             <div className="space-y-3 relative z-10">
                                 {[
                                     { label: 'Casas en Venta', href: '/venta' },
@@ -315,7 +315,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                                         className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/5 hover:border-brand/50 transition-all group"
                                     >
                                         <span className="text-[10px] font-black uppercase tracking-widest">{item.label}</span>
-                                        <ChevronRight className="w-3 h-3 text-zinc-500 group-hover:text-brand transition-colors" />
+                                        <ChevronRight className="w-3 h-3 text-slate-500 group-hover:text-brand transition-colors" />
                                     </Link>
                                 ))}
                             </div>
@@ -326,7 +326,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
             {/* Related Posts */}
             {relatedPosts.length > 0 && (
-                <section className="bg-bg-alt py-32 border-t border-zinc-50">
+                <section className="bg-bg-alt py-32 border-t border-slate-50">
                     <div className="container-wide px-4">
                         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16 gap-8 px-4">
                             <div>

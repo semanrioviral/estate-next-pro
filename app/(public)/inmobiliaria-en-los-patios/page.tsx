@@ -132,7 +132,7 @@ export default async function LosPatiosDominanceAuthorityPage({
             <section className="bg-white pt-16 md:pt-24 pb-6 md:pb-12 relative border-b border-border-clean">
                 <div className="container-wide px-4">
                     <div className="flex flex-col items-start md:items-center mb-4 md:mb-8">
-                        <nav className="flex items-center text-[10px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
+                        <nav className="flex items-center text-[12px] font-black text-text-secondary uppercase tracking-[0.2em] mb-3 md:mb-6">
                             <Link href="/" className="hover:text-brand transition-colors flex items-center gap-1.5">
                                 <Home className="w-3 h-3" />
                                 Inicio
@@ -142,7 +142,7 @@ export default async function LosPatiosDominanceAuthorityPage({
                         </nav>
                         <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-bg-alt border border-border-clean rounded-full mb-3 md:mb-6">
                             <BadgeCheck className="w-3.5 h-3.5 text-brand" />
-                            <span className="text-[10px] font-black text-text-primary uppercase tracking-widest">Referente Municipal 2026</span>
+                            <span className="text-[12px] font-black text-text-primary uppercase tracking-widest">Referente Municipal 2026</span>
                         </div>
                     </div>
                     <div className="max-w-4xl mx-auto text-center mb-6 md:mb-12">
@@ -161,7 +161,7 @@ export default async function LosPatiosDominanceAuthorityPage({
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div>
-                            <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Contexto Municipal</p>
+                            <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Contexto Municipal</p>
                             <h2 className="mb-8">Mercado Inmobiliario en <span className="text-brand">Los Patios</span></h2>
                             <div className="space-y-6 text-lg text-text-secondary leading-relaxed font-secondary">
                                 <p>
@@ -173,15 +173,15 @@ export default async function LosPatiosDominanceAuthorityPage({
                             </div>
                         </div>
                         <div className="grid grid-cols-2 gap-6">
-                            <div className="p-8 bg-bg-alt rounded-xl border border-zinc-100 flex flex-col items-center text-center group hover:border-brand transition-colors">
+                            <div className="p-8 bg-bg-alt rounded-xl border border-slate-100 flex flex-col items-center text-center group hover:border-brand transition-colors">
                                 <TrendingUp className="w-10 h-10 text-brand mb-4" />
-                                <span className="text-3xl font-black text-zinc-950">+10 Años</span>
-                                <span className="text-[10px] text-zinc-400 uppercase tracking-widest font-black mt-2">Experiencia Real</span>
+                                <span className="text-3xl font-black text-slate-950">+10 Años</span>
+                                <span className="text-[12px] text-slate-400 uppercase tracking-widest font-black mt-2">Experiencia Real</span>
                             </div>
-                            <div className="p-8 bg-zinc-950 rounded-xl flex flex-col items-center text-center group">
+                            <div className="p-8 bg-slate-900 rounded-xl flex flex-col items-center text-center group">
                                 <ShieldCheck className="w-10 h-10 text-brand mb-4" />
                                 <span className="text-3xl font-black text-white">100%</span>
-                                <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-black mt-2">Cierres Legales</span>
+                                <span className="text-[12px] text-slate-500 uppercase tracking-widest font-black mt-2">Cierres Legales</span>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@ export default async function LosPatiosDominanceAuthorityPage({
 
 
             {/* MARKET DATA */}
-            <section className="py-24 bg-bg-alt border-y border-zinc-100">
+            <section className="py-24 bg-bg-alt border-y border-slate-100">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
                         <h2 className="mb-4">Métricas del <span className="text-brand">Mercado</span> 2026</h2>
@@ -198,9 +198,9 @@ export default async function LosPatiosDominanceAuthorityPage({
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {marketData.map((data, i) => (
-                            <div key={i} className="p-10 bg-white rounded-xl border border-zinc-100 relative group hover:border-brand transition-colors">
-                                <h4 className="text-[10px] font-black text-zinc-400 uppercase tracking-widest mb-6">{data.label}</h4>
-                                <div className="text-3xl font-black text-zinc-950 mb-2">{data.value}</div>
+                            <div key={i} className="p-10 bg-white rounded-xl border border-slate-100 relative group hover:border-brand transition-colors">
+                                <h4 className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-6">{data.label}</h4>
+                                <div className="text-3xl font-black text-slate-950 mb-2">{data.value}</div>
                                 <div className="text-xs font-black text-brand flex items-center gap-2">
                                     <TrendingUp className="w-3 h-3" /> {data.trend}
                                 </div>
@@ -214,17 +214,17 @@ export default async function LosPatiosDominanceAuthorityPage({
             <section className="py-24 bg-white">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
-                        <p className="text-[10px] font-black text-brand uppercase tracking-widest mb-4">Soluciones 360°</p>
+                        <p className="text-[12px] font-black text-brand uppercase tracking-widest mb-4">Soluciones 360°</p>
                         <h2 className="mb-4">Servicios <span className="text-brand">Integrales</span></h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                         {services.map((service, i) => (
-                            <div key={i} className="p-10 bg-zinc-950 rounded-xl group border border-zinc-800 hover:border-brand transition-colors">
+                            <div key={i} className="p-10 bg-slate-900 rounded-xl group border border-slate-800 hover:border-brand transition-colors">
                                 <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-brand">
                                     <service.icon className="w-6 h-6" />
                                 </div>
                                 <h3 className="text-lg font-black text-white mb-4 uppercase tracking-tight">{service.title}</h3>
-                                <p className="text-sm text-zinc-400 leading-relaxed font-medium">{service.desc}</p>
+                                <p className="text-sm text-slate-400 leading-relaxed font-medium">{service.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -259,8 +259,8 @@ export default async function LosPatiosDominanceAuthorityPage({
                             </div>
                         </>
                     ) : (
-                        <div className="py-32 text-center bg-bg-alt rounded-xl border border-zinc-100">
-                            <Search className="w-16 h-16 text-zinc-300 mx-auto mb-6" />
+                        <div className="py-32 text-center bg-bg-alt rounded-xl border border-slate-100">
+                            <Search className="w-16 h-16 text-slate-300 mx-auto mb-6" />
                             <h3 className="text-2xl font-black mb-4">Catálogo en Actualización</h3>
                             <Link href="/contacto" className="text-brand font-black underline">Contactar un Asesor →</Link>
                         </div>
@@ -269,11 +269,11 @@ export default async function LosPatiosDominanceAuthorityPage({
             </section>
 
             {/* COBERTURA METROPOLITANA */}
-            <section className="py-24 bg-zinc-950">
+            <section className="py-24 bg-slate-900">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
                         <h2 className="text-white mb-4">Dominio del <span className="text-brand">Territorio</span></h2>
-                        <p className="text-zinc-400 font-medium">Conectamos las mejores oportunidades en el Norte de Santander.</p>
+                        <p className="text-slate-400 font-medium">Conectamos las mejores oportunidades en el Norte de Santander.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="p-10 bg-brand rounded-xl shadow-xl">
@@ -283,12 +283,12 @@ export default async function LosPatiosDominanceAuthorityPage({
                         </div>
                         <Link href="/inmobiliaria-en-cucuta" className="p-10 bg-white/5 rounded-xl border border-white/10 hover:border-brand transition-colors group">
                             <h3 className="text-xl font-black mb-2 text-white">Cúcuta</h3>
-                            <p className="text-sm text-zinc-500 mb-6 font-medium group-hover:text-zinc-400">Epicentro comercial y corporativo.</p>
+                            <p className="text-sm text-slate-500 mb-6 font-medium group-hover:text-slate-400">Epicentro comercial y corporativo.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-brand">Ver Guía →</span>
                         </Link>
                         <Link href="/inmobiliaria-en-villa-del-rosario" className="p-10 bg-white/5 rounded-xl border border-white/10 hover:border-brand transition-colors group">
                             <h3 className="text-xl font-black mb-2 text-white">Villa del Rosario</h3>
-                            <p className="text-sm text-zinc-500 mb-6 font-medium group-hover:text-zinc-400">Historia y expansión fronteriza.</p>
+                            <p className="text-sm text-slate-500 mb-6 font-medium group-hover:text-slate-400">Historia y expansión fronteriza.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-brand">Ver Guía →</span>
                         </Link>
                     </div>
@@ -296,13 +296,13 @@ export default async function LosPatiosDominanceAuthorityPage({
             </section>
 
             {/* CTA FINAL */}
-            <section className="py-24 bg-white border-t border-zinc-100">
+            <section className="py-24 bg-white border-t border-slate-100">
                 <div className="container-wide px-4 text-center">
                     <h2 className="mb-6">¿Desea <span className="text-brand">vender</span> en Los Patios?</h2>
                     <p className="text-xl text-text-secondary font-medium mb-12 max-w-2xl mx-auto">
                         Aproveche nuestra plataforma líder para vender al mejor precio de mercado en 2026.
                     </p>
-                    <Link href="/vender-casa-en-los-patios" className="px-10 py-5 bg-zinc-950 text-white rounded-xl font-black text-lg hover:bg-zinc-800 transition-colors flex items-center gap-3 justify-center w-fit mx-auto">
+                    <Link href="/vender-casa-en-los-patios" className="px-10 py-5 bg-slate-900 text-white rounded-xl font-black text-lg hover:bg-slate-800 transition-colors flex items-center gap-3 justify-center w-fit mx-auto">
                         Iniciar Proceso de Venta <ArrowRight className="w-5 h-5" />
                     </Link>
                 </div>
