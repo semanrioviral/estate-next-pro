@@ -83,7 +83,7 @@ export async function generateMetadata({ params, searchParams }: ArriendoCiudadT
         alternates: {
             canonical: canonicalUrl,
         },
-        robots: (!properties || properties.length < 2) ? { index: false, follow: true } : { index: true, follow: true },
+        robots: (!properties || properties.length < 1) ? { index: false, follow: true } : { index: true, follow: true },
         openGraph: {
             title,
             description,

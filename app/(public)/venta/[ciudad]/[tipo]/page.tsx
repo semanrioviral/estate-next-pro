@@ -101,7 +101,7 @@ export async function generateMetadata({ params, searchParams }: VentaCiudadTipo
             ...(nextUrl ? { 'link:next': nextUrl } : {}),
             'googlebot': 'index, follow, max-image-preview:large',
         },
-        robots: (!properties || properties.length < 2) ? { index: false, follow: true } : { index: true, follow: true },
+        robots: (!properties || properties.length < 1) ? { index: false, follow: true } : { index: true, follow: true },
         openGraph: {
             title,
             description,

@@ -31,7 +31,7 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
 
     const baseDescription = numHabitaciones
         ? `Explora casas y apartamentos en venta con ${numHabitaciones} o más habitaciones en Cúcuta, Los Patios y Villa del Rosario. Asesoría personalizada con respaldo jurídico. ¡Encuentra tu hogar hoy!`
-        : `Descubre ${totalCount} casas, apartamentos y lotes en venta en Cúcuta, Los Patios y Villa del Rosario. Compara precios, zonas y tipos de inmueble. Asesoría personalizada con respaldo jurídico. ¡Encuentra tu hogar hoy!`;
+        : `${totalCount} propiedades verificadas en venta en Los Patios y Cúcuta. Compara precios, zonas y tipos de inmueble con la inmobiliaria líder en Norte de Santander. Asesoría jurídica incluida.`;
 
     const canonicalUrl = `${siteUrl}/venta`;
 

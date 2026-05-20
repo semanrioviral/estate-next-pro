@@ -109,7 +109,7 @@ export default function NavbarV3() {
                     <div className="p-8 flex flex-col h-full overflow-y-auto">
                         <div className="flex items-center justify-between mb-12">
                             <span className="text-xl font-bold tracking-tight text-slate-900 uppercase">Menú Principal</span>
-                            <button onClick={() => setIsOpen(false)} className="p-2 bg-slate-50 rounded-full transition-colors active:bg-slate-100">
+                            <button onClick={() => setIsOpen(false)} aria-label="Cerrar menú" className="p-2 bg-slate-50 rounded-full transition-colors active:bg-slate-100">
                                 <X className="w-8 h-8 text-slate-900" />
                             </button>
                         </div>

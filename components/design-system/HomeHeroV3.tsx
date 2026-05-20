@@ -40,15 +40,9 @@ export default function HomeHeroV3() {
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                         <Link
                             href="/venta"
-                            className="bg-brand-600 text-white px-10 h-14 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-brand-700 transition-all active:scale-[0.98] shadow-lg shadow-brand-900/20 flex items-center justify-center min-w-[220px]"
+                            className="bg-brand-600 text-white px-12 h-14 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-brand-700 transition-all active:scale-[0.98] shadow-lg shadow-brand-900/20 flex items-center justify-center min-w-[240px]"
                         >
                             Ver Propiedades
-                        </Link>
-                        <Link
-                            href="/vender-casa-en-cucuta"
-                            className="bg-white/10 backdrop-blur-md text-white border-2 border-white/20 px-10 h-14 rounded-full font-bold text-sm uppercase tracking-widest hover:bg-white/20 transition-all active:scale-[0.98] flex items-center justify-center min-w-[220px]"
-                        >
-                            Consignar Inmueble
                         </Link>
                     </div>
                 </div>

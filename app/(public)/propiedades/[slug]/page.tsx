@@ -12,14 +12,9 @@ import {
     Bath,
     Maximize,
     Car,
-    CheckCircle2,
-    Calendar,
     ChevronRight,
     Phone,
     Star,
-    ShieldCheck,
-    Award,
-    Share2,
     Check
 } from 'lucide-react';
 import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, Property } from '@/lib/supabase/properties';
