@@ -53,7 +53,6 @@ const testimonials = [
 function StatsSection() {
   return (
     <section className="pt-24 pb-16 bg-slate-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-40"></div>
       <div className="container-wide relative z-10">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {navItems.map((nav, i) => (
@@ -135,8 +134,7 @@ function CitiesSection() {
             </Link>
           ))}
         </div>
-        <div className="mt-20 p-10 bg-slate-900 rounded-[2.5rem] border border-white/5 relative overflow-hidden group">
-          <div className="absolute inset-0 bg-brand-600/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+        <div className="mt-20 p-10 bg-slate-800 rounded-[2.5rem] border border-slate-700/50 relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
             <div className="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center shrink-0 shadow-xl shadow-brand-900/20"><Building2 className="w-8 h-8 text-white" /></div>
             <p className="text-sm text-slate-400 leading-relaxed font-medium">
@@ -151,9 +149,7 @@ function CitiesSection() {
 
 function TestimonialsSection() {
   return (
-    <section className="py-32 bg-slate-950 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(#1e293b_1px,transparent_1px)] [background-size:32px_32px] opacity-20"></div>
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-brand-600 to-transparent"></div>
+    <section className="py-32 bg-slate-900 relative overflow-hidden">
       <div className="container-wide relative z-10">
         <div className="flex flex-col items-center text-center mb-24">
           <span className="text-brand-500 font-black text-[11px] uppercase tracking-[0.4em] mb-4">Garantía de Excelencia</span>

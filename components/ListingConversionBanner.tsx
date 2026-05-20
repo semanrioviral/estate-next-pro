@@ -8,14 +8,8 @@ export default function ListingConversionBanner() {
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent('Hola, no encontré lo que buscaba en la web. ¿Podrían ayudarme a encontrar una propiedad con mis requisitos?')}`;
 
     return (
-        <section className="mt-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-brand to-zinc-900 rounded-[3rem]"></div>
-
-            {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -mr-32 -mt-32 blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-red-500/20 rounded-full -ml-32 -mb-32 blur-3xl"></div>
-
-            <div className="relative px-8 py-12 md:py-16 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
+        <section className="mt-20 relative overflow-hidden bg-slate-900 rounded-[3rem]">
+            <div className="px-8 py-12 md:py-16 md:px-16 flex flex-col md:flex-row items-center justify-between gap-10">
                 <div className="max-w-xl text-center md:text-left">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
                         <Sparkles className="w-4 h-4 text-yellow-400" />

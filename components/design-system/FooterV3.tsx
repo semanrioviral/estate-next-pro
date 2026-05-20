@@ -8,7 +8,7 @@ export default function FooterV3() {
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "573223047435";
 
     return (
-        <footer className="bg-zinc-900 text-white pt-24 pb-12">
+        <footer className="bg-slate-900 text-white pt-24 pb-12">
             <div className="container-wide">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 mb-20">
                     {/* Brand & Mission */}
