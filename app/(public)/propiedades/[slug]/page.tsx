@@ -220,7 +220,7 @@ Referencia: ${propertyUrl}
                     {/* Header Title Section - Anchored */}
                     <div className="mb-5 md:mb-8 pt-1 pb-4 md:pt-0 md:pb-6 md:border-b border-slate-200 space-y-4 md:space-y-6">
                         <div className="flex flex-wrap items-center gap-2">
-                            <span className="bg-slate-900 text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
+                            <span className="bg-slate-100 text-slate-700 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-slate-200">
                                 ID: {property.id.toString().slice(0, 8)}
                             </span>
                             <span className="bg-brand text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
@@ -245,7 +245,7 @@ Referencia: ${propertyUrl}
                         </div>
                         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                             <div className="flex-1">
-                                <h1 className="text-[1.65rem] sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
+                                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-2">
                                     {property.titulo}
                                 </h1>
                                 <div className="flex items-center text-slate-500 font-semibold text-wrap">
@@ -265,7 +265,7 @@ Referencia: ${propertyUrl}
 
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
                         {/* Left Column (lg:col-span-2) */}
-                        <div className="lg:col-span-2 flex flex-col gap-5 md:gap-6">
+                        <div className="lg:col-span-2 flex flex-col gap-6 md:gap-8">
                             {/* 2. DESKTOP ONLY: HERO / GALLERY MOSAIC */}
                             <div className="hidden md:block overflow-hidden rounded-lg border border-slate-200 bg-white p-2">
                                 <PropertyGallery
@@ -278,12 +278,12 @@ Referencia: ${propertyUrl}
                             {/* 4. Characteristics Card */}
                             <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-5">
                                 <div className="space-y-5">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-3 sm:pl-4">
+                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
                                         Características principales
                                     </h2>
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                                                 <Maximize className="h-4 w-4 text-brand" />
                                             </div>
                                             <div className="flex flex-col gap-1">
@@ -292,7 +292,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                                                 <BedDouble className="h-4 w-4 text-brand" />
                                             </div>
                                             <div className="flex flex-col gap-1">
@@ -301,7 +301,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                                                 <Bath className="h-4 w-4 text-brand" />
                                             </div>
                                             <div className="flex flex-col gap-1">
@@ -310,7 +310,7 @@ Referencia: ${propertyUrl}
                                             </div>
                                         </div>
                                         <div className="flex flex-col items-center text-center gap-2 rounded-lg border border-slate-200 py-3 sm:py-4 px-2">
-                                            <div className="h-9 w-9 rounded-full bg-red-50 flex items-center justify-center border border-red-100">
+                                            <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
                                                 <Car className="h-4 w-4 text-brand" />
                                             </div>
                                             <div className="flex flex-col gap-1">
@@ -324,7 +324,7 @@ Referencia: ${propertyUrl}
 
                             {/* 5. Description Section */}
                             <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-4">
-                                <h2 className="text-xl lg:text-3xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-3 sm:pl-4">
+                                <h2 className="text-xl lg:text-3xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
                                     Descripción de la propiedad
                                 </h2>
                                 {hasLongDescription ? (
@@ -339,7 +339,7 @@ Referencia: ${propertyUrl}
                             {/* 6. Amenities */}
                             {displayServicios.length > 0 && (
                                 <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-4">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-3 sm:pl-4">
+                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
                                         Amenidades y Servicios
                                     </h2>
                                     <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 ${displayServicios.length > 10 ? 'max-h-60 overflow-y-auto pr-1' : ''}`}>
@@ -358,7 +358,7 @@ Referencia: ${propertyUrl}
                             {/* 7. Technical and Legal Details */}
                             {(property.medidas_lote || property.tipo_uso || property.financiamiento) && (
                                 <section className="rounded-lg border border-slate-200 bg-white p-4 sm:p-5 md:p-6 space-y-5">
-                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-3 sm:pl-4">
+                                    <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4">
                                         Detalles Técnicos y Legales
                                     </h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
@@ -389,7 +389,7 @@ Referencia: ${propertyUrl}
                             {/* 6. Location Section - Integrated & Clean */}
                             <section className="rounded-lg border border-slate-200 bg-white p-6 space-y-6">
                                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                                    <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-4">
+                                    <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-4">
                                         Ubicación Estratégica
                                     </h2>
                                     <div className="text-[12px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
@@ -423,7 +423,7 @@ Referencia: ${propertyUrl}
 
                         {/* RIGHT COLUMN: Sticky Sidebar (1/3) - Hidden on Mobile */}
                         <aside className="hidden lg:block lg:col-span-1">
-                            <div className="sticky top-28 space-y-6">
+                            <div className="sticky top-28 space-y-8">
                                 {/* Conversion Card Authority */}
                                 <div className="bg-white rounded-lg border border-slate-200 overflow-hidden p-6 space-y-6">
                                     {/* Price and Operation */}
@@ -552,7 +552,7 @@ Referencia: ${propertyUrl}
                 <div className="max-w-7xl mx-auto px-4 lg:px-8">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-6 md:mb-12">
                         <div className="space-y-2 md:space-y-4">
-                            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 border-l-4 border-brand-600 pl-4">
+                            <h2 className="text-2xl lg:text-3xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-4">
                                 Inmuebles similares en esta zona
                             </h2>
                             <p className="text-slate-500 text-sm md:text-lg font-medium">Explora inmuebles con características similares en {property.barrio}</p>
@@ -566,7 +566,7 @@ Referencia: ${propertyUrl}
                         </Link>
                     </div>
 
-                    <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
+                    <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
                         {similarProperties.map((item, index) => (
                             <div key={item.property.id} className="min-w-[85%] snap-start md:min-w-0">
                                 <PropertyCardV3
@@ -590,7 +590,7 @@ Referencia: ${propertyUrl}
                             </h2>
                             <div className="h-1 lg:h-px flex-1 bg-slate-100" />
                         </div>
-                        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
+                        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-2 md:grid md:grid-cols-3 md:gap-8 md:overflow-visible md:pb-0">
                             {popularInBarrio.map((prop) => (
                                 <div key={prop.id} className="min-w-[85%] snap-start md:min-w-0">
                                     <PropertyCardV3 property={prop} />
