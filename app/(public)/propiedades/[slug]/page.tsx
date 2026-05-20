@@ -237,7 +237,7 @@ Referencia: ${propertyUrl}
                             <span className="bg-gray-100 text-gray-900 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 {property.tipo}
                             </span>
-                            {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.map((tag, idx) => (
+                            {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.slice(0, 3).map((tag, idx) => (
                                 <span key={idx} className="bg-brand/10 text-brand text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-brand/20">
                                     {tag}
                                 </span>
