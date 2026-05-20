@@ -15,7 +15,6 @@ interface PropertyGalleryProps {
 export default function PropertyGallery({ images, title, variant = 'default' }: PropertyGalleryProps) {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [isLightboxOpen, setIsLightboxOpen] = useState(false)
-    const [mosaicStartIndex, setMosaicStartIndex] = useState(0)
 
     // Main Carousel
     const [mainViewportRef, emblaMainApi] = useEmblaCarousel({
@@ -97,41 +96,6 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
         };
     }, [emblaMainApi, onSelect]);
 
-    useEffect(() => {
-        if (variant !== 'mosaic' || allImages.length < 2) return;
-
-        const mediaQuery = window.matchMedia('(min-width: 768px)');
-        let intervalId: ReturnType<typeof setInterval> | null = null;
-
-        const startAutoplay = () => {
-            if (!mediaQuery.matches) return;
-            intervalId = setInterval(() => {
-                setMosaicStartIndex((prev) => (prev + 1) % allImages.length);
-            }, 3800);
-        };
-
-        const stopAutoplay = () => {
-            if (intervalId) {
-                clearInterval(intervalId);
-                intervalId = null;
-            }
-        };
-
-        startAutoplay();
-
-        const handleChange = (event: MediaQueryListEvent) => {
-            stopAutoplay();
-            if (event.matches) startAutoplay();
-        };
-
-        mediaQuery.addEventListener('change', handleChange);
-
-        return () => {
-            stopAutoplay();
-            mediaQuery.removeEventListener('change', handleChange);
-        };
-    }, [variant, allImages.length]);
-
     const scrollPrev = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         if (emblaMainApi) emblaMainApi.scrollPrev();
@@ -176,11 +140,11 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
     const lightboxModal = isLightboxOpen ? (
         <div className="fixed inset-0 z-[9999] bg-zinc-950/95 flex items-center justify-center transition-all duration-500 animate-in fade-in backdrop-blur-md">
             <button
-                className="absolute top-6 right-6 z-[10000] p-3 text-white/70 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full border border-white/10"
+                className="absolute top-4 right-4 md:top-6 md:right-6 z-[10000] p-2.5 md:p-3 text-white/70 hover:text-white transition-colors bg-white/10 hover:bg-white/20 rounded-full border border-white/10"
                 onClick={() => setIsLightboxOpen(false)}
                 aria-label="Cerrar"
             >
-                <X className="h-6 w-6" />
+                <X className="h-5 w-5 md:h-6 md:w-6" />
             </button>
 
             <div className="relative w-full h-full flex flex-col items-center justify-center">
@@ -206,21 +170,23 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
                 {allImages.length > 1 && (
                     <>
                         <button
-                            className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-110 active:scale-95 z-20 hidden md:flex border border-white/10"
+                            className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-110 active:scale-95 z-20 border border-white/10"
                             onClick={scrollLightboxPrev}
+                            aria-label="Anterior"
                         >
-                            <ChevronLeft className="h-8 w-8" />
+                            <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
                         </button>
                         <button
-                            className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-110 active:scale-95 z-20 hidden md:flex border border-white/10"
+                            className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-110 active:scale-95 z-20 border border-white/10"
                             onClick={scrollLightboxNext}
+                            aria-label="Siguiente"
                         >
-                            <ChevronRight className="h-8 w-8" />
+                            <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
                         </button>
                     </>
                 )}
 
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-6 py-2.5 rounded-full text-white/90 text-sm font-bold tracking-widest border border-white/10 shadow-2xl">
+                <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-md px-4 py-1.5 md:px-6 md:py-2.5 rounded-full text-white/90 text-xs md:text-sm font-bold tracking-widest border border-white/10 shadow-2xl">
                     {selectedIndex + 1} / {allImages.length}
                 </div>
             </div>
@@ -229,14 +195,14 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
 
     if (variant === 'mosaic') {
         const displayCount = Math.min(allImages.length, 5)
-        const orderedIndexes = allImages.map((_, idx) => (idx + mosaicStartIndex) % allImages.length)
+        const orderedIndexes = allImages.map((_, idx) => idx)
         const displayIndexes = orderedIndexes.slice(0, displayCount)
         const displayImages = displayIndexes.map((idx) => allImages[idx])
         const hasMore = allImages.length > 5
 
         return (
             <>
-                <div className="relative group w-full h-full lg:h-[500px] grid grid-cols-1 md:grid-cols-4 gap-2 overflow-hidden rounded-none md:rounded-lg">
+                <div className="relative group w-full h-full lg:h-[500px] grid grid-cols-1 md:grid-cols-5 gap-2 overflow-hidden rounded-none md:rounded-lg">
                 {/* Mobile Swipe Gallery */}
                 <div className="md:hidden relative h-[70vw] min-h-[260px] max-h-[420px] overflow-hidden bg-zinc-100">
                     <div className="overflow-hidden h-full" ref={mainViewportRef}>
@@ -265,30 +231,16 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
 
                     {allImages.length > 1 && (
                         <div className="absolute bottom-3 right-3 z-10">
-                            <span className="bg-black/60 text-white px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wide">
+                            <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-2.5 py-1 rounded-lg text-[12px] font-semibold tracking-wide shadow-sm border border-slate-200/50">
                                 {selectedIndex + 1} / {allImages.length}
                             </span>
-                        </div>
-                    )}
-
-                    {allImages.length > 1 && (
-                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center gap-1.5">
-                            {allImages.slice(0, 6).map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={`h-1.5 rounded-full transition-all ${index === Math.min(selectedIndex, 5) ? 'w-4 bg-white' : 'w-1.5 bg-white/60'}`}
-                                />
-                            ))}
-                            {allImages.length > 6 && (
-                                <span className="text-[10px] font-bold text-white/90 ml-1">+{allImages.length - 6}</span>
-                            )}
                         </div>
                     )}
                 </div>
 
                 {/* Desktop Main Large Image */}
                 <div
-                    className={`${displayCount === 1 ? 'md:col-span-4' : 'md:col-span-2'
+                    className={`${displayCount === 1 ? 'md:col-span-5' : 'md:col-span-3'
                         } hidden md:block relative h-[70vw] min-h-[260px] max-h-[420px] md:h-full cursor-pointer overflow-hidden bg-zinc-100`}
                     onClick={() => {
                         setSelectedIndex(displayIndexes[0] ?? 0)
@@ -307,7 +259,7 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
 
                 {/* Right Grid */}
                 {displayCount > 1 && (
-                    <div className={`hidden md:grid col-span-2 ${displayCount === 2 ? 'grid-cols-1' : 'grid-cols-2'
+                    <div className={`hidden md:grid md:col-span-2 ${displayCount === 2 ? 'grid-cols-1' : 'grid-cols-2'
                         } grid-rows-2 gap-2 h-full`}>
                         {displayImages.slice(1, 5).map((src, idx) => (
                             <div
@@ -330,8 +282,8 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
                                 />
                                 {/* "Show more" overlay on the last visible image if applicable */}
                                 {(idx === displayImages.length - 2 || (hasMore && idx === 3)) && (
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center pointer-events-none group-hover:bg-black/50 transition-colors">
-                                        <span className="text-white font-bold text-sm lg:text-base px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent flex items-center justify-center pointer-events-none transition-colors">
+                                        <span className="text-white font-bold text-sm lg:text-base px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl">
                                             {allImages.length > displayCount ? `+${allImages.length - displayCount + 1}` : 'Ver todas'}
                                         </span>
                                     </div>
@@ -341,15 +293,7 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
                     </div>
                 )}
 
-                {/* Mobile hint */}
-                {allImages.length > 1 && (
-                    <div className="md:hidden absolute bottom-3 left-3 z-10">
-                        <span className="bg-white/90 text-zinc-700 px-2.5 py-1 rounded-md text-[11px] font-bold border border-zinc-200">
-                            Desliza o toca para ampliar
-                        </span>
-                    </div>
-                )}
-
+                {/* Maximize button */}
                 <button
                     type="button"
                     className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur p-2 rounded-lg border border-zinc-200 shadow-sm"
