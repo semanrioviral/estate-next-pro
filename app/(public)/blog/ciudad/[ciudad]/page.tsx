@@ -38,7 +38,7 @@ export default async function BlogCityPage({ params }: BlogCityPageProps) {
                 <div className="max-w-7xl mx-auto px-4">
                     <Link
                         href="/blog"
-                        className="inline-flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-slate-400 mb-12 hover:text-[#fb2c36] transition-colors"
+                        className="inline-flex items-center gap-2 text-[12px] font-black uppercase tracking-widest text-slate-400 mb-12 hover:text-brand transition-colors"
                     >
                         <ArrowLeft className="w-3 h-3" />
                         Volver al Blog General
@@ -47,10 +47,10 @@ export default async function BlogCityPage({ params }: BlogCityPageProps) {
                     <div className="max-w-3xl">
                         <div className="flex items-center gap-4 mb-8">
                             <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center border border-slate-200">
-                                <MapPin className="w-6 h-6 text-[#fb2c36]" />
+                                <MapPin className="w-6 h-6 text-brand" />
                             </div>
                             <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter leading-[0.9]">
-                                Actualidad en <br /><span className="text-[#fb2c36]">{ciudadName}</span>
+                                Actualidad en <br /><span className="text-brand">{ciudadName}</span>
                             </h1>
                         </div>
                         <p className="text-xl text-slate-500 font-medium leading-relaxed">
@@ -90,7 +90,7 @@ export default async function BlogCityPage({ params }: BlogCityPageProps) {
             {/* Local Authority Badge */}
             <section className="pb-24">
                 <div className="max-w-7xl mx-auto px-4">
-                    <div className="p-12 bg-[#fb2c36] rounded-[4rem] text-white flex flex-col md:flex-row items-center gap-10">
+                    <div className="p-12 bg-brand rounded-[4rem] text-white flex flex-col md:flex-row items-center gap-10">
                         <div className="w-24 h-24 bg-white/10 rounded-[2.5rem] flex items-center justify-center backdrop-blur-xl">
                             <Building className="w-10 h-10 text-white" />
                         </div>
@@ -98,7 +98,7 @@ export default async function BlogCityPage({ params }: BlogCityPageProps) {
                             <h2 className="text-3xl font-black mb-2 tracking-tighter">¿Busca inmuebles en {ciudadName}?</h2>
                             <p className="text-white/80 font-medium">Explore nuestro inventario curado con las mejores fotos y asesoría legal incluida.</p>
                         </div>
-                        <Link href={`/venta/${ciudad}`} className="px-10 py-5 bg-white text-[#fb2c36] rounded-[2rem] font-black uppercase tracking-widest text-[12px] hover:scale-105 transition-all shadow-xl shadow-red-900/20">
+                        <Link href={`/venta/${ciudad}`} className="px-10 py-5 bg-white text-brand rounded-[2rem] font-black uppercase tracking-widest text-[12px] hover:scale-105 transition-all shadow-xl shadow-red-900/20">
                             Ver Portafolio Local
                         </Link>
                     </div>

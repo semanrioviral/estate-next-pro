@@ -86,7 +86,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
 
                 {/* 2.1 Price - Connected to Media */}
                 <div className="mb-2">
-                    <span className="text-[24px] font-black text-slate-900 tracking-tighter flex items-baseline gap-1 leading-none">
+                    <span className="text-[24px] font-bold text-slate-900 tracking-tighter flex items-baseline gap-1 leading-none">
                         {formattedPrice}
                         <span className="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">COP</span>
                     </span>

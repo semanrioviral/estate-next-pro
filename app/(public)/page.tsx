@@ -59,7 +59,7 @@ function StatsSection() {
             <Link key={i} href={nav.href} className="flex flex-col items-center text-center p-8 bg-white rounded-3xl border border-slate-100 shadow-sm transition-all hover:border-brand-600/20 hover:shadow-xl hover:-translate-y-2 group">
               <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-brand-600 shadow-sm mb-5 border border-slate-100 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500">{nav.icon}</div>
               <span className="text-xl font-black text-slate-900 mb-1 tracking-tight group-hover:text-brand-600 transition-colors uppercase">{nav.val}</span>
-              <span className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">{nav.label}</span>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">{nav.label}</span>
             </Link>
           ))}
         </div>
@@ -117,7 +117,7 @@ function CitiesSection() {
           {cities.map((city, cityIndex) => (
             <Link key={city.slug} href={`/${city.slug}`} className="group bg-white rounded-[2.5rem] overflow-hidden border border-slate-200 shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 flex flex-col">
               <div className="relative h-64 overflow-hidden">
-                <Image src={city.image} alt={`Propiedades en ${city.name} - ${city.count} inmuebles disponibles`} fill className="object-cover transition-transform duration-[2000ms] group-hover:scale-110" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px" priority={cityIndex === 0} unoptimized />
+                <Image src={city.image} alt={`Propiedades en ${city.name} - ${city.count} inmuebles disponibles`} fill className="object-cover transition-transform duration-700 group-hover:scale-110" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 400px" priority={cityIndex === 0} unoptimized />
                 <div className="absolute top-6 left-6 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/20 text-slate-900 text-[10px] font-black uppercase tracking-widest shadow-xl">{city.count}</div>
               </div>
               <div className="p-8 flex flex-col flex-grow">
