@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { handleQuickStatusUpdate } from "@/app/admin/actions";
-import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
 
 interface InlineStatusSelectProps {
     propertyId: string;
@@ -25,64 +25,114 @@ export default function InlineStatusSelect({ propertyId, currentStatus }: Inline
     const router = useRouter();
     const [feedback, setFeedback] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
     const [selectedStatus, setSelectedStatus] = useState(currentStatus || 'Disponible');
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const newStatus = e.target.value;
-        if (newStatus === currentStatus) return;
+    // Cerrar dropdown al hacer clic fuera
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
-        // Confirmación visual inmediata
+    const handleSelect = async (newStatus: string) => {
+        console.log('[InlineStatusSelect] handleSelect called:', { propertyId, newStatus, currentStatus });
+        if (newStatus === currentStatus) {
+            setIsOpen(false);
+            return;
+        }
+
         setSelectedStatus(newStatus);
         setFeedback('saving');
+        setIsOpen(false);
 
         try {
+            console.log('[InlineStatusSelect] Calling handleQuickStatusUpdate...');
             const result = await handleQuickStatusUpdate(propertyId, newStatus);
+            console.log('[InlineStatusSelect] Result:', result);
+
             if (result.success) {
+                console.log('[InlineStatusSelect] Success! Refreshing...');
                 setFeedback('success');
+                // Forzar refresh completo
                 router.refresh();
-                setTimeout(() => setFeedback('idle'), 2000);
+                // Recarga completa como fallback
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
             } else {
+                console.error('[InlineStatusSelect] Server action error:', result.error);
                 setFeedback('error');
                 setSelectedStatus(currentStatus); // revertir
-                setTimeout(() => setFeedback('idle'), 3000);
+                setTimeout(() => {
+                    setFeedback('idle');
+                }, 3000);
             }
-        } catch {
+        } catch (err) {
+            console.error('[InlineStatusSelect] Exception:', err);
             setFeedback('error');
             setSelectedStatus(currentStatus); // revertir
-            setTimeout(() => setFeedback('idle'), 3000);
+            setTimeout(() => {
+                setFeedback('idle');
+            }, 3000);
         }
     };
 
     return (
-        <div className="relative inline-flex items-center gap-1.5">
-            <select
-                value={selectedStatus}
-                onChange={handleChange}
+        <div className="relative inline-flex items-center" ref={dropdownRef}>
+            {/* Botón principal que muestra el estado actual */}
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                disabled={feedback === 'saving'}
                 className={`
-                    appearance-none cursor-pointer rounded-full px-3 py-1.5 pr-8 text-[9px] font-black uppercase tracking-wider border
+                    inline-flex items-center gap-1.5 cursor-pointer rounded-full px-3 py-1.5 pr-2 text-[9px] font-black uppercase tracking-wider border
                     transition-all outline-none
                     ${STATUS_COLORS[selectedStatus] || 'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'}
                     ${feedback === 'saving' ? 'opacity-60 cursor-wait' : 'hover:ring-2 hover:ring-red-300'}
                 `}
             >
-                {ALL_ESTADOS.map((estado) => (
-                    <option key={estado} value={estado}>{estado}</option>
-                ))}
-            </select>
+                <span>{selectedStatus}</span>
+                <ChevronDown size={10} className="opacity-50" />
 
-            {/* Feedback indicator */}
-            {feedback === 'saving' && (
-                <div className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm flex items-center justify-center">
+                {/* Feedback indicator */}
+                {feedback === 'saving' && (
                     <Loader2 size={10} className="animate-spin text-red-600" />
-                </div>
-            )}
-            {feedback === 'success' && (
-                <div className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm flex items-center justify-center">
+                )}
+                {feedback === 'success' && (
                     <CheckCircle2 size={10} className="text-emerald-500" />
-                </div>
-            )}
-            {feedback === 'error' && (
-                <div className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-white dark:bg-zinc-900 rounded-full shadow-sm flex items-center justify-center">
+                )}
+                {feedback === 'error' && (
                     <AlertCircle size={10} className="text-red-500" />
+                )}
+            </button>
+
+            {/* Dropdown menu */}
+            {isOpen && (
+                <div className="absolute top-full left-0 mt-1 z-50 min-w-[140px] bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-zinc-200 dark:border-zinc-700 py-1 overflow-hidden">
+                    {ALL_ESTADOS.map((estado) => {
+                        const isActive = estado === selectedStatus;
+                        return (
+                            <button
+                                key={estado}
+                                type="button"
+                                onClick={() => handleSelect(estado)}
+                                className={`
+                                    w-full text-left px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors
+                                    ${isActive
+                                        ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'
+                                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
+                                    }
+                                `}
+                            >
+                                {estado}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
         </div>

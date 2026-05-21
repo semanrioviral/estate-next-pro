@@ -61,9 +61,6 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
             const nameInput = agentNameInputRef.current;
             if (nameInput) {
                 nameInput.value = agentsMap[agentId].name;
-                // Disparar evento para que React/Flux registre el cambio
-                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
-                nameInput.dispatchEvent(new Event('change', { bubbles: true }));
             }
         }
     };
@@ -112,6 +109,14 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
         setLoading(true);
         const formData = new FormData(e.currentTarget);
+
+        // Auto-fill: si se seleccionó un agente pero el nombre público está vacío, completarlo
+        const agentId = formData.get('agente_id') as string;
+        const agentNameFromField = formData.get('agente_nombre_publico') as string;
+        if (agentId && agentsMap[agentId] && !agentNameFromField?.trim()) {
+            console.log('[PropertyForm] Auto-filling agent name:', agentsMap[agentId].name);
+            formData.set('agente_nombre_publico', agentsMap[agentId].name);
+        }
 
         const sanitizedServicios = selectedServicios.filter((service) => !/^parqueaderos?:\s*\d+/i.test(service));
         if (parkingSpots > 0) {
