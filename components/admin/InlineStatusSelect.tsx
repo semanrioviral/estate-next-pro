@@ -1,9 +1,17 @@
-"use client";
+/**
+ * InlineStatusSelect — Cambio rápido de estado mediante formulario HTML estándar.
+ * 
+ * Funciona SIN JavaScript del lado cliente:
+ * - El <form> con action={serverAction} se envía vía POST estándar
+ * - Si JS está disponible, Next.js intercepta y lo optimiza
+ * - Si JS NO está disponible (hidratación fallida), el navegador envía
+ *   el formulario como POST normal y la server action lo procesa
+ * 
+ * No usa: useState, useEffect, useRouter, ni eventos onClick/onChange.
+ * Es un componente servidor puro renderizado como HTML + formulario.
+ */
 
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { handleQuickStatusUpdate } from "@/app/admin/actions";
-import { Loader2, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
 
 interface InlineStatusSelectProps {
     propertyId: string;
@@ -22,119 +30,29 @@ const STATUS_COLORS: Record<string, string> = {
 const ALL_ESTADOS = ['Disponible', 'En Venta', 'Vendido', 'Destacado', 'Reservado', 'En Remate'];
 
 export default function InlineStatusSelect({ propertyId, currentStatus }: InlineStatusSelectProps) {
-    const router = useRouter();
-    const [feedback, setFeedback] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
-    const [selectedStatus, setSelectedStatus] = useState(currentStatus || 'Disponible');
-    const [isOpen, setIsOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    // Cerrar dropdown al hacer clic fuera
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
-
-    const handleSelect = async (newStatus: string) => {
-        console.log('[InlineStatusSelect] handleSelect called:', { propertyId, newStatus, currentStatus });
-        if (newStatus === currentStatus) {
-            setIsOpen(false);
-            return;
-        }
-
-        setSelectedStatus(newStatus);
-        setFeedback('saving');
-        setIsOpen(false);
-
-        try {
-            console.log('[InlineStatusSelect] Calling handleQuickStatusUpdate...');
-            const result = await handleQuickStatusUpdate(propertyId, newStatus);
-            console.log('[InlineStatusSelect] Result:', result);
-
-            if (result.success) {
-                console.log('[InlineStatusSelect] Success! Refreshing...');
-                setFeedback('success');
-                // Forzar refresh completo
-                router.refresh();
-                // Recarga completa como fallback
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1500);
-            } else {
-                console.error('[InlineStatusSelect] Server action error:', result.error);
-                setFeedback('error');
-                setSelectedStatus(currentStatus); // revertir
-                setTimeout(() => {
-                    setFeedback('idle');
-                }, 3000);
-            }
-        } catch (err) {
-            console.error('[InlineStatusSelect] Exception:', err);
-            setFeedback('error');
-            setSelectedStatus(currentStatus); // revertir
-            setTimeout(() => {
-                setFeedback('idle');
-            }, 3000);
-        }
-    };
-
     return (
-        <div className="relative inline-flex items-center" ref={dropdownRef}>
-            {/* Botón principal que muestra el estado actual */}
-            <button
-                type="button"
-                onClick={() => setIsOpen(!isOpen)}
-                disabled={feedback === 'saving'}
+        <form action={handleQuickStatusUpdate} className="inline-flex items-center gap-1">
+            <input type="hidden" name="propertyId" value={propertyId} />
+            <select
+                name="estado"
+                defaultValue={currentStatus}
                 className={`
-                    inline-flex items-center gap-1.5 cursor-pointer rounded-full px-3 py-1.5 pr-2 text-[9px] font-black uppercase tracking-wider border
+                    appearance-none cursor-pointer rounded-full px-3 py-1.5 text-[9px] font-black uppercase tracking-wider border
                     transition-all outline-none
-                    ${STATUS_COLORS[selectedStatus] || 'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'}
-                    ${feedback === 'saving' ? 'opacity-60 cursor-wait' : 'hover:ring-2 hover:ring-red-300'}
+                    ${STATUS_COLORS[currentStatus] || 'bg-zinc-100 text-zinc-600 border-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:border-zinc-700'}
                 `}
             >
-                <span>{selectedStatus}</span>
-                <ChevronDown size={10} className="opacity-50" />
-
-                {/* Feedback indicator */}
-                {feedback === 'saving' && (
-                    <Loader2 size={10} className="animate-spin text-red-600" />
-                )}
-                {feedback === 'success' && (
-                    <CheckCircle2 size={10} className="text-emerald-500" />
-                )}
-                {feedback === 'error' && (
-                    <AlertCircle size={10} className="text-red-500" />
-                )}
+                {ALL_ESTADOS.map((estado) => (
+                    <option key={estado} value={estado}>{estado}</option>
+                ))}
+            </select>
+            <button
+                type="submit"
+                className="rounded-full px-2 py-1.5 text-[8px] font-black uppercase tracking-wider bg-red-600 text-white border border-red-600 hover:bg-red-700 transition-colors"
+                title="Guardar cambio de estado"
+            >
+                ✓
             </button>
-
-            {/* Dropdown menu */}
-            {isOpen && (
-                <div className="absolute top-full left-0 mt-1 z-50 min-w-[140px] bg-white dark:bg-zinc-900 rounded-xl shadow-lg border border-zinc-200 dark:border-zinc-700 py-1 overflow-hidden">
-                    {ALL_ESTADOS.map((estado) => {
-                        const isActive = estado === selectedStatus;
-                        return (
-                            <button
-                                key={estado}
-                                type="button"
-                                onClick={() => handleSelect(estado)}
-                                className={`
-                                    w-full text-left px-3.5 py-2 text-[11px] font-bold uppercase tracking-wider transition-colors
-                                    ${isActive
-                                        ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'
-                                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/50'
-                                    }
-                                `}
-                            >
-                                {estado}
-                            </button>
-                        );
-                    })}
-                </div>
-            )}
-        </div>
+        </form>
     );
 }

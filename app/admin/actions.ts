@@ -547,16 +547,31 @@ export async function handleUpdateAgentProfile(agentId: string, fullName: string
  * Cambio rápido de estado — ONLY UPDATE estado, 0 riesgo.
  * NO toca imágenes, tags, ni ningún otro campo.
  */
-export async function handleQuickStatusUpdate(propertyId: string, estado: string) {
+export async function handleQuickStatusUpdate(formData: FormData) {
     try {
+        const propertyId = formData.get('propertyId') as string;
+        const estado = formData.get('estado') as string;
+
+        if (!propertyId || !estado) {
+            console.error('[ACTION] Faltan datos requeridos');
+            redirect('/admin/propiedades');
+            return;
+        }
+
         const VALID_ESTADOS = ['Disponible', 'En Venta', 'Vendido', 'Destacado', 'Reservado', 'En Remate'];
         if (!VALID_ESTADOS.includes(estado)) {
-            return { error: 'Estado no válido' };
+            console.error('[ACTION] Estado no válido:', estado);
+            redirect('/admin/propiedades');
+            return;
         }
 
         const supabase = await createClient();
         const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return { error: 'No autorizado' };
+        if (!user) {
+            console.error('[ACTION] No autorizado');
+            redirect('/admin/propiedades');
+            return;
+        }
 
         const { error } = await supabase
             .from('properties')
@@ -565,17 +580,19 @@ export async function handleQuickStatusUpdate(propertyId: string, estado: string
 
         if (error) {
             console.error('[ACTION] Error en handleQuickStatusUpdate:', error.message);
-            return { error: error.message };
+            redirect('/admin/propiedades');
+            return;
         }
 
+        console.log('[ACTION] Estado actualizado con éxito:', { propertyId, estado });
         revalidatePath('/admin/propiedades');
         revalidatePath('/admin');
         revalidatePath('/');
         // @ts-ignore - Build fix for revalidateTag signature
         revalidateTag('properties');
-        return { success: true };
+        redirect('/admin/propiedades');
     } catch (err: any) {
         console.error('[ACTION] Excepción en handleQuickStatusUpdate:', err.message);
-        return { error: err.message || 'Error inesperado al actualizar estado.' };
+        redirect('/admin/propiedades');
     }
 }
