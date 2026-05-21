@@ -43,9 +43,22 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
         const meta_descripcion = formData.get('meta_descripcion') as string;
         const canonical = formData.get('canonical') as string;
 
-        // Arrays (from comma separated or multiple inputs if needed, here we assume simple string for simplicity or multiple)
+        // Arrays
         const servicios = formData.get('servicios')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
         const etiquetas = formData.get('etiquetas')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
+
+        // New schema fields
+        const parqueaderos = Number(formData.get('parqueaderos')) || 0;
+        const latitud = formData.get('latitud') ? Number(formData.get('latitud')) : null;
+        const longitud = formData.get('longitud') ? Number(formData.get('longitud')) : null;
+        const año_construccion = formData.get('año_construccion') ? Number(formData.get('año_construccion')) : null;
+        const antigüedad = formData.get('antigüedad') as string || null;
+        const estrato = formData.get('estrato') ? Number(formData.get('estrato')) : null;
+        const canon_administracion = formData.get('canon_administracion') ? Number(formData.get('canon_administracion')) : null;
+        const codigo_postal = formData.get('codigo_postal') as string || null;
+        const moneda = formData.get('moneda') as string || 'COP';
+        const video_url = formData.get('video_url') as string || null;
+        const fecha_disponible = formData.get('fecha_disponible') as string || null;
 
         if (!titulo || isNaN(precio)) {
             return { error: 'Título y precio son requeridos.' };
@@ -97,6 +110,17 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
             agente_id,
             agente_nombre_publico: resolvedAgentName,
             agente_foto_url: resolvedAgentPhoto,
+            parqueaderos,
+            latitud,
+            longitud,
+            año_construccion,
+            antigüedad,
+            estrato,
+            canon_administracion,
+            codigo_postal,
+            moneda,
+            video_url,
+            fecha_disponible,
             destacado,
             slug,
             meta_titulo,
@@ -188,6 +212,19 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
         const servicios = formData.get('servicios')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
         const etiquetas = formData.get('etiquetas')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
 
+        // New schema fields
+        const parqueaderos = Number(formData.get('parqueaderos')) || 0;
+        const latitud = formData.get('latitud') ? Number(formData.get('latitud')) : null;
+        const longitud = formData.get('longitud') ? Number(formData.get('longitud')) : null;
+        const año_construccion = formData.get('año_construccion') ? Number(formData.get('año_construccion')) : null;
+        const antigüedad = formData.get('antigüedad') as string || null;
+        const estrato = formData.get('estrato') ? Number(formData.get('estrato')) : null;
+        const canon_administracion = formData.get('canon_administracion') ? Number(formData.get('canon_administracion')) : null;
+        const codigo_postal = formData.get('codigo_postal') as string || null;
+        const moneda = formData.get('moneda') as string || 'COP';
+        const video_url = formData.get('video_url') as string || null;
+        const fecha_disponible = formData.get('fecha_disponible') as string || null;
+
         if (!titulo || isNaN(precio)) {
             return { error: 'Título y precio son requeridos.' };
         }
@@ -240,6 +277,17 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
             agente_id,
             agente_nombre_publico: resolvedAgentName,
             agente_foto_url: resolvedAgentPhoto,
+            parqueaderos,
+            latitud,
+            longitud,
+            año_construccion,
+            antigüedad,
+            estrato,
+            canon_administracion,
+            codigo_postal,
+            moneda,
+            video_url,
+            fecha_disponible,
             destacado,
             slug,
             meta_titulo,

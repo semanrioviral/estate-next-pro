@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { updatePropertyGallery } from "@/app/admin/actions";
 import ImageUploader from "@/components/admin/ImageUploader";
 import { GalleryImage } from "@/lib/supabase/properties";
-import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield, Tags, Globe } from "lucide-react";
+import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield, Tags, Globe, Video, Calendar, DollarSign, Map } from "lucide-react";
 import Link from "next/link";
 import { Property } from "@/lib/supabase/properties";
 import MultiSelectCheckbox from "@/components/admin/MultiSelectCheckbox";
@@ -67,15 +67,8 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
     };
 
     // State for servicios and etiquetas
-    const [selectedServicios, setSelectedServicios] = useState<string[]>(
-        (initialData?.servicios || []).filter((service) => !/^parqueaderos?:\s*\d+/i.test(service))
-    );
+    const [selectedServicios, setSelectedServicios] = useState<string[]>(initialData?.servicios || []);
     const [selectedEtiquetas, setSelectedEtiquetas] = useState<string[]>(initialData?.etiquetas || []);
-    const [parkingSpots, setParkingSpots] = useState<number>(() => {
-        const parkingMeta = (initialData?.servicios || []).find((service) => /^parqueaderos?:\s*\d+/i.test(service));
-        const parkingMatch = parkingMeta?.match(/\d+/);
-        return parkingMatch ? Number(parkingMatch[0]) : 0;
-    });
 
     const handleSaveGallery = async () => {
         if (!initialData?.id) return;
@@ -119,13 +112,8 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
             formData.set('agente_nombre_publico', agentsMap[agentId].name);
         }
 
-        const sanitizedServicios = selectedServicios.filter((service) => !/^parqueaderos?:\s*\d+/i.test(service));
-        if (parkingSpots > 0) {
-            sanitizedServicios.push(`Parqueaderos: ${parkingSpots}`);
-        }
-
         // Append selectedServicios and selectedEtiquetas as comma-separated strings
-        formData.set('servicios', sanitizedServicios.join(', '));
+        formData.set('servicios', selectedServicios.join(', '));
         formData.set('etiquetas', selectedEtiquetas.join(', '));
 
         try {
@@ -212,17 +200,27 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             </label>
 
                             <label className="block">
-                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Precio (COP) *</span>
-                                <div className="relative">
-                                    <span className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-zinc-400">$</span>
-                                    <input
-                                        name="precio"
-                                        type="number"
-                                        required
-                                        defaultValue={initialData?.precio}
-                                        className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl pl-12 pr-8 py-5 outline-none font-black text-xl transition-all shadow-inner"
-                                        placeholder="0"
-                                    />
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Precio *</span>
+                                <div className="relative flex gap-3">
+                                    <div className="relative flex-1">
+                                        <span className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-zinc-400">$</span>
+                                        <input
+                                            name="precio"
+                                            type="number"
+                                            required
+                                            defaultValue={initialData?.precio}
+                                            className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl pl-12 pr-8 py-5 outline-none font-black text-xl transition-all shadow-inner"
+                                            placeholder="0"
+                                        />
+                                    </div>
+                                    <select
+                                        name="moneda"
+                                        defaultValue={initialData?.moneda || 'COP'}
+                                        className="w-28 bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-4 py-5 outline-none font-black text-center appearance-none shadow-inner"
+                                    >
+                                        <option value="COP">COP</option>
+                                        <option value="USD">USD</option>
+                                    </select>
                                 </div>
                                 <div className="mt-3 flex items-center gap-3">
                                     <input name="negociable" type="checkbox" value="true" defaultChecked={initialData?.negociable} className="w-5 h-5 rounded-lg accent-red-600 cursor-pointer" />
@@ -352,6 +350,40 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                                     placeholder="Ej: Villa Betania"
                                 />
                             </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Código Postal</span>
+                                <input
+                                    name="codigo_postal"
+                                    defaultValue={initialData?.codigo_postal || ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
+                                    placeholder="Ej: 540001"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Latitud</span>
+                                <input
+                                    name="latitud"
+                                    type="number"
+                                    step="any"
+                                    defaultValue={initialData?.latitud ?? ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
+                                    placeholder="Ej: 7.8375"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Longitud</span>
+                                <input
+                                    name="longitud"
+                                    type="number"
+                                    step="any"
+                                    defaultValue={initialData?.longitud ?? ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
+                                    placeholder="Ej: -72.5062"
+                                />
+                            </label>
                         </div>
                     </section>
 
@@ -376,10 +408,10 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <label className="block">
                                 <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Parqueaderos</span>
                                 <input
+                                    name="parqueaderos"
                                     type="number"
                                     min={0}
-                                    value={parkingSpots}
-                                    onChange={(e) => setParkingSpots(Math.max(0, Number(e.target.value) || 0))}
+                                    defaultValue={initialData?.parqueaderos || 0}
                                     className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner"
                                 />
                             </label>
@@ -390,6 +422,47 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <label className="block">
                                 <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Medidas Lote</span>
                                 <input name="medidas_lote" defaultValue={initialData?.medidas_lote} placeholder="Ej: 7x15m" className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner" />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Año Construcción</span>
+                                <input name="año_construccion" type="number" min={1900} max={2099} defaultValue={initialData?.año_construccion ?? ''} placeholder="Ej: 2024" className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner" />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Antigüedad</span>
+                                <select
+                                    name="antigüedad"
+                                    defaultValue={initialData?.antigüedad || ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center appearance-none shadow-inner"
+                                >
+                                    <option value="">Seleccionar...</option>
+                                    <option value="Nuevo">Nuevo</option>
+                                    <option value="Usado">Usado</option>
+                                    <option value="En construcción">En construcción</option>
+                                </select>
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Estrato</span>
+                                <select
+                                    name="estrato"
+                                    defaultValue={initialData?.estrato ?? ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center appearance-none shadow-inner"
+                                >
+                                    <option value="">N/A</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Canon Administración</span>
+                                <input name="canon_administracion" type="number" min={0} defaultValue={initialData?.canon_administracion ?? ''} placeholder="$ 0" className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-black text-center shadow-inner" />
                             </label>
                         </div>
 
@@ -510,7 +583,39 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         </div>
                     </section>
 
-                    {/* 6. SEO */}
+                    {/* 6. MULTIMEDIA */}
+                    <section className="bg-white dark:bg-zinc-900/50 p-10 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 shadow-xl space-y-8">
+                        <div className="flex items-center gap-4 text-red-600 border-b border-zinc-50 dark:border-zinc-800/50 pb-6">
+                            <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
+                                <Video size={24} />
+                            </div>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Multimedia Extra</h2>
+                        </div>
+
+                        <div className="space-y-6">
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Video Tour (URL)</span>
+                                <input
+                                    name="video_url"
+                                    defaultValue={initialData?.video_url || ''}
+                                    placeholder="https://youtube.com/watch?v=..."
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium text-sm shadow-inner"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Fecha Disponible</span>
+                                <input
+                                    name="fecha_disponible"
+                                    type="date"
+                                    defaultValue={initialData?.fecha_disponible ? initialData.fecha_disponible.split('T')[0] : ''}
+                                    className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium text-sm shadow-inner"
+                                />
+                            </label>
+                        </div>
+                    </section>
+
+                    {/* 7. SEO */}
                     <section className="bg-white dark:bg-zinc-900/50 p-10 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 shadow-xl space-y-8">
                         <div className="flex items-center gap-4 text-red-600 border-b border-zinc-50 dark:border-zinc-800/50 pb-6">
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
