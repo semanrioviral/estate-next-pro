@@ -64,9 +64,13 @@ export default function VolverResultados({
     return (
         <Link
             href={href}
-            className="inline-flex items-center gap-1.5 text-[12px] font-bold text-slate-600 hover:text-brand transition-colors"
+            className="inline-flex items-center gap-2 text-[14px] font-bold text-slate-700
+                       bg-white/90 backdrop-blur-sm rounded-xl px-4 py-2.5
+                       shadow-xs border border-slate-200/60
+                       hover:text-brand hover:border-brand/30 hover:shadow-sm
+                       transition-all duration-200"
         >
-            <ArrowLeft className="w-4 h-4" />
+            <ArrowLeft className="w-5 h-5 shrink-0" />
             {label}
         </Link>
     );

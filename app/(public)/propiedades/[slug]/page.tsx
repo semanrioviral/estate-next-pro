@@ -191,40 +191,40 @@ Referencia: ${propertyUrl}
             />
 
             {/* Breadcrumb - Institutional Style (visible all breakpoints) */}
-            <div className="bg-gray-50 border-b border-gray-100 py-2 md:py-3">
+            <div className="bg-gray-50 border-b border-gray-200 py-2 md:py-3">
                 <div className="max-w-7xl mx-auto px-3 md:px-4 lg:px-8">
-                    {/* Mobile: simplified "← Volver" (contextual or generic fallback) */}
-                    <div className="flex md:hidden items-center justify-between">
+                    {/* Mobile: simplified nav with Volver + prev/next icons */}
+                    <div className="flex md:hidden items-center justify-between min-h-[44px]">
                         <VolverResultados
                             mobileFallbackHref={`/${property.operacion}`}
                             mobileFallbackLabel={`Volver a ${operationText}`}
                         />
                         {/* Prev / Next Mobile inline */}
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                             {prevSlug ? (
                                 <Link
                                     href={`/propiedades/${prevSlug}`}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-slate-100 transition-all"
+                                    className="p-2 rounded-xl text-slate-500 hover:text-brand hover:bg-slate-100/80 transition-all"
                                     aria-label="Propiedad anterior"
                                 >
-                                    <ChevronLeft className="w-4 h-4" />
+                                    <ChevronLeft className="w-5 h-5" />
                                 </Link>
                             ) : (
-                                <span className="p-1.5 rounded-lg text-slate-200 cursor-not-allowed">
-                                    <ChevronLeft className="w-4 h-4" />
+                                <span className="p-2 rounded-xl text-slate-200 cursor-not-allowed">
+                                    <ChevronLeft className="w-5 h-5" />
                                 </span>
                             )}
                             {nextSlug ? (
                                 <Link
                                     href={`/propiedades/${nextSlug}`}
-                                    className="p-1.5 rounded-lg text-slate-400 hover:text-brand hover:bg-slate-100 transition-all"
+                                    className="p-2 rounded-xl text-slate-500 hover:text-brand hover:bg-slate-100/80 transition-all"
                                     aria-label="Propiedad siguiente"
                                 >
-                                    <ChevronRight className="w-4 h-4" />
+                                    <ChevronRight className="w-5 h-5" />
                                 </Link>
                             ) : (
-                                <span className="p-1.5 rounded-lg text-slate-200 cursor-not-allowed">
-                                    <ChevronRight className="w-4 h-4" />
+                                <span className="p-2 rounded-xl text-slate-200 cursor-not-allowed">
+                                    <ChevronRight className="w-5 h-5" />
                                 </span>
                             )}
                         </div>
@@ -514,41 +514,44 @@ Referencia: ${propertyUrl}
                 </div>
             </div>
 
-            {/* --- PREV / NEXT NAVIGATION (Desktop) --- */}
+            {/* --- PREV / NEXT NAVIGATION (Desktop + Mobile) --- */}
             <div className="max-w-7xl mx-auto px-3 md:px-4 lg:px-8 mt-8 md:mt-12">
-                <div className="hidden md:flex items-center justify-between border-t border-b border-slate-100 py-4">
-                    <div className="flex-1">
+                <div className="flex items-center justify-between border-t border-b border-slate-200 py-4 md:py-6">
+                    {/* Anterior */}
+                    <div className="flex-1 min-w-0">
                         {prevSlug ? (
                             <Link
                                 href={`/propiedades/${prevSlug}`}
-                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand transition-colors group"
+                                className="inline-flex items-center gap-2 md:gap-2.5 text-sm font-semibold text-slate-700 hover:text-brand transition-colors group"
                             >
-                                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-                                <span>Anterior</span>
+                                <ChevronLeft className="w-5 h-5 shrink-0 group-hover:-translate-x-1 transition-transform" />
+                                <span className="truncate">Anterior</span>
                             </Link>
                         ) : (
-                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
-                                <ChevronLeft className="w-5 h-5" />
+                            <span className="inline-flex items-center gap-2 md:gap-2.5 text-sm font-semibold text-slate-300 cursor-not-allowed">
+                                <ChevronLeft className="w-5 h-5 shrink-0" />
                                 <span>Anterior</span>
                             </span>
                         )}
                     </div>
-                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                    {/* Label — hidden on mobile, visible md+ */}
+                    <div className="hidden md:block text-[12px] font-bold text-slate-500 uppercase tracking-widest px-4 select-none">
                         Navegar propiedades
                     </div>
-                    <div className="flex-1 flex justify-end">
+                    {/* Siguiente */}
+                    <div className="flex-1 flex justify-end min-w-0">
                         {nextSlug ? (
                             <Link
                                 href={`/propiedades/${nextSlug}`}
-                                className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-brand transition-colors group"
+                                className="inline-flex items-center gap-2 md:gap-2.5 text-sm font-semibold text-slate-700 hover:text-brand transition-colors group"
                             >
-                                <span>Siguiente</span>
-                                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                <span className="truncate">Siguiente</span>
+                                <ChevronRight className="w-5 h-5 shrink-0 group-hover:translate-x-1 transition-transform" />
                             </Link>
                         ) : (
-                            <span className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 cursor-not-allowed">
+                            <span className="inline-flex items-center gap-2 md:gap-2.5 text-sm font-semibold text-slate-300 cursor-not-allowed">
                                 <span>Siguiente</span>
-                                <ChevronRight className="w-5 h-5" />
+                                <ChevronRight className="w-5 h-5 shrink-0" />
                             </span>
                         )}
                     </div>
