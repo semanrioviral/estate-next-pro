@@ -264,6 +264,8 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
 
         console.log('[ACTION] Propiedad actualizada con éxito');
         revalidatePath('/admin/propiedades');
+        revalidatePath('/admin');
+        revalidatePath('/');
         revalidatePath(`/propiedades/${slug}`);
         // @ts-ignore - Build fix
         revalidateTag('properties'); // Invalidate cache for listings
@@ -538,5 +540,42 @@ export async function handleUpdateAgentProfile(agentId: string, fullName: string
         return { success: true };
     } catch (err: any) {
         return { error: err.message || 'Error inesperado al actualizar el perfil del agente.' };
+    }
+}
+
+/**
+ * Cambio rápido de estado — ONLY UPDATE estado, 0 riesgo.
+ * NO toca imágenes, tags, ni ningún otro campo.
+ */
+export async function handleQuickStatusUpdate(propertyId: string, estado: string) {
+    try {
+        const VALID_ESTADOS = ['Disponible', 'En Venta', 'Vendido', 'Destacado', 'Reservado', 'En Remate'];
+        if (!VALID_ESTADOS.includes(estado)) {
+            return { error: 'Estado no válido' };
+        }
+
+        const supabase = await createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return { error: 'No autorizado' };
+
+        const { error } = await supabase
+            .from('properties')
+            .update({ estado })
+            .eq('id', propertyId);
+
+        if (error) {
+            console.error('[ACTION] Error en handleQuickStatusUpdate:', error.message);
+            return { error: error.message };
+        }
+
+        revalidatePath('/admin/propiedades');
+        revalidatePath('/admin');
+        revalidatePath('/');
+        // @ts-ignore - Build fix for revalidateTag signature
+        revalidateTag('properties');
+        return { success: true };
+    } catch (err: any) {
+        console.error('[ACTION] Excepción en handleQuickStatusUpdate:', err.message);
+        return { error: err.message || 'Error inesperado al actualizar estado.' };
     }
 }

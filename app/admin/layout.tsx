@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase-server'
-import { LayoutDashboard, Home, Send, Users, LogOut, Menu } from 'lucide-react'
+import { LayoutDashboard, Home, Users, LogOut, PhoneCall } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from './actions'
 
@@ -43,9 +43,9 @@ export default async function AdminLayout({
                             <Home size={20} />
                             <span>Propiedades</span>
                         </Link>
-                        <Link href="/admin/solicitudes" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 hover:text-red-600 transition-colors font-semibold">
-                            <Send size={20} />
-                            <span>Solicitudes</span>
+                        <Link href="/admin/leads" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 hover:text-red-600 transition-colors font-semibold">
+                            <PhoneCall size={20} />
+                            <span>Leads / Consultas</span>
                         </Link>
                         <Link href="/admin/equipo" className="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 hover:bg-slate-50 hover:text-red-600 transition-colors font-semibold">
                             <Users size={20} />
@@ -65,28 +65,28 @@ export default async function AdminLayout({
 
                 <div className="flex-1 min-w-0">
                     <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-slate-200">
-                        <div className="px-4 py-3 flex items-center justify-between">
-                            <div>
-                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Admin</p>
-                                <p className="text-lg font-black text-red-600">Tucasa</p>
-                            </div>
-                            <div className="h-9 w-9 rounded-lg border border-slate-200 bg-slate-50 flex items-center justify-center text-slate-500">
-                                <Menu size={18} />
-                            </div>
+                        <div className="px-4 py-3">
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Panel Admin</p>
+                            <p className="text-lg font-black text-red-600">Inmobiliaria Tucasa</p>
                         </div>
-                        <nav className="px-3 pb-3 flex gap-2 overflow-x-auto">
-                            <Link href="/admin" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold">
+                        <nav className="px-3 pb-3 flex gap-2 overflow-x-auto scrollbar-none">
+                            <Link href="/admin" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold hover:bg-red-50 hover:text-red-600 transition-colors">
                                 <LayoutDashboard size={14} /> Dashboard
                             </Link>
-                            <Link href="/admin/propiedades" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold">
+                            <Link href="/admin/propiedades" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold hover:bg-red-50 hover:text-red-600 transition-colors">
                                 <Home size={14} /> Propiedades
                             </Link>
-                            <Link href="/admin/solicitudes" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold">
-                                <Send size={14} /> Solicitudes
+                            <Link href="/admin/leads" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold hover:bg-red-50 hover:text-red-600 transition-colors">
+                                <PhoneCall size={14} /> Leads
                             </Link>
-                            <Link href="/admin/equipo" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold">
+                            <Link href="/admin/equipo" className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-slate-50 text-slate-700 text-xs font-bold hover:bg-red-50 hover:text-red-600 transition-colors">
                                 <Users size={14} /> Equipo
                             </Link>
+                            <form action={logout} className="ml-auto">
+                                <button className="whitespace-nowrap inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 text-red-600 text-xs font-bold hover:bg-red-100 transition-colors">
+                                    <LogOut size={14} /> Salir
+                                </button>
+                            </form>
                         </nav>
                     </header>
 

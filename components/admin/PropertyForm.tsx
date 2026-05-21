@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { updatePropertyGallery } from "@/app/admin/actions";
 import ImageUploader from "@/components/admin/ImageUploader";
@@ -45,6 +45,28 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [isSavingGallery, setIsSavingGallery] = useState(false);
+
+    // Ref para auto-completar nombre del asesor al seleccionar agente
+    const agentNameInputRef = useRef<HTMLInputElement>(null);
+    const agentPhotoInputRef = useRef<HTMLInputElement>(null);
+    const agentsMap = useMemo(() => {
+        const map: Record<string, { name: string }> = {};
+        agents.forEach((a) => { map[a.id] = { name: a.full_name }; });
+        return map;
+    }, [agents]);
+
+    const handleAgentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const agentId = e.target.value;
+        if (agentId && agentsMap[agentId]) {
+            const nameInput = agentNameInputRef.current;
+            if (nameInput) {
+                nameInput.value = agentsMap[agentId].name;
+                // Disparar evento para que React/Flux registre el cambio
+                nameInput.dispatchEvent(new Event('input', { bubbles: true }));
+                nameInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+    };
 
     // State for servicios and etiquetas
     const [selectedServicios, setSelectedServicios] = useState<string[]>(
@@ -380,6 +402,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <select
                                 name="agente_id"
                                 defaultValue={initialData?.agente_id || ''}
+                                onChange={handleAgentChange}
                                 className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold text-zinc-700 dark:text-zinc-200 appearance-none shadow-inner"
                             >
                                 <option value="">Sin agente asignado</option>
@@ -393,6 +416,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         <label className="block">
                             <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Nombre público del asesor</span>
                             <input
+                                ref={agentNameInputRef}
                                 name="agente_nombre_publico"
                                 defaultValue={initialData?.agente_nombre_publico || ''}
                                 placeholder="Ej: Laura Mendoza"
@@ -403,6 +427,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         <label className="md:col-span-2 block">
                             <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Foto del asesor (URL)</span>
                             <input
+                                ref={agentPhotoInputRef}
                                 name="agente_foto_url"
                                 defaultValue={initialData?.agente_foto_url || ''}
                                 placeholder="https://..."

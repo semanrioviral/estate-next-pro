@@ -175,7 +175,7 @@ function applyOrder(query: any, orden?: string) {
     }
 }
 
-export async function getProperties(orden?: string, page: number = 1, pageSize: number = 12): Promise<PaginatedProperties> {
+export async function getProperties(orden?: string, page: number = 1, pageSize: number = 12, searchTerm?: string, estadoFilter?: string): Promise<PaginatedProperties> {
     try {
         const supabase = createPublicClient();
         const from = (page - 1) * pageSize;
@@ -184,6 +184,17 @@ export async function getProperties(orden?: string, page: number = 1, pageSize: 
         let query = supabase
             .from('properties')
             .select(PROPERTY_SELECT_FIELDS, { count: 'exact' });
+
+        // Búsqueda por texto (título, barrio, ciudad) — solo lectura, 0 riesgo
+        if (searchTerm && searchTerm.trim()) {
+            const term = `%${searchTerm.trim()}%`;
+            query = query.or(`titulo.ilike.${term},barrio.ilike.${term},ciudad.ilike.${term}`);
+        }
+
+        // Filtro por estado — solo lectura, 0 riesgo
+        if (estadoFilter && estadoFilter.trim()) {
+            query = query.eq('estado', estadoFilter.trim());
+        }
 
         query = applyOrder(query, orden);
         query = query.range(from, to);

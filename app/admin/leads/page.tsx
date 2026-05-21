@@ -49,7 +49,7 @@ export default function AdminLeadsPage() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h1 className="text-4xl font-black tracking-tight text-zinc-900 dark:text-zinc-50 uppercase leading-none mb-3">
-                        Gestión de <span className="text-[#fb2c36]">Leads</span>
+                        Gestión de <span className="text-red-600">Leads</span>
                     </h1>
                     <p className="text-zinc-500 dark:text-zinc-400 font-medium">Administra las consultas de tus clientes potenciales.</p>
                 </div>
@@ -64,20 +64,20 @@ export default function AdminLeadsPage() {
 
             {loading ? (
                 <div className="flex flex-col items-center justify-center py-32 space-y-4">
-                    <div className="w-12 h-12 border-4 border-[#fb2c36]/20 border-t-[#fb2c36] rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-red-600/20 border-t-red-600 rounded-full animate-spin"></div>
                     <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Cargando consultas...</p>
                 </div>
             ) : leads.length > 0 ? (
                 <div className="grid grid-cols-1 gap-6">
                     {leads.map((lead) => (
-                        <div key={lead.id} className="group glass rounded-[2rem] border border-zinc-100 dark:border-zinc-800 p-6 transition-all hover:shadow-2xl hover:shadow-[#fb2c36]/5 hover:-translate-y-1">
+                        <div key={lead.id} className="group glass rounded-[2rem] border border-zinc-100 dark:border-zinc-800 p-6 transition-all hover:shadow-2xl hover:shadow-red-600/5 hover:-translate-y-1">
                             <div className="flex flex-col lg:flex-row gap-8">
                                 {/* Informacion del Lead */}
                                 <div className="flex-1 space-y-6">
                                     <div className="flex items-start justify-between">
                                         <div className="flex items-center gap-4">
-                                            <div className="w-12 h-12 rounded-2xl bg-[#fb2c36]/10 flex items-center justify-center">
-                                                <User className="w-6 h-6 text-[#fb2c36]" />
+                                            <div className="w-12 h-12 rounded-2xl bg-red-600/10 flex items-center justify-center">
+                                                <User className="w-6 h-6 text-red-600" />
                                             </div>
                                             <div>
                                                 <h3 className="text-lg font-black text-zinc-900 dark:text-zinc-50">{lead.nombre}</h3>
@@ -101,7 +101,7 @@ export default function AdminLeadsPage() {
                                                 <Link
                                                     href={`/propiedades/${lead.properties?.slug}`}
                                                     target="_blank"
-                                                    className="font-bold text-[#fb2c36] hover:underline truncate max-w-[200px]"
+                                                    className="font-bold text-red-600 hover:underline truncate max-w-[200px]"
                                                 >
                                                     {lead.properties?.titulo}
                                                 </Link>
@@ -131,7 +131,7 @@ export default function AdminLeadsPage() {
                                                     disabled={updatingId === lead.id || lead.estado === s}
                                                     onClick={() => handleStatusChange(lead.id, s)}
                                                     className={`px-4 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${lead.estado === s
-                                                            ? 'bg-[#fb2c36] text-white shadow-lg shadow-[#fb2c36]/20'
+                                                            ? 'bg-red-600 text-white shadow-lg shadow-red-600/20'
                                                             : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 hover:bg-zinc-200 dark:hover:bg-zinc-700'
                                                         } disabled:opacity-50`}
                                                 >

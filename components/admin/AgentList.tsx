@@ -115,8 +115,8 @@ export default function AgentList({ initialAgents }: AgentListProps) {
             {/* Header / Top Bar */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Equipo de Agentes</h1>
-                    <p className="text-gray-500 text-sm mt-1">Gestiona los accesos y perfiles de tus colaboradores.</p>
+                    <h1 className="text-3xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight uppercase">Equipo de <span className="text-red-600">Agentes</span></h1>
+                    <p className="text-zinc-500 text-sm mt-1">Gestiona los accesos y perfiles de tus colaboradores.</p>
                 </div>
                 <button
                     onClick={() => setIsModalOpen(true)}
@@ -128,23 +128,23 @@ export default function AgentList({ initialAgents }: AgentListProps) {
             </div>
 
             {/* Stats Summary */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white dark:bg-zinc-900/50 p-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-red-50 rounded-xl flex items-center justify-center text-red-600">
                         <UsersIcon size={24} />
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Total Usuarios</p>
-                        <p className="text-2xl font-bold text-gray-900">{agents.length}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Total Usuarios</p>
+                        <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{agents.length}</p>
                     </div>
                 </div>
-                <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+                <div className="bg-white dark:bg-zinc-900/50 p-5 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-sm flex items-center gap-4">
                     <div className="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
                         <RefreshCw size={24} />
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 font-medium uppercase tracking-wider">Pendientes</p>
-                        <p className="text-2xl font-bold text-gray-900">{agents.filter(a => a.is_pending).length}</p>
+                        <p className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Pendientes</p>
+                        <p className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{agents.filter(a => a.is_pending).length}</p>
                     </div>
                 </div>
             </div>
@@ -152,48 +152,48 @@ export default function AgentList({ initialAgents }: AgentListProps) {
             {/* Search and Filters */}
             <div className="flex flex-col md:flex-row gap-4">
                 <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" size={18} />
                     <input
                         type="text"
                         placeholder="Buscar por nombre o correo..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all shadow-sm"
+                        className="w-full pl-10 pr-4 py-2.5 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all shadow-sm"
                     />
                 </div>
             </div>
 
             {/* List Table */}
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-xl overflow-hidden">
+            <div className="bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-xl overflow-hidden">
                 {filteredAgents.length > 0 ? (
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead>
-                                <tr className="bg-gray-50/50 text-left border-b border-gray-100">
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Agente</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Rol / Estado</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Registrado</th>
-                                    <th className="px-6 py-4 text-xs font-bold text-gray-500 uppercase tracking-widest text-right">Acciones</th>
+                                <tr className="bg-zinc-50/50 dark:bg-zinc-900/50 text-left border-b border-zinc-100 dark:border-zinc-800">
+                                    <th className="px-6 py-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Agente</th>
+                                    <th className="px-6 py-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Rol / Estado</th>
+                                    <th className="px-6 py-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest">Registrado</th>
+                                    <th className="px-6 py-4 text-[10px] font-black text-zinc-400 uppercase tracking-widest text-right">Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-50">
+                            <tbody className="divide-y divide-zinc-50 dark:divide-zinc-900">
                                 {filteredAgents.map((agent) => (
-                                    <tr key={agent.id} className="hover:bg-gray-50/50 transition-colors group">
+                                    <tr key={agent.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-colors group">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 {agent.avatar_url ? (
-                                                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white shadow-sm bg-gray-100">
+                                                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white dark:border-zinc-900 shadow-sm bg-zinc-100 dark:bg-zinc-800">
                                                         <img src={agent.avatar_url} alt={agent.full_name} className="w-full h-full object-cover" />
                                                     </div>
                                                 ) : (
-                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border border-white shadow-sm ${agent.is_pending ? 'bg-amber-100 text-amber-600' : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-500'
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold border border-white dark:border-zinc-900 shadow-sm ${agent.is_pending ? 'bg-amber-100 text-amber-600' : 'bg-gradient-to-br from-zinc-100 to-zinc-200 text-zinc-500'
                                                         }`}>
                                                         {agent.full_name?.charAt(0) || <User size={18} />}
                                                     </div>
                                                 )}
                                                 <div>
-                                                    <p className="font-bold text-gray-900 leading-tight">{agent.full_name}</p>
-                                                    <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+                                                    <p className="font-bold text-zinc-900 dark:text-zinc-50 leading-tight">{agent.full_name}</p>
+                                                    <p className="text-xs text-zinc-500 mt-0.5 flex items-center gap-1">
                                                         <Mail size={10} />
                                                         {agent.email}
                                                     </p>
@@ -203,27 +203,27 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                                         <td className="px-6 py-4">
                                             <div className="flex flex-col gap-1.5 items-start">
                                                 <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold border uppercase tracking-wider ${agent.role === 'admin'
-                                                        ? 'bg-red-50 text-red-700 border-red-100'
-                                                        : 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                                                        ? 'bg-red-50 text-red-700 border-red-100 dark:bg-red-900/30 dark:text-red-400 dark:border-red-800'
+                                                        : 'bg-emerald-50 text-emerald-700 border-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400 dark:border-emerald-800'
                                                     }`}>
                                                     <Shield size={10} />
                                                     {agent.role === 'admin' ? 'Administrador' : 'Agente'}
                                                 </span>
                                                 {agent.is_pending && (
-                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[10px] font-bold border border-amber-100">
+                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 text-[10px] font-bold border border-amber-100 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-800">
                                                         <AlertCircle size={10} />
                                                         Invitación Pendiente
                                                     </span>
                                                 )}
                                                 {!agent.has_profile && agent.confirmed_at && (
-                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">
+                                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100 dark:bg-blue-900/20 dark:text-blue-400 dark:border-blue-800">
                                                         <RefreshCw size={10} className="animate-spin-slow" />
                                                         Sincronizando...
                                                     </span>
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-500">
+                                        <td className="px-6 py-4 text-sm text-zinc-500">
                                             {new Date(agent.created_at).toLocaleDateString()}
                                         </td>
                                         <td className="px-6 py-4 text-right">
@@ -231,7 +231,7 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                                                 {!agent.is_pending && (
                                                     <button
                                                         onClick={() => startEditAgent(agent)}
-                                                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                                                        className="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
                                                         title="Editar agente"
                                                     >
                                                         <Pencil size={16} />
@@ -241,12 +241,13 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                                                     <button
                                                         onClick={() => handleDeleteAction(agent)}
                                                         disabled={isProcessing === agent.id}
-                                                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all title='Eliminar invitación'"
+                                                        className="p-2 text-zinc-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+                                                        title="Eliminar invitación"
                                                     >
                                                         {isProcessing === agent.id ? <Loader2 size={18} className="animate-spin" /> : <Trash2 size={18} />}
                                                     </button>
                                                 ) : (
-                                                    <span className="text-[10px] text-gray-300 font-medium italic">Activo</span>
+                                                    <span className="text-[10px] text-zinc-300 dark:text-zinc-600 font-medium italic">Activo</span>
                                                 )}
                                             </div>
                                         </td>
@@ -257,11 +258,11 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                     </div>
                 ) : (
                     <div className="p-12 text-center">
-                        <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-300">
+                        <div className="w-16 h-16 bg-zinc-50 dark:bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-4 text-zinc-300 dark:text-zinc-700">
                             <Search size={32} />
                         </div>
-                        <h3 className="text-lg font-bold text-gray-900">No se encontraron agentes</h3>
-                        <p className="text-gray-500 mt-1 max-w-xs mx-auto">Prueba con otro término de búsqueda o invita a un nuevo integrante.</p>
+                        <h3 className="text-lg font-bold text-zinc-900 dark:text-zinc-50">No se encontraron agentes</h3>
+                        <p className="text-zinc-500 mt-1 max-w-xs mx-auto">Prueba con otro término de búsqueda o invita a un nuevo integrante.</p>
                     </div>
                 )}
             </div>
@@ -273,30 +274,30 @@ export default function AgentList({ initialAgents }: AgentListProps) {
 
             {editingAgentId && (
                 <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
-                    <div className="w-full max-w-lg bg-white rounded-2xl border border-gray-100 shadow-2xl p-6 space-y-4">
+                    <div className="w-full max-w-lg bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-100 dark:border-zinc-800 shadow-2xl p-6 space-y-4">
                         <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-bold text-gray-900">Editar perfil del agente</h3>
-                            <button onClick={cancelEditAgent} className="p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+                            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50">Editar perfil del agente</h3>
+                            <button onClick={cancelEditAgent} className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500">
                                 <X size={18} />
                             </button>
                         </div>
 
                         <label className="block">
-                            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Nombre público</span>
+                            <span className="text-xs font-black uppercase tracking-widest text-zinc-500">Nombre público</span>
                             <input
                                 value={editName}
                                 onChange={(e) => setEditName(e.target.value)}
-                                className="mt-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                className="mt-2 w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-bold"
                                 placeholder="Nombre del asesor"
                             />
                         </label>
 
                         <label className="block">
-                            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Foto (URL)</span>
+                            <span className="text-xs font-black uppercase tracking-widest text-zinc-500">Foto (URL)</span>
                             <input
                                 value={editAvatarUrl}
                                 onChange={(e) => setEditAvatarUrl(e.target.value)}
-                                className="mt-2 w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                className="mt-2 w-full px-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-950 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none font-bold"
                                 placeholder="https://..."
                             />
                         </label>
@@ -304,14 +305,14 @@ export default function AgentList({ initialAgents }: AgentListProps) {
                         <div className="flex justify-end gap-2 pt-2">
                             <button
                                 onClick={cancelEditAgent}
-                                className="px-4 py-2.5 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50"
+                                className="px-4 py-2.5 rounded-xl border border-zinc-200 dark:border-zinc-700 text-zinc-600 font-bold hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
                             >
                                 Cancelar
                             </button>
                             <button
                                 onClick={saveEditAgent}
                                 disabled={isProcessing === editingAgentId}
-                                className="px-4 py-2.5 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-500 disabled:opacity-60 inline-flex items-center gap-2"
+                                className="px-4 py-2.5 rounded-xl bg-red-600 text-white font-bold hover:bg-red-500 disabled:opacity-60 inline-flex items-center gap-2 transition-colors"
                             >
                                 {isProcessing === editingAgentId ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                 Guardar
