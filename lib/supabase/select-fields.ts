@@ -30,7 +30,6 @@ export const PROPERTY_SELECT_FIELDS = `
     agente_id,
     agente_nombre_publico,
     agente_foto_url,
-    profiles(full_name),
     created_at,
     updated_at
 `;
