@@ -27,9 +27,6 @@ export const PROPERTY_SELECT_FIELDS = `
     meta_descripcion,
     canonical,
     etiquetas,
-    agente_id,
-    agente_nombre_publico,
-    agente_foto_url,
     created_at,
     updated_at
 `;
