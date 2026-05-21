@@ -20,7 +20,7 @@ export type Property = {
     negociable?: boolean;
     estado?: string;
     operacion: 'venta' | 'arriendo';
-    tipo: 'casa' | 'apartamento' | 'lote' | 'comercial' | 'proyecto';
+    tipo: 'casa' | 'apartamento' | 'lote' | 'comercial' | 'proyecto' | 'local' | 'oficina' | 'bodega' | 'finca';
     habitaciones: number;
     baños: number;
     area_m2: number;
@@ -35,6 +35,17 @@ export type Property = {
     agente_nombre?: string;
     agente_nombre_publico?: string | null;
     agente_foto_url?: string | null;
+    parqueaderos?: number;
+    latitud?: number | null;
+    longitud?: number | null;
+    año_construccion?: number | null;
+    antigüedad?: string | null;
+    estrato?: number | null;
+    canon_administracion?: number | null;
+    codigo_postal?: string | null;
+    moneda?: string;
+    video_url?: string | null;
+    fecha_disponible?: string | null;
     meta_titulo?: string;
     meta_descripcion?: string;
     canonical?: string;
