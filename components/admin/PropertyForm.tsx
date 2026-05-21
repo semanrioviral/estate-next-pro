@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { updatePropertyGallery } from "@/app/admin/actions";
 import ImageUploader from "@/components/admin/ImageUploader";
@@ -46,9 +46,9 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
     const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [isSavingGallery, setIsSavingGallery] = useState(false);
 
-    // Ref para auto-completar nombre del asesor al seleccionar agente
-    const agentNameInputRef = useRef<HTMLInputElement>(null);
-    const agentPhotoInputRef = useRef<HTMLInputElement>(null);
+    // State controlado para nombre público del asesor (auto-fill al seleccionar agente)
+    const [agentName, setAgentName] = useState(initialData?.agente_nombre_publico || '');
+    const [agentPhotoUrl, setAgentPhotoUrl] = useState(initialData?.agente_foto_url || '');
     const agentsMap = useMemo(() => {
         const map: Record<string, { name: string }> = {};
         agents.forEach((a) => { map[a.id] = { name: a.full_name }; });
@@ -58,10 +58,11 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
     const handleAgentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const agentId = e.target.value;
         if (agentId && agentsMap[agentId]) {
-            const nameInput = agentNameInputRef.current;
-            if (nameInput) {
-                nameInput.value = agentsMap[agentId].name;
-            }
+            setAgentName(agentsMap[agentId].name);
+            setAgentPhotoUrl('');
+        } else {
+            setAgentName('');
+            setAgentPhotoUrl('');
         }
     };
 
@@ -421,9 +422,9 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         <label className="block">
                             <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Nombre público del asesor</span>
                             <input
-                                ref={agentNameInputRef}
                                 name="agente_nombre_publico"
-                                defaultValue={initialData?.agente_nombre_publico || ''}
+                                value={agentName}
+                                onChange={(e) => setAgentName(e.target.value)}
                                 placeholder="Ej: Laura Mendoza"
                                 className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-bold shadow-inner"
                             />
@@ -432,9 +433,9 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                         <label className="md:col-span-2 block">
                             <span className="text-xs font-black uppercase tracking-[0.2em] text-zinc-400 mb-3 block">Foto del asesor (URL)</span>
                             <input
-                                ref={agentPhotoInputRef}
                                 name="agente_foto_url"
-                                defaultValue={initialData?.agente_foto_url || ''}
+                                value={agentPhotoUrl}
+                                onChange={(e) => setAgentPhotoUrl(e.target.value)}
                                 placeholder="https://..."
                                 className="w-full bg-zinc-50 dark:bg-zinc-950 border-2 border-transparent focus:border-red-500 rounded-3xl px-8 py-5 outline-none font-medium shadow-inner"
                             />
