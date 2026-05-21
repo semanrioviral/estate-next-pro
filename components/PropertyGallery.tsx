@@ -219,7 +219,7 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
                                             src={src}
                                             alt={`${title} - Foto ${index + 1}`}
                                             fill
-                                            className="object-cover"
+                                            className="object-contain"
                                             sizes="100vw"
                                             priority={index === 0}
                                         />
