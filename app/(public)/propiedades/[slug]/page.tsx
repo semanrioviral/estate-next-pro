@@ -248,7 +248,7 @@ Referencia: ${propertyUrl}
             <div className="max-w-7xl mx-auto md:px-4 lg:px-8 py-0 md:py-12">
                 <div className="px-3 sm:px-4 md:px-0">
                     {/* 1. MOBILE ONLY: HERO GALLERY AT TOP */}
-                    <div className="md:hidden mb-5 -mx-3 sm:-mx-4">
+                    <div className="md:hidden mb-4 -mx-3 sm:-mx-4">
                         <PropertyGallery
                             images={[property.imagen_principal, ...(property.galeria || [])]}
                             title={property.titulo}
@@ -257,7 +257,7 @@ Referencia: ${propertyUrl}
                     </div>
 
                     {/* Header Title Section - Anchored */}
-                    <div className="mb-5 md:mb-8 pt-1 pb-4 md:pt-0 md:pb-6 md:border-b border-slate-200 space-y-4 md:space-y-6">
+                    <div className="mb-5 md:mb-6 pt-1 pb-4 md:pt-0 md:pb-4 space-y-4 md:space-y-6">
                         <div className="flex flex-wrap items-center gap-2">
                             <span className="bg-brand text-white text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded">
                                 {operationText}
@@ -303,7 +303,7 @@ Referencia: ${propertyUrl}
                         {/* Left Column (lg:col-span-2) */}
                         <div className="lg:col-span-2 flex flex-col gap-6 md:gap-8">
                             {/* 2. DESKTOP ONLY: HERO / GALLERY MOSAIC */}
-                            <div className="hidden md:block overflow-hidden rounded-lg border border-slate-200 bg-white p-2">
+                            <div className="hidden md:block overflow-hidden rounded-lg">
                                 <PropertyGallery
                                     images={[property.imagen_principal, ...(property.galeria || [])]}
                                     title={property.titulo}

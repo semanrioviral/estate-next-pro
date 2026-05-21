@@ -202,9 +202,9 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
 
         return (
             <>
-                <div className="relative group w-full h-full lg:h-[500px] grid grid-cols-1 md:grid-cols-5 gap-2 overflow-hidden rounded-none md:rounded-lg">
+                <div className="relative group w-full h-full lg:h-[560px] grid grid-cols-1 md:grid-cols-5 gap-2 overflow-hidden rounded-none md:rounded-lg">
                 {/* Mobile Swipe Gallery */}
-                <div className="md:hidden relative h-[70vw] min-h-[260px] max-h-[420px] overflow-hidden bg-zinc-100">
+                <div className="md:hidden relative h-[72vw] min-h-[280px] max-h-[440px] overflow-hidden bg-zinc-100">
                     <div className="overflow-hidden h-full" ref={mainViewportRef}>
                         <div className="flex h-full">
                             {allImages.map((src, index) => (
