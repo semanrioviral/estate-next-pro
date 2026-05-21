@@ -194,114 +194,118 @@ export default function PropertyGallery({ images, title, variant = 'default' }: 
     ) : null
 
     if (variant === 'mosaic') {
-        const displayCount = Math.min(allImages.length, 5)
-        const orderedIndexes = allImages.map((_, idx) => idx)
-        const displayIndexes = orderedIndexes.slice(0, displayCount)
-        const displayImages = displayIndexes.map((idx) => allImages[idx])
-        const hasMore = allImages.length > 5
+        const mainImage = allImages[0]
+        const MAX_THUMBS = 4
+        const thumbnails = allImages.slice(1, 1 + MAX_THUMBS)
+        const hasMoreThumbs = allImages.length > 1 + MAX_THUMBS
 
         return (
             <>
-                <div className="relative group w-full h-full lg:h-[560px] grid grid-cols-1 md:grid-cols-5 gap-2 overflow-hidden rounded-none md:rounded-lg">
-                {/* Mobile Swipe Gallery */}
-                <div className="md:hidden relative h-[72vw] min-h-[280px] max-h-[440px] overflow-hidden bg-zinc-100">
-                    <div className="overflow-hidden h-full" ref={mainViewportRef}>
-                        <div className="flex h-full">
-                            {allImages.map((src, index) => (
-                                <div
-                                    key={index}
-                                    className="relative flex-[0_0_100%] min-w-0 h-full cursor-pointer"
-                                    onClick={() => {
-                                        setSelectedIndex(index)
-                                        setIsLightboxOpen(true)
-                                    }}
-                                >
-                                    <Image
-                                        src={src}
-                                        alt={`${title} - Foto ${index + 1}`}
-                                        fill
-                                        className="object-cover"
-                                        sizes="100vw"
-                                        priority={index === 0}
-                                    />
-                                </div>
-                            ))}
+                <div className="relative group w-full flex flex-col gap-2 overflow-hidden rounded-none md:rounded-lg">
+                    {/* Mobile Swipe Gallery */}
+                    <div className="md:hidden relative h-[72vw] min-h-[280px] max-h-[440px] overflow-hidden bg-zinc-100">
+                        <div className="overflow-hidden h-full" ref={mainViewportRef}>
+                            <div className="flex h-full">
+                                {allImages.map((src, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative flex-[0_0_100%] min-w-0 h-full cursor-pointer"
+                                        onClick={() => {
+                                            setSelectedIndex(index)
+                                            setIsLightboxOpen(true)
+                                        }}
+                                    >
+                                        <Image
+                                            src={src}
+                                            alt={`${title} - Foto ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                            sizes="100vw"
+                                            priority={index === 0}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
+
+                        {allImages.length > 1 && (
+                            <div className="absolute bottom-3 right-3 z-10">
+                                <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-2.5 py-1 rounded-lg text-[12px] font-semibold tracking-wide shadow-sm border border-slate-200/50">
+                                    {selectedIndex + 1} / {allImages.length}
+                                </span>
+                            </div>
+                        )}
                     </div>
 
-                    {allImages.length > 1 && (
-                        <div className="absolute bottom-3 right-3 z-10">
-                            <span className="bg-white/90 backdrop-blur-sm text-slate-700 px-2.5 py-1 rounded-lg text-[12px] font-semibold tracking-wide shadow-sm border border-slate-200/50">
-                                {selectedIndex + 1} / {allImages.length}
-                            </span>
+                    {/* Desktop: Main Image — Full Width, Sin Recortes */}
+                    <div
+                        className="hidden md:block relative w-full h-[45vh] min-h-[360px] max-h-[520px] cursor-pointer overflow-hidden bg-zinc-100 rounded-lg"
+                        onClick={() => {
+                            setSelectedIndex(0)
+                            setIsLightboxOpen(true)
+                        }}
+                    >
+                        <Image
+                            src={mainImage}
+                            alt={`${title} - Principal`}
+                            fill
+                            className="object-contain"
+                            priority
+                            sizes="(max-width: 768px) 100vw, 66vw"
+                        />
+                        {allImages.length > 1 && (
+                            <div className="absolute bottom-4 right-4 z-10 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm border border-slate-200/50">
+                                {allImages.length} fotos
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Desktop: Miniaturas en Mosaico — Sin Recortes */}
+                    {thumbnails.length > 0 && (
+                        <div className="hidden md:grid grid-cols-4 gap-2">
+                            {thumbnails.map((src, idx) => {
+                                const colSpan =
+                                    thumbnails.length === 1 ? 'col-span-4' :
+                                    thumbnails.length === 2 ? 'col-span-2' : ''
+                                return (
+                                    <div
+                                        key={idx}
+                                        className={`relative aspect-[4/3] cursor-pointer overflow-hidden rounded-md bg-zinc-100 ${colSpan}`}
+                                        onClick={() => {
+                                            setSelectedIndex(idx + 1)
+                                            setIsLightboxOpen(true)
+                                        }}
+                                    >
+                                        <Image
+                                            src={src}
+                                            alt={`${title} - Foto ${idx + 2}`}
+                                            fill
+                                            className="object-contain"
+                                            sizes="25vw"
+                                        />
+                                        {hasMoreThumbs && idx === thumbnails.length - 1 && (
+                                            <div className="absolute inset-0 bg-zinc-900/50 flex items-center justify-center rounded-md pointer-events-none">
+                                                <span className="text-white font-bold text-lg">+{allImages.length - 1 - MAX_THUMBS}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )
+                            })}
                         </div>
                     )}
-                </div>
 
-                {/* Desktop Main Large Image */}
-                <div
-                    className={`${displayCount === 1 ? 'md:col-span-5' : 'md:col-span-3'
-                        } hidden md:block relative h-[70vw] min-h-[260px] max-h-[420px] md:h-full cursor-pointer overflow-hidden bg-zinc-100`}
-                    onClick={() => {
-                        setSelectedIndex(displayIndexes[0] ?? 0)
-                        setIsLightboxOpen(true)
-                    }}
-                >
-                    <Image
-                        src={displayImages[0]}
-                        alt={`${title} - Principal`}
-                        fill
-                        className="object-contain md:object-cover hover:scale-105 transition-transform duration-500"
-                        priority
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                </div>
-
-                {/* Right Grid */}
-                {displayCount > 1 && (
-                    <div className={`hidden md:grid md:col-span-2 ${displayCount === 2 ? 'grid-cols-1' : 'grid-cols-2'
-                        } grid-rows-2 gap-2 h-full`}>
-                        {displayImages.slice(1, 5).map((src, idx) => (
-                            <div
-                                key={idx}
-                                className={`relative h-full cursor-pointer overflow-hidden ${displayCount === 2 ? 'row-span-2' :
-                                    displayCount === 3 && idx === 0 ? 'row-span-2 col-span-2' :
-                                        displayCount === 3 && idx === 1 ? 'hidden' : ''
-                                    }`}
-                                onClick={() => {
-                                    setSelectedIndex(displayIndexes[idx + 1] ?? idx + 1)
-                                    setIsLightboxOpen(true)
-                                }}
-                            >
-                                <Image
-                                    src={src}
-                                    alt={`${title} - Foto ${idx + 2}`}
-                                    fill
-                                    className="object-cover hover:scale-105 transition-transform duration-500"
-                                    sizes="25vw"
-                                />
-                                {/* "Show more" overlay on the last visible image if applicable */}
-                                {(idx === displayImages.length - 2 || (hasMore && idx === 3)) && (
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent flex items-center justify-center pointer-events-none transition-colors">
-                                        <span className="text-white font-bold text-sm lg:text-base px-4 py-2 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20 shadow-xl">
-                                            {allImages.length > displayCount ? `+${allImages.length - displayCount + 1}` : 'Ver todas'}
-                                        </span>
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Maximize button */}
-                <button
-                    type="button"
-                    className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur p-2 rounded-lg border border-zinc-200 shadow-sm"
-                    onClick={() => setIsLightboxOpen(true)}
-                    aria-label="Abrir galería en pantalla completa"
-                >
-                    <Maximize2 className="h-4 w-4 text-zinc-900" />
-                </button>
+                    {/* Maximize button */}
+                    <button
+                        type="button"
+                        className="absolute top-3 right-3 z-10 bg-white/90 backdrop-blur p-2 rounded-lg border border-zinc-200 shadow-sm"
+                        onClick={() => {
+                            setSelectedIndex(0)
+                            setIsLightboxOpen(true)
+                        }}
+                        aria-label="Abrir galería en pantalla completa"
+                    >
+                        <Maximize2 className="h-4 w-4 text-zinc-900" />
+                    </button>
                 </div>
                 {lightboxModal}
             </>
