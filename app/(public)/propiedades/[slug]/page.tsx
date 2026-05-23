@@ -16,7 +16,13 @@ import {
     ChevronLeft,
     Phone,
     Star,
-    Check
+    Check,
+    Layers,
+    CalendarDays,
+    DollarSign,
+    Video,
+    FileText,
+    Clock
 } from 'lucide-react';
 import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, getAdjacentProperties, Property } from '@/lib/supabase/properties';
 import { generatePropertySEO, generatePropertyJSONLD } from '@/lib/seo/generatePropertySEO';
@@ -45,6 +51,36 @@ function slugify(text: string) {
         .replace(/--+/g, '-')
         .replace(/^-+/, '')
         .replace(/-+$/, '');
+}
+
+/** Converts YouTube/Vimeo URLs to embed URLs; passes other URLs through for use as link */
+function getVideoEmbedUrl(url: string): string | null {
+    try {
+        const u = new URL(url);
+        // YouTube watch → embed
+        if (u.hostname.includes('youtube.com') && u.searchParams.get('v')) {
+            return `https://www.youtube.com/embed/${u.searchParams.get('v')}`;
+        }
+        // YouTube short link
+        if (u.hostname === 'youtu.be') {
+            return `https://www.youtube.com/embed${u.pathname}`;
+        }
+        // Already an embed URL
+        if (u.hostname.includes('youtube.com') && u.pathname.startsWith('/embed/')) {
+            return url;
+        }
+        // Vimeo
+        if (u.hostname === 'vimeo.com' || u.hostname === 'player.vimeo.com') {
+            const vimeoId = u.pathname.replace(/^\/+/, '').split('/')[0];
+            if (vimeoId) {
+                return `https://player.vimeo.com/video/${vimeoId}`;
+            }
+        }
+        // Fallback: return the URL as-is (will be rendered as a link)
+        return null;
+    } catch {
+        return null;
+    }
 }
 
 interface Props {
@@ -112,14 +148,24 @@ export default async function PropertyDetailPage({ params }: Props) {
     const getAbsoluteUrl = (path: string) => path.startsWith('http') ? path : `${siteUrl}${path}`;
     const propertyUrl = `${siteUrl}/propiedades/${property.slug}`;
 
-    const formattedPrice = property.precio.toLocaleString("es-CO");
-    const priceDisplay = property.operacion === 'arriendo' ? `$${formattedPrice} / mes` : `$${formattedPrice}`;
+    const currencyLocale = property.moneda === 'USD' ? 'en-US' : 'es-CO';
+    const formattedPrice = property.precio.toLocaleString(currencyLocale);
+    const currencyLabel = property.moneda === 'USD' ? ' USD' : '';
+    const priceDisplay = property.operacion === 'arriendo'
+        ? `$${formattedPrice}${currencyLabel} / mes`
+        : `$${formattedPrice}${currencyLabel}`;
     const operationText = property.operacion === 'venta' ? 'Venta' : 'Arriendo';
+    // Parqueaderos: dedicated column first, fallback to servicios parsing
     const parkingMeta = (property.servicios || []).find((service) => /^parqueaderos?:\s*\d+/i.test(service));
-    const parkingCount = parkingMeta ? Number(parkingMeta.match(/\d+/)?.[0] || 0) : 0;
-    const parkingDisplay = parkingCount > 0
-        ? String(parkingCount)
-        : (property.servicios?.some((service) => service.toLowerCase().includes('parqueadero')) ? 'Si' : '--');
+    const parkingFromServicios = parkingMeta ? Number(parkingMeta.match(/\d+/)?.[0] || 0) : 0;
+    const hasParkingInServicios = property.servicios?.some((s) => s.toLowerCase().includes('parqueadero'));
+    const parkingDisplay = property.parqueaderos != null && property.parqueaderos > 0
+        ? String(property.parqueaderos)
+        : parkingFromServicios > 0
+            ? String(parkingFromServicios)
+            : hasParkingInServicios
+                ? 'Si'
+                : '--';
     const displayServicios = (property.servicios || []).filter((service) => !/^parqueaderos?:\s*\d+/i.test(service));
     const assignedAgentName = property.agente_nombre_publico?.trim() || property.agente_nombre?.trim() || 'Equipo de Ventas';
     const assignedAgentPhoto = property.agente_foto_url?.trim() || '';
@@ -273,6 +319,12 @@ Referencia: ${propertyUrl}
                             <span className="bg-slate-100 text-slate-700 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-slate-200">
                                 {property.tipo}
                             </span>
+                            {property.fecha_disponible && (
+                                <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-amber-200">
+                                    <CalendarDays className="h-3 w-3" />
+                                    Disp. {new Date(property.fecha_disponible).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                            )}
                             {property.etiquetas && property.etiquetas.length > 0 && property.etiquetas.slice(0, 1).map((tag, idx) => (
                                 <span key={idx} className="bg-brand/10 text-brand text-[12px] font-bold uppercase tracking-widest px-3 py-1 rounded border border-brand/20">
                                     {tag}
@@ -389,7 +441,9 @@ Referencia: ${propertyUrl}
                                 )}
 
                                 {/* Technical Details — only if they exist */}
-                                {(property.medidas_lote || property.tipo_uso || property.financiamiento) && (
+                                {(property.medidas_lote || property.tipo_uso || property.financiamiento ||
+                                    property.estrato || property.año_construccion || property.antigüedad ||
+                                    property.canon_administracion || property.codigo_postal) && (
                                     <div className="pt-6 border-t border-slate-100">
                                         <h3 className="text-xs font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Detalles técnicos y legales</h3>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-5 gap-x-10">
@@ -411,6 +465,37 @@ Referencia: ${propertyUrl}
                                                     <span className="text-slate-600 font-medium bg-slate-50 p-4 rounded-lg border border-slate-100 leading-relaxed italic">
                                                         {property.financiamiento}
                                                     </span>
+                                                </div>
+                                            )}
+                                            {/* --- New conditional fields --- */}
+                                            {property.estrato && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Estrato</span>
+                                                    <span className="text-slate-900 font-semibold">{property.estrato}</span>
+                                                </div>
+                                            )}
+                                            {property.año_construccion && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Año de Construcción</span>
+                                                    <span className="text-slate-900 font-semibold">{property.año_construccion}</span>
+                                                </div>
+                                            )}
+                                            {property.antigüedad && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Antigüedad</span>
+                                                    <span className="text-slate-900 font-semibold capitalize">{property.antigüedad}</span>
+                                                </div>
+                                            )}
+                                            {property.canon_administracion != null && property.canon_administracion > 0 && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Canon de Administración</span>
+                                                    <span className="text-slate-900 font-semibold">${property.canon_administracion.toLocaleString('es-CO')} COP</span>
+                                                </div>
+                                            )}
+                                            {property.codigo_postal && (
+                                                <div className="flex flex-col gap-1">
+                                                    <span className="text-[12px] font-bold text-slate-400 uppercase tracking-widest">Código Postal</span>
+                                                    <span className="text-slate-900 font-semibold">{property.codigo_postal}</span>
                                                 </div>
                                             )}
                                         </div>
@@ -438,6 +523,41 @@ Referencia: ${propertyUrl}
                                     </TrackedWhatsappButton>
                                 </div>
                             </section>
+
+                            {/* Video Tour — only if present */}
+                            {property.video_url && (
+                                <section className="rounded-lg border border-slate-200 bg-white p-5 sm:p-6 md:p-8 space-y-4">
+                                    <h2 className="text-xl lg:text-2xl font-semibold text-slate-900 border-l-2 border-brand-600/60 pl-3 sm:pl-4 flex items-center gap-2">
+                                        <Video className="h-5 w-5 text-brand" />
+                                        Video Tour
+                                    </h2>
+                                    {(() => {
+                                        const embedUrl = getVideoEmbedUrl(property.video_url!);
+                                        return embedUrl ? (
+                                            <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-slate-100">
+                                                <iframe
+                                                    src={embedUrl}
+                                                    title="Video Tour"
+                                                    className="absolute inset-0 w-full h-full"
+                                                    allowFullScreen
+                                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <a
+                                                href={property.video_url!}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 text-brand font-semibold hover:underline"
+                                            >
+                                                <Video className="h-4 w-4" />
+                                                Ver video tour externo
+                                            </a>
+                                        );
+                                    })()}
+                                </section>
+                            )}
                         </div>
 
                         {/* RIGHT COLUMN: Editorial Sidebar — Desktop Only */}
@@ -452,7 +572,7 @@ Referencia: ${propertyUrl}
                                         <div className="flex items-center justify-center gap-3 text-sm text-slate-500 font-medium">
                                             <span>{property.area_m2} m²</span>
                                             <span className="text-slate-300">·</span>
-                                            <span>{Math.round(property.precio / property.area_m2).toLocaleString()} / m²</span>
+                                            <span>{Math.round(property.precio / property.area_m2).toLocaleString(currencyLocale)} {property.moneda === 'USD' ? 'USD' : 'COP'}/m²</span>
                                         </div>
                                         {property.negociable && (
                                             <p className="mt-3 text-xs font-bold text-emerald-600 uppercase tracking-wider">
