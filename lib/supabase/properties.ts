@@ -560,17 +560,17 @@ export async function createProperty(
         }
 
         // 1. Insertar propiedad en tabla 'properties'
+        const insertData = sanitizePayload({
+            ...propertyData as unknown as Record<string, unknown>,
+            barrio_id,
+            imagen_principal: images.find(img => img.es_principal)?.url || images[0]?.url || '',
+            servicios: propertyData.servicios || [],
+            etiquetas: propertyData.etiquetas || [],
+        });
+
         const { data: property, error: propError } = await supabase
             .from('properties')
-            .insert([
-                {
-                    ...propertyData,
-                    barrio_id,
-                    imagen_principal: images.find(img => img.es_principal)?.url || images[0]?.url || '',
-                    servicios: propertyData.servicios || [],
-                    etiquetas: propertyData.etiquetas || [],
-                }
-            ])
+            .insert([insertData])
             .select()
             .single();
 
@@ -695,6 +695,34 @@ export async function deleteProperty(id: string) {
     }
 }
 
+/** Columns that are known to exist in the 'properties' table.
+ *  Used as a safety filter so unknown/missing columns don't break PATCH requests. */
+const KNOWN_PROPERTY_COLUMNS = new Set([
+    'titulo', 'precio', 'descripcion', 'descripcion_corta', 'direccion',
+    'barrio', 'ciudad', 'tipo', 'habitaciones', 'baños', 'area_m2',
+    'negociable', 'estado', 'operacion', 'medidas_lote', 'tipo_uso',
+    'servicios', 'financiamiento', 'imagen_principal', 'slug', 'destacado',
+    'agente_id', 'agente_nombre', 'agente_nombre_publico', 'agente_foto_url',
+    'parqueaderos', 'latitud', 'longitud', 'año_construccion', 'antigüedad',
+    'estrato', 'canon_administracion', 'codigo_postal', 'moneda',
+    'video_url', 'fecha_disponible', 'meta_titulo', 'meta_descripcion',
+    'canonical', 'etiquetas', 'barrio_id',
+]);
+
+/** Strips any keys from `data` that are not in KNOWN_PROPERTY_COLUMNS.
+ *  Prevents PostgREST 400 errors when a column doesn't exist yet in the DB. */
+function sanitizePayload<T extends Record<string, unknown>>(data: T): Partial<T> {
+    const sanitized: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(data)) {
+        if (KNOWN_PROPERTY_COLUMNS.has(key)) {
+            sanitized[key] = value;
+        } else {
+            console.warn(`[DB] Sanitized: skipping unknown column "${key}"`);
+        }
+    }
+    return sanitized as Partial<T>;
+}
+
 export async function updateProperty(
     id: string,
     propertyData: Partial<Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>>,
@@ -727,11 +755,14 @@ export async function updateProperty(
             ...(propertyData.etiquetas !== undefined && { etiquetas: propertyData.etiquetas }),
         };
 
-        console.log('[DB] Update Payload:', JSON.stringify(updatePayload, null, 2));
+        // Sanitize: strip any keys that don't match known columns (safety net for partial migrations)
+        const sanitized = sanitizePayload(updatePayload);
+
+        console.log('[DB] Update Payload (sanitized):', JSON.stringify(sanitized, null, 2));
 
         const { error: propError } = await supabase
             .from('properties')
-            .update(updatePayload)
+            .update(sanitized)
             .eq('id', id);
 
         if (propError) {
