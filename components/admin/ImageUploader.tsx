@@ -291,6 +291,8 @@ export default function ImageUploader({
                 // Auto-compress & convert to WebP on upload
                 formData.append("quality", "auto");
                 formData.append("fetch_format", "auto");
+                // Force conversion from HEIC/HEIF/bmp to jpg
+                formData.append("format", "jpg");
 
                 const uploadRes = await fetch(
                     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
