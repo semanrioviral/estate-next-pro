@@ -1,141 +1,227 @@
 import Link from 'next/link';
-import { BarChart3, Building2, Clock3, Plus, Send, Users } from 'lucide-react';
+import { Building2, Clock3, Plus, Send, Users, TrendingUp, ArrowRight, AlertTriangle, Activity, Eye, KanbanSquare, Phone, Target } from 'lucide-react';
 import { createClient } from '@/lib/supabase-server';
+import AdminBreadcrumbs from '@/components/admin/AdminBreadcrumbs';
+import { getMostViewedProperties } from '@/lib/supabase/properties';
+import { getCRMMetrics } from '@/lib/supabase/crm';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
     const supabase = await createClient();
 
-    const [
-        propertiesCountRes,
-        leadsCountRes,
-        agentsCountRes,
-        recentPropertiesRes,
-        recentLeadsRes
-    ] = await Promise.all([
+    const [propertiesRes, leadsRes, agentsRes, pendingRes, recentProps, recentLeadsRes, statusRes, viewsRes, crmMetrics] = await Promise.all([
         supabase.from('properties').select('id', { count: 'exact', head: true }),
         supabase.from('advisory_requests').select('id', { count: 'exact', head: true }),
         supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agente'),
-        supabase
-            .from('properties')
-            .select('id, titulo, slug, ciudad, barrio, precio, estado, created_at')
-            .order('created_at', { ascending: false })
-            .limit(6),
-        supabase
-            .from('advisory_requests')
-            .select('id, nombre, estado, created_at')
-            .order('created_at', { ascending: false })
-            .limit(6)
+        supabase.from('advisory_requests').select('id', { count: 'exact', head: true }).eq('estado', 'pendiente'),
+        supabase.from('properties').select('id, titulo, slug, ciudad, barrio, precio, estado, imagen_principal, created_at, updated_at').order('updated_at', { ascending: false }).limit(5),
+        supabase.from('advisory_requests').select('id, nombre, email, estado, created_at').order('created_at', { ascending: false }).limit(5),
+        supabase.from('properties').select('estado').not('estado', 'is', null),
+        supabase.from('property_views').select('id', { count: 'exact', head: true }),
+        getCRMMetrics().catch(() => ({ total: 0, pipeline: { nuevo: 0, contactado: 0, visitando: 0, negociando: 0, cerrado: 0 }, agentes: [] })),
     ]);
 
-    const totalProperties = propertiesCountRes.count || 0;
-    const totalLeads = leadsCountRes.count || 0;
-    const totalAgents = agentsCountRes.count || 0;
-
-    const recentProperties = recentPropertiesRes.data || [];
+    const totalProps = propertiesRes.count || 0;
+    const totalLeads = crmMetrics.total || (leadsRes.count || 0);
+    const totalAgents = agentsRes.count || 0;
+    const pendingLeads = pendingRes.count || 0;
+    const totalViews = viewsRes.count || 0;
+    const recentProperties = recentProps.data || [];
     const recentLeads = recentLeadsRes.data || [];
+    const pipeline = crmMetrics.pipeline;
+
+    let mostViewed: any[] = [];
+    try { mostViewed = await getMostViewedProperties(4); } catch { mostViewed = []; }
+
+    const statusCounts: Record<string, number> = {};
+    (statusRes.data || []).forEach((p: any) => { const s = p.estado || 'Sin estado'; statusCounts[s] = (statusCounts[s] || 0) + 1; });
+    const statusEntries = Object.entries(statusCounts).sort((a, b) => b[1] - a[1]);
+
+    const alerts: { message: string; href?: string }[] = [];
+    if (pendingLeads > 0) alerts.push({ message: `${pendingLeads} lead${pendingLeads !== 1 ? 's' : ''} sin contacto`, href: '/admin/crm' });
+    const noPhotoProps = recentProperties.filter((p: any) => !p.imagen_principal).length;
+    if (noPhotoProps > 0) alerts.push({ message: `${noPhotoProps} propiedade${noPhotoProps !== 1 ? 's' : ''} sin foto`, href: '/admin/propiedades' });
 
     return (
-        <div className="space-y-6 md:space-y-8">
-            <section className="rounded-2xl md:rounded-3xl border border-slate-200 bg-white p-5 md:p-8">
-                <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                    <div>
-                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Panel de Control</p>
-                        <h1 className="mt-2 text-2xl md:text-4xl font-black text-slate-900 tracking-tight">Dashboard Comercial</h1>
-                        <p className="mt-2 text-sm md:text-base text-slate-500 font-medium">Resumen operativo de propiedades, solicitudes y equipo.</p>
+        <div className="space-y-6">
+            <AdminBreadcrumbs items={[{ label: 'Dashboard' }]} />
+
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight">Dashboard CRM</h1>
+                    <p className="text-sm text-zinc-500 font-medium mt-0.5">
+                        {new Date().toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}
+                    </p>
+                </div>
+                <div className="flex gap-2">
+                    <Link href="/admin/propiedades/nuevo" className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 text-white rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-red-700 transition-colors">
+                        <Plus size={14} /> Nuevo inmueble
+                    </Link>
+                    <Link href="/admin/crm" className="inline-flex items-center gap-1.5 px-4 py-2 bg-white dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-lg text-xs font-bold uppercase tracking-wider border border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 transition-colors">
+                        <KanbanSquare size={13} /> Pipeline
+                    </Link>
+                </div>
+            </div>
+
+            {/* KPI Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                {[
+                    { label: 'Propiedades', value: totalProps, icon: Building2, accent: 'red' },
+                    { label: 'Leads totales', value: totalLeads, icon: Send, accent: 'blue' },
+                    { label: 'Visitas', value: totalViews, icon: Eye, accent: 'emerald' },
+                    { label: 'Agentes', value: totalAgents, icon: Users, accent: 'purple' },
+                    { label: 'Pipeline activo', value: pipeline.nuevo + pipeline.contactado + pipeline.visitando + pipeline.negociando, icon: KanbanSquare, accent: 'amber' },
+                    { label: 'Cerrados', value: pipeline.cerrado, icon: Target, accent: 'zinc' },
+                ].map(kpi => (
+                    <div key={kpi.label} className="relative bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800 p-4 overflow-hidden group hover:shadow-md transition-shadow">
+                        <div className="flex items-center justify-between mb-2">
+                            <div className={`p-2 rounded-lg ${
+                                kpi.accent === 'red' ? 'bg-red-50 text-red-600' :
+                                kpi.accent === 'blue' ? 'bg-blue-50 text-blue-600' :
+                                kpi.accent === 'emerald' ? 'bg-emerald-50 text-emerald-600' :
+                                kpi.accent === 'purple' ? 'bg-purple-50 text-purple-600' :
+                                kpi.accent === 'amber' ? 'bg-amber-50 text-amber-600' :
+                                'bg-zinc-100 text-zinc-600'
+                            }`}><kpi.icon size={15} /></div>
+                        </div>
+                        <p className="text-2xl font-black text-zinc-900 dark:text-zinc-50">{kpi.value}</p>
+                        <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">{kpi.label}</p>
                     </div>
-                    <div className="flex gap-2 md:gap-3">
-                        <Link href="/admin/propiedades/nuevo" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-red-600 text-white text-xs font-black uppercase tracking-widest hover:bg-red-500 transition-colors">
-                            <Plus size={14} /> Nuevo inmueble
-                        </Link>
-                        <Link href="/admin/solicitudes" className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 text-xs font-black uppercase tracking-widest hover:bg-slate-50 transition-colors">
-                            <Send size={14} /> Revisar leads
-                        </Link>
+                ))}
+            </div>
+
+            {/* Pipeline Bar */}
+            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 dark:border-zinc-800 p-5">
+                <div className="flex items-center gap-2 mb-3">
+                    <KanbanSquare size={16} className="text-red-500" />
+                    <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-50">Pipeline de leads</h2>
+                    <Link href="/admin/crm" className="ml-auto text-xs font-bold text-zinc-400 hover:text-red-600 flex items-center gap-1">Ver CRM <ArrowRight size={11} /></Link>
+                </div>
+                <div className="flex h-8 rounded-lg overflow-hidden">
+                    {[
+                        { label: 'Nuevos', count: pipeline.nuevo, color: 'bg-blue-500' },
+                        { label: 'Contactados', count: pipeline.contactado, color: 'bg-amber-500' },
+                        { label: 'Visitando', count: pipeline.visitando, color: 'bg-purple-500' },
+                        { label: 'Negociando', count: pipeline.negociando, color: 'bg-orange-500' },
+                        { label: 'Cerrados', count: pipeline.cerrado, color: 'bg-emerald-500' },
+                    ].map(seg => {
+                        const total = pipeline.nuevo + pipeline.contactado + pipeline.visitando + pipeline.negociando + pipeline.cerrado;
+                        const w = total > 0 ? (seg.count / total) * 100 : 0;
+                        return w > 0 ? (
+                            <div key={seg.label} className={`${seg.color} flex items-center justify-center text-white text-[10px] font-bold`} style={{ width: `${Math.max(w, 3)}%` }}>
+                                {w > 8 ? `${seg.label} ${seg.count}` : ''}
+                            </div>
+                        ) : null;
+                    })}
+                    {pipeline.nuevo + pipeline.contactado + pipeline.visitando + pipeline.negociando + pipeline.cerrado === 0 && (
+                        <div className="flex-1 bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-xs text-zinc-400">Sin leads aún</div>
+                    )}
+                </div>
+                <div className="flex flex-wrap gap-4 mt-3">
+                    {[
+                        { label: 'Nuevos', count: pipeline.nuevo, color: 'bg-blue-500' },
+                        { label: 'Contactados', count: pipeline.contactado, color: 'bg-amber-500' },
+                        { label: 'Visitando', count: pipeline.visitando, color: 'bg-purple-500' },
+                        { label: 'Negociando', count: pipeline.negociando, color: 'bg-orange-500' },
+                        { label: 'Cerrados', count: pipeline.cerrado, color: 'bg-emerald-500' },
+                    ].map(seg => (
+                        <div key={seg.label} className="flex items-center gap-1.5">
+                            <div className={`h-2.5 w-2.5 rounded-full ${seg.color}`} />
+                            <span className="text-[10px] font-bold text-zinc-500 uppercase">{seg.label}</span>
+                            <span className="text-[10px] font-black text-zinc-700">{seg.count}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Alerts */}
+            {alerts.length > 0 && (
+                <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800 rounded-xl p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                        <AlertTriangle size={15} className="text-amber-600" />
+                        <p className="text-xs font-black uppercase tracking-wider text-amber-700">Requiere atención</p>
+                    </div>
+                    {alerts.map((a, i) => (
+                        a.href ? <Link key={i} href={a.href} className="block text-sm text-amber-800 font-medium hover:underline">• {a.message}</Link>
+                            : <p key={i} className="text-sm text-amber-800 font-medium">• {a.message}</p>
+                    ))}
+                </div>
+            )}
+
+            <div className="grid grid-cols-1 xl:grid-cols-5 gap-4">
+                <div className="xl:col-span-3 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 overflow-hidden">
+                    <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-2">
+                        <Activity size={15} className="text-zinc-400" />
+                        <h2 className="text-sm font-black text-zinc-900 dark:text-zinc-50">Actividad reciente</h2>
+                    </div>
+                    <div className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
+                        {recentProperties.map(prop => (
+                            <Link key={prop.id} href={`/admin/propiedades/editar/${prop.id}`} className="flex items-center gap-3 px-5 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors group">
+                                <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
+                                    {prop.imagen_principal ? <img src={prop.imagen_principal.replace('/upload/', '/upload/w_64,h_64,c_fill,q_auto,f_auto/')} alt="" className="h-full w-full object-cover" /> : <Building2 size={14} className="text-zinc-300" />}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="text-[13px] font-semibold text-zinc-900 truncate group-hover:text-red-600">{prop.titulo}</p>
+                                    <p className="text-[10px] text-zinc-400">{prop.barrio}, {prop.ciudad}</p>
+                                </div>
+                                <span className="text-xs font-bold text-zinc-400">${Number(prop.precio).toLocaleString('es-CO')}</span>
+                            </Link>
+                        ))}
                     </div>
                 </div>
-            </section>
-
-            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
-                <article className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Propiedades</p>
-                        <Building2 className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <p className="mt-3 text-3xl font-black text-slate-900">{totalProperties}</p>
-                </article>
-                <article className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Solicitudes</p>
-                        <Send className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <p className="mt-3 text-3xl font-black text-slate-900">{totalLeads}</p>
-                </article>
-                <article className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Agentes</p>
-                        <Users className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <p className="mt-3 text-3xl font-black text-slate-900">{totalAgents}</p>
-                </article>
-                <article className="rounded-2xl border border-slate-200 bg-white p-5">
-                    <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Conversión</p>
-                        <BarChart3 className="h-4 w-4 text-slate-400" />
-                    </div>
-                    <p className="mt-3 text-3xl font-black text-slate-900">
-                        {totalProperties > 0 ? Math.round((totalLeads / totalProperties) * 100) : 0}%
-                    </p>
-                </article>
-            </section>
-
-            <section className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
-                <article className="rounded-2xl border border-slate-200 bg-white">
-                    <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-                        <h2 className="text-lg font-black text-slate-900">Últimos inmuebles</h2>
-                        <Link href="/admin/propiedades" className="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-red-600">Ver todos</Link>
-                    </div>
-                    <div className="divide-y divide-slate-100">
-                        {recentProperties.length > 0 ? recentProperties.map((property) => (
-                            <div key={property.id} className="px-5 py-4">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="font-bold text-slate-900 leading-tight">{property.titulo}</p>
-                                        <p className="mt-1 text-xs text-slate-500">{property.barrio}, {property.ciudad}</p>
-                                    </div>
-                                    <p className="text-sm font-black text-slate-900">${Number(property.precio).toLocaleString('es-CO')}</p>
+                <div className="xl:col-span-2 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 overflow-hidden">
+                    <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-800"><h2 className="text-sm font-black text-zinc-900 dark:text-zinc-50">Propiedades por estado</h2></div>
+                    <div className="p-4 space-y-2.5">
+                        {statusEntries.map(([s, c]) => (
+                            <div key={s} className="flex items-center gap-3">
+                                <span className="text-[11px] font-semibold text-zinc-600 w-20 truncate">{s}</span>
+                                <div className="flex-1 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                    <div className={`h-full rounded-full ${s === 'Disponible' ? 'bg-emerald-500' : s === 'En Venta' ? 'bg-blue-500' : s === 'Vendido' ? 'bg-zinc-400' : s === 'Destacado' ? 'bg-amber-500' : s === 'Reservado' ? 'bg-purple-500' : 'bg-red-500'}`} style={{ width: `${Math.max((c / totalProps) * 100, 4)}%` }} />
                                 </div>
-                                <div className="mt-2 flex items-center justify-between">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{property.estado || 'Disponible'}</span>
-                                    <Link href={`/admin/propiedades/editar/${property.id}`} className="text-xs font-bold text-red-600 hover:text-red-500">Editar</Link>
-                                </div>
+                                <span className="text-[11px] font-bold text-zinc-500 w-6 text-right">{c}</span>
                             </div>
-                        )) : (
-                            <p className="px-5 py-8 text-sm text-slate-400">No hay inmuebles recientes.</p>
-                        )}
+                        ))}
                     </div>
-                </article>
+                </div>
+            </div>
 
-                <article className="rounded-2xl border border-slate-200 bg-white">
-                    <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-                        <h2 className="text-lg font-black text-slate-900">Solicitudes recientes</h2>
-                        <Link href="/admin/solicitudes" className="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-red-600">Gestionar</Link>
+            {mostViewed.length > 0 && (
+                <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 overflow-hidden">
+                    <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-800 flex items-center gap-2">
+                        <Eye size={15} className="text-zinc-400" /><h2 className="text-sm font-black text-zinc-900">Más visitados</h2>
                     </div>
-                    <div className="divide-y divide-slate-100">
-                        {recentLeads.length > 0 ? recentLeads.map((lead) => (
-                            <div key={lead.id} className="px-5 py-4 flex items-center justify-between gap-3">
-                                <div>
-                                    <p className="font-bold text-slate-900">{lead.nombre}</p>
-                                    <p className="mt-1 text-xs text-slate-500 inline-flex items-center gap-1.5"><Clock3 className="h-3 w-3" />{new Date(lead.created_at).toLocaleDateString('es-CO')}</p>
+                    <div className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
+                        {mostViewed.map((prop: any, i: number) => (
+                            <Link key={prop.id} href={`/admin/propiedades/editar/${prop.id}`} className="flex items-center gap-3 px-5 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
+                                <span className="text-sm font-black text-zinc-300 w-5 text-right">{i + 1}</span>
+                                <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
+                                    {prop.imagen_principal ? <img src={prop.imagen_principal.replace('/upload/', '/upload/w_64,h_64,c_fill,q_auto,f_auto/')} alt="" className="h-full w-full object-cover" /> : <Building2 size={14} className="text-zinc-300" />}
                                 </div>
-                                <span className="text-[10px] font-black uppercase tracking-widest rounded-full px-2.5 py-1 bg-slate-100 text-slate-600 border border-slate-200">{lead.estado || 'pendiente'}</span>
-                            </div>
-                        )) : (
-                            <p className="px-5 py-8 text-sm text-slate-400">No hay solicitudes recientes.</p>
-                        )}
+                                <div className="min-w-0 flex-1"><p className="text-[13px] font-semibold text-zinc-900 truncate">{prop.titulo}</p><p className="text-[10px] text-zinc-400">{prop.barrio}, {prop.ciudad}</p></div>
+                                <span className="text-xs font-bold text-zinc-400">${Number(prop.precio).toLocaleString('es-CO')}</span>
+                            </Link>
+                        ))}
                     </div>
-                </article>
-            </section>
+                </div>
+            )}
+
+            {recentLeads.length > 0 && (
+                <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 overflow-hidden">
+                    <div className="px-5 py-3.5 border-b border-zinc-100 dark:border-zinc-800 flex items-center justify-between">
+                        <h2 className="text-sm font-black text-zinc-900">Últimos leads</h2>
+                        <Link href="/admin/crm" className="text-[11px] font-bold text-zinc-400 hover:text-red-600 flex items-center gap-1">Ver CRM <ArrowRight size={11} /></Link>
+                    </div>
+                    <div className="divide-y divide-zinc-50 dark:divide-zinc-800/50">
+                        {recentLeads.map(lead => (
+                            <div key={lead.id} className="flex items-center justify-between gap-4 px-5 py-3">
+                                <div className="min-w-0"><p className="text-[13px] font-semibold text-zinc-900">{lead.nombre}</p><p className="text-[10px] text-zinc-400 flex items-center gap-1.5"><Clock3 size={10} />{new Date(lead.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' })}</p></div>
+                                <span className={`shrink-0 text-[9px] font-bold uppercase px-2 py-0.5 rounded-full border ${lead.estado === 'pendiente' ? 'bg-amber-50 text-amber-700 border-amber-200' : lead.estado === 'contactado' ? 'bg-blue-50 text-blue-700 border-blue-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>{lead.estado || 'pendiente'}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

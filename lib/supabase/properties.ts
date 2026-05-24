@@ -1,4 +1,4 @@
-import { createClient, createPublicClient } from '../supabase-server';
+import { createClient, createPublicClient, createAdminClient } from '../supabase-server';
 import { PROPERTY_SELECT_FIELDS } from './select-fields';
 import { upsertTags, upsertAmenidades, syncPropertyTags, syncPropertyAmenidades, upsertBarrio, slugify } from './seo-helpers';
 import { unstable_cache } from 'next/cache';
@@ -539,7 +539,8 @@ export async function createProperty(
     propertyData: Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>,
     images: GalleryImage[]
 ) {
-    const supabase = await createClient();
+    // Use service_role client — auth is enforced by middleware before reaching this function
+    const supabase = createAdminClient();
     let propertyId: string | null = null;
 
     try {
@@ -572,16 +573,21 @@ export async function createProperty(
             .from('properties')
             .insert([insertData])
             .select()
-            .single();
+            .maybeSingle();
 
         if (propError) {
-            console.error('[DB] ERROR CRÍTICO al insertar propiedad:', propError.message);
+            console.error('[DB] ERROR CRÍTICO al insertar propiedad:', {
+                message: propError.message,
+                details: propError.details,
+                hint: propError.hint,
+                code: propError.code,
+            });
             throw new Error(`Error base de datos (propiedad): ${propError.message}`);
         }
 
         if (!property || !property.id) {
-            console.error('[DB] ERROR: La propiedad se insertó pero no se devolvió el ID');
-            throw new Error('No se pudo obtener el ID de la propiedad creada.');
+            console.error('[DB] INSERT no retornó fila — posible RLS bloqueando. Payload:', JSON.stringify(insertData).slice(0, 200));
+            throw new Error('No se pudo crear la propiedad. Verifica tus permisos (RLS).');
         }
 
         propertyId = property.id;
@@ -671,7 +677,8 @@ export async function createProperty(
 }
 
 export async function deleteProperty(id: string) {
-    const supabase = await createClient();
+    // Use service_role client — auth is enforced by middleware before reaching this function
+    const supabase = createAdminClient();
     try {
         console.log('[DB] INICIANDO ELIMINACIÓN DE PROPIEDAD ID:', id);
 
@@ -728,7 +735,8 @@ export async function updateProperty(
     propertyData: Partial<Omit<Property, 'id' | 'created_at' | 'updated_at' | 'galeria'>>,
     images: GalleryImage[]
 ) {
-    const supabase = await createClient();
+    // Use service_role client — auth is enforced by middleware before reaching this function
+    const supabase = createAdminClient();
     try {
         console.log('---------------------------------------------------------');
         console.log('[DB] INICIANDO ACTUALIZACIÓN DE PROPIEDAD ID:', id);
@@ -760,15 +768,30 @@ export async function updateProperty(
 
         console.log('[DB] Update Payload (sanitized):', JSON.stringify(sanitized, null, 2));
 
-        const { error: propError } = await supabase
+        // Use .select() with maybeSingle() to verify the row was actually updated (RLS can silently block)
+        const { data: updatedRow, error: propError } = await supabase
             .from('properties')
             .update(sanitized)
-            .eq('id', id);
+            .eq('id', id)
+            .select('id')
+            .maybeSingle();
 
         if (propError) {
-            console.error('[DB] ERROR al actualizar propiedad:', propError.message);
-            return { error: propError.message };
+            console.error('[DB] ERROR al actualizar propiedad:', {
+                message: propError.message,
+                details: propError.details,
+                hint: propError.hint,
+                code: propError.code,
+            });
+            return { error: `Error de base de datos: ${propError.message}` };
         }
+
+        if (!updatedRow) {
+            console.error('[DB] UPDATE no afectó ninguna fila — posible RLS bloqueando o propiedad inexistente. ID:', id);
+            return { error: 'No se pudo actualizar la propiedad. Verifica que exista y tengas permisos.' };
+        }
+
+        console.log('[DB] UPDATE confirmado — fila afectada. ID:', id);
 
         // 2. Sincronizar galería de imágenes
         console.log('[DB] Sincronizando galería de imágenes...');
@@ -846,7 +869,8 @@ export async function updateProperty(
 }
 
 export async function syncPropertyGallery(propertyId: string, images: GalleryImage[]) {
-    const supabase = await createClient();
+    // Use service_role client — auth is enforced by middleware before reaching this function
+    const supabase = createAdminClient();
     try {
         console.log(`[DB] Iniciando syncPropertyGallery para propiedad: ${propertyId}`);
 

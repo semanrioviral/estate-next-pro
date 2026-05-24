@@ -9,6 +9,7 @@ import { ArrowLeft, Save, Building2, MapPin, Layout, Info, Loader2, Star, Shield
 import Link from "next/link";
 import { Property } from "@/lib/supabase/properties";
 import MultiSelectCheckbox from "@/components/admin/MultiSelectCheckbox";
+import { useToast } from "@/components/admin/Toast";
 
 interface PropertyFormProps {
     initialData?: Property;
@@ -22,6 +23,7 @@ interface PropertyFormProps {
 
 export default function PropertyForm({ initialData, onSubmitAction, title, subtitle, tags, amenidades, agents }: PropertyFormProps) {
     const router = useRouter();
+    const { success: showSuccess, error: showError } = useToast();
     const [loading, setLoading] = useState(false);
 
     // Transform initial galeria (string[]) to GalleryImage[]
@@ -43,7 +45,6 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
         }));
     });
 
-    const [status, setStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
     const [isSavingGallery, setIsSavingGallery] = useState(false);
 
     // State controlado para nombre público del asesor (auto-fill al seleccionar agente)
@@ -72,32 +73,26 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
 
     const handleSaveGallery = async () => {
         if (!initialData?.id) return;
-
         setIsSavingGallery(true);
-        setStatus(null);
-
         try {
             const res = await updatePropertyGallery(initialData.id, images);
             if (res.success) {
-                setStatus({ type: 'success', message: '¡Galería actualizada con éxito!' });
+                showSuccess('Galería actualizada correctamente');
             } else {
-                setStatus({ type: 'error', message: res.error || 'Error al actualizar galería' });
+                showError(res.error || 'Error al actualizar galería');
             }
         } catch (err) {
-            setStatus({ type: 'error', message: 'Error de red al actualizar galería' });
+            showError('Error de red al actualizar galería');
         } finally {
             setIsSavingGallery(false);
-            // Auto hide success message
-            setTimeout(() => setStatus(null), 3000);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setStatus(null);
 
         if (images.length === 0) {
-            setStatus({ type: 'error', message: 'Debes subir al menos una imagen' });
+            showError('Debes subir al menos una imagen');
             return;
         }
 
@@ -120,19 +115,16 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
             const result = await onSubmitAction(formData, images);
 
             if (result?.error) {
-                setStatus({ type: 'error', message: result.error });
+                showError(result.error);
                 setLoading(false);
             } else if (result?.success) {
-                setStatus({ type: 'success', message: `¡Propiedad ${initialData ? 'actualizada' : 'publicada'} con éxito! Redirigiendo...` });
-
-                setTimeout(() => {
-                    router.push("/admin/propiedades");
-                    router.refresh();
-                }, 1500);
+                showSuccess(`¡Propiedad ${initialData ? 'actualizada' : 'publicada'} con éxito!`);
+                router.push("/admin/propiedades");
+                router.refresh();
             }
         } catch (error) {
             console.error("Submission error:", error);
-            setStatus({ type: 'error', message: 'Ocurrió un error inesperado' });
+            showError('Ocurrió un error inesperado');
             setLoading(false);
         }
     };
@@ -155,21 +147,6 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                     <p className="text-zinc-500 font-medium tracking-wide">{subtitle}</p>
                 </div>
             </div>
-
-            {/* Status Alert */}
-            {status && (
-                <div
-                    className={`p-6 rounded-[2.5rem] border-2 animate-in fade-in slide-in-from-top-4 duration-501 ${status.type === 'success'
-                        ? 'bg-emerald-50 border-emerald-100 text-emerald-800 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400'
-                        : 'bg-red-50 border-red-100 text-red-800 dark:bg-red-900/20 dark:border-red-800 dark:text-red-400'
-                        }`}
-                >
-                    <div className="flex items-center gap-4 font-black">
-                        {status.type === 'success' ? <Star className="h-6 w-6 fill-current" /> : <Info className="h-6 w-6" />}
-                        <p className="uppercase tracking-[0.2em] text-sm">{status.message}</p>
-                    </div>
-                </div>
-            )}
 
             <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-12 gap-10">
                 <div className="xl:col-span-8 space-y-12">

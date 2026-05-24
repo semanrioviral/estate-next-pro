@@ -16,6 +16,18 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
     try {
         console.log('[ACTION] handleCreateProperty iniciado');
 
+        // Helper: parse optional numeric field (null/'' → null, valid number → number, NaN → null)
+        const optNum = (raw: FormDataEntryValue | null): number | null => {
+            if (raw === null || raw === '') return null;
+            const n = Number(raw);
+            return isNaN(n) ? null : n;
+        };
+        // Helper: parse optional string field (null/'' → null)
+        const optStr = (raw: FormDataEntryValue | null): string | null => {
+            if (raw === null || raw === '') return null;
+            return String(raw);
+        };
+
         const titulo = formData.get('titulo') as string;
         const precio = Number(formData.get('precio'));
         const descripcion = formData.get('descripcion') as string;
@@ -47,18 +59,18 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
         const servicios = formData.get('servicios')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
         const etiquetas = formData.get('etiquetas')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
 
-        // New schema fields
+        // New schema fields (using safe parsers that handle '' and '0' correctly)
         const parqueaderos = Number(formData.get('parqueaderos')) || 0;
-        const latitud = formData.get('latitud') ? Number(formData.get('latitud')) : null;
-        const longitud = formData.get('longitud') ? Number(formData.get('longitud')) : null;
-        const año_construccion = formData.get('año_construccion') ? Number(formData.get('año_construccion')) : null;
-        const antigüedad = formData.get('antigüedad') as string || null;
-        const estrato = formData.get('estrato') ? Number(formData.get('estrato')) : null;
-        const canon_administracion = formData.get('canon_administracion') ? Number(formData.get('canon_administracion')) : null;
-        const codigo_postal = formData.get('codigo_postal') as string || null;
-        const moneda = formData.get('moneda') as string || 'COP';
-        const video_url = formData.get('video_url') as string || null;
-        const fecha_disponible = formData.get('fecha_disponible') as string || null;
+        const latitud = optNum(formData.get('latitud'));
+        const longitud = optNum(formData.get('longitud'));
+        const año_construccion = optNum(formData.get('año_construccion'));
+        const antigüedad = optStr(formData.get('antigüedad'));
+        const estrato = optNum(formData.get('estrato'));
+        const canon_administracion = optNum(formData.get('canon_administracion'));
+        const codigo_postal = optStr(formData.get('codigo_postal'));
+        const moneda = optStr(formData.get('moneda')) || 'COP';
+        const video_url = optStr(formData.get('video_url'));
+        const fecha_disponible = optStr(formData.get('fecha_disponible'));
 
         if (!titulo || isNaN(precio)) {
             return { error: 'Título y precio son requeridos.' };
@@ -75,6 +87,11 @@ export async function handleCreateProperty(formData: FormData, images: GalleryIm
 
         let resolvedAgentName = agente_nombre_publico;
         let resolvedAgentPhoto = agente_foto_url;
+
+        console.log('[ACTION] New fields parsed (create):', {
+            año_construccion, antigüedad, estrato, canon_administracion,
+            latitud, longitud, parqueaderos, codigo_postal, moneda
+        });
 
         if (agente_id && (!resolvedAgentName || !resolvedAgentPhoto)) {
             const admin = createAdminClient();
@@ -182,6 +199,18 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
     try {
         console.log('[ACTION] handleUpdateProperty iniciado para ID:', id);
 
+        // Helper: parse optional numeric field (null/'' → null, valid number → number, NaN → null)
+        const optNum = (raw: FormDataEntryValue | null): number | null => {
+            if (raw === null || raw === '') return null;
+            const n = Number(raw);
+            return isNaN(n) ? null : n;
+        };
+        // Helper: parse optional string field (null/'' → null)
+        const optStr = (raw: FormDataEntryValue | null): string | null => {
+            if (raw === null || raw === '') return null;
+            return String(raw);
+        };
+
         const titulo = formData.get('titulo') as string;
         const precio = Number(formData.get('precio'));
         const descripcion = formData.get('descripcion') as string;
@@ -212,18 +241,18 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
         const servicios = formData.get('servicios')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
         const etiquetas = formData.get('etiquetas')?.toString().split(',').map(s => s.trim()).filter(Boolean) || [];
 
-        // New schema fields
+        // New schema fields (using safe parsers that handle '' and '0' correctly)
         const parqueaderos = Number(formData.get('parqueaderos')) || 0;
-        const latitud = formData.get('latitud') ? Number(formData.get('latitud')) : null;
-        const longitud = formData.get('longitud') ? Number(formData.get('longitud')) : null;
-        const año_construccion = formData.get('año_construccion') ? Number(formData.get('año_construccion')) : null;
-        const antigüedad = formData.get('antigüedad') as string || null;
-        const estrato = formData.get('estrato') ? Number(formData.get('estrato')) : null;
-        const canon_administracion = formData.get('canon_administracion') ? Number(formData.get('canon_administracion')) : null;
-        const codigo_postal = formData.get('codigo_postal') as string || null;
-        const moneda = formData.get('moneda') as string || 'COP';
-        const video_url = formData.get('video_url') as string || null;
-        const fecha_disponible = formData.get('fecha_disponible') as string || null;
+        const latitud = optNum(formData.get('latitud'));
+        const longitud = optNum(formData.get('longitud'));
+        const año_construccion = optNum(formData.get('año_construccion'));
+        const antigüedad = optStr(formData.get('antigüedad'));
+        const estrato = optNum(formData.get('estrato'));
+        const canon_administracion = optNum(formData.get('canon_administracion'));
+        const codigo_postal = optStr(formData.get('codigo_postal'));
+        const moneda = optStr(formData.get('moneda')) || 'COP';
+        const video_url = optStr(formData.get('video_url'));
+        const fecha_disponible = optStr(formData.get('fecha_disponible'));
 
         if (!titulo || isNaN(precio)) {
             return { error: 'Título y precio son requeridos.' };
@@ -254,6 +283,10 @@ export async function handleUpdateProperty(id: string, formData: FormData, image
         }
 
         console.log(`[ACTION] handleUpdateProperty - ID: ${id}, Computed Slug: ${slug}, Title: ${titulo}, Estado: ${estado}`);
+        console.log('[ACTION] New fields parsed:', {
+            año_construccion, antigüedad, estrato, canon_administracion,
+            latitud, longitud, parqueaderos, codigo_postal, moneda
+        });
 
         const payload = {
             titulo,
