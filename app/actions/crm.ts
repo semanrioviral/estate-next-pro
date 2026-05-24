@@ -5,32 +5,40 @@ import { createAdminClient } from "@/lib/supabase-server";
 export async function trackWhatsappLead(phone: string, propertyId?: string, propertyTitle?: string) {
     try {
         const supabase = createAdminClient();
-        const cleanPhone = phone.replace(/\D/g, '');
 
         // Buscar lead existente con el mismo teléfono
         const { data: existing } = await supabase
             .from("advisory_requests")
-            .select("id, mensaje, property_id")
+            .select("id, mensaje, property_id, propiedades_ids")
             .eq("telefono", phone)
             .order("created_at", { ascending: false })
             .limit(1);
 
         if (existing && existing.length > 0) {
-            // Actualizar lead existente: agregar info de la nueva propiedad
             const lead = existing[0];
-            const newPropertyLine = propertyTitle ? `\nTambién interesado en: ${propertyTitle}` : '';
-            const updatedMensaje = (lead.mensaje || '') + newPropertyLine;
+            
+            // Track propiedad en historial (evitar duplicados)
+            let propsIds: string[] = [];
+            try { propsIds = lead.propiedades_ids ? JSON.parse(lead.propiedades_ids) : []; } catch { propsIds = []; }
+            if (lead.property_id) propsIds.unshift(lead.property_id);
+            if (propertyId && !propsIds.includes(propertyId)) propsIds.unshift(propertyId);
+            propsIds = [...new Set(propsIds)].slice(0, 20); // max 20 properties
+
+            const newPropLine = propertyTitle && propertyId && propertyId !== lead.property_id
+                ? `\n📌 ${new Date().toLocaleDateString('es-CO')} — También interesado en: ${propertyTitle}`
+                : '';
 
             const { error } = await supabase
                 .from("advisory_requests")
                 .update({
-                    mensaje: updatedMensaje,
+                    mensaje: (lead.mensaje || '') + newPropLine,
                     ultimo_contacto: new Date().toISOString(),
-                    property_id: propertyId || lead.property_id, // actualizar a la más reciente
+                    property_id: propertyId || lead.property_id,
+                    propiedades_ids: JSON.stringify(propsIds),
                 })
                 .eq("id", lead.id);
 
-            if (!error) console.log("[CRM] Lead existente actualizado:", lead.id);
+            if (!error) console.log("[CRM] Lead actualizado:", lead.id, "| Props:", propsIds.length);
         } else {
             // Crear nuevo lead
             const { error } = await supabase.from("advisory_requests").insert({
@@ -40,6 +48,7 @@ export async function trackWhatsappLead(phone: string, propertyId?: string, prop
                 mensaje: propertyTitle ? `Interesado en: ${propertyTitle}` : "Contacto vía WhatsApp",
                 estado: "pendiente",
                 property_id: propertyId || null,
+                propiedades_ids: propertyId ? JSON.stringify([propertyId]) : null,
             });
             if (error) console.warn("[CRM] Error creating lead:", error.message);
         }

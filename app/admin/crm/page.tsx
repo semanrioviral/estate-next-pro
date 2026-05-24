@@ -160,6 +160,21 @@ export default function CRMPage() {
                                     <Building2 size={12} /> {selectedLead.property_titulo} <ChevronRight size={11} />
                                 </Link>
                             )}
+                            {selectedLead.mensaje && (
+                                <div className="mt-3">
+                                    <h4 className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-2">Historial de contacto</h4>
+                                    <div className="text-xs text-zinc-600 space-y-1 bg-zinc-50 dark:bg-zinc-800 rounded-lg p-3 max-h-40 overflow-y-auto">
+                                        {(selectedLead.mensaje || '').split('\n').filter(Boolean).map((line, i) => {
+                                            const isPropertyLine = line.includes('Interesado en:') || line.includes('📌');
+                                            return (
+                                                <p key={i} className={isPropertyLine ? 'font-semibold text-zinc-800' : 'text-zinc-500'}>
+                                                    {line}
+                                                </p>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                         <div className="lg:col-span-2">
                             <h4 className="text-xs font-black text-zinc-500 uppercase tracking-wider mb-2">Notas</h4>
