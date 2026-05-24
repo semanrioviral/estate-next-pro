@@ -299,7 +299,7 @@ export default async function PropertyDetailPage({ params }: Props) {
                 </div>
             </div>
 
-            <MobileStickyCTA whatsappUrl={whatsappUrl} callUrl={callUrl} price={priceDisplay} />
+            <MobileStickyCTA whatsappUrl={whatsappUrl} callUrl={callUrl} price={priceDisplay} propertyId={property.id} propertyTitle={property.titulo} />
             <RetentionModal ciudad={property.ciudad} />
         </main>
     );

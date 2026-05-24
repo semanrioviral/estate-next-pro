@@ -3,14 +3,25 @@
 import React from 'react';
 import { Phone } from 'lucide-react';
 import { openWhatsapp } from '@/lib/trackWhatsapp';
+import { trackWhatsappLead } from '@/app/actions/crm';
 
 interface MobileStickyCTAProps {
     whatsappUrl: string;
     callUrl: string;
     price: string;
+    propertyId?: string;
+    propertyTitle?: string;
 }
 
-export default function MobileStickyCTA({ whatsappUrl, callUrl, price }: MobileStickyCTAProps) {
+export default function MobileStickyCTA({ whatsappUrl, callUrl, price, propertyId, propertyTitle }: MobileStickyCTAProps) {
+    const handleWhatsapp = () => {
+        if (propertyId || propertyTitle) {
+            const phone = whatsappUrl.match(/wa\.me\/(\d+)/)?.[1] || '';
+            trackWhatsappLead(phone, propertyId, propertyTitle);
+        }
+        openWhatsapp(whatsappUrl);
+    };
+
     return (
         <div className="fixed bottom-0 left-0 right-0 z-[100] md:hidden">
             <div className="bg-gradient-to-t from-zinc-100/90 to-transparent pt-2">
@@ -22,7 +33,7 @@ export default function MobileStickyCTA({ whatsappUrl, callUrl, price }: MobileS
                                 <p className="text-[1.05rem] font-black text-zinc-900 tracking-tight leading-none truncate mt-1">{price}</p>
                             </div>
                             <button
-                                onClick={() => openWhatsapp(whatsappUrl)}
+                                onClick={handleWhatsapp}
                                 type="button"
                                 aria-label="Contactar por WhatsApp"
                                 className="flex-1 h-11 rounded-xl bg-[#25D366] hover:bg-[#1ebe5d] text-white inline-flex items-center justify-center gap-2 transition-colors active:scale-95 shadow-sm font-bold text-sm"

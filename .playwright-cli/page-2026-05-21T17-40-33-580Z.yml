@@ -1,0 +1,14 @@
+- generic [active] [ref=e1]:
+  - link "Saltar al contenido principal" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - heading "Admin Login" [level=2] [ref=e6]
+      - paragraph [ref=e7]: Usa tus credenciales para acceder al panel
+    - generic [ref=e8]:
+      - generic [ref=e9]:
+        - textbox "Email Address" [ref=e11]
+        - textbox "Password" [ref=e13]
+      - button "Log In" [ref=e15]
+  - button "Open Next.js Dev Tools" [ref=e21] [cursor=pointer]:
+    - img [ref=e22]
