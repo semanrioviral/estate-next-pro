@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { Phone, MessageSquare, ChevronRight, Clock, Building2, Search } from "lucide-react";
 import Link from "next/link";
-import { getCRMLeads, updateLeadEtapa, addLeadNote, type CRMLead, type PipelineEtapa } from "@/lib/supabase/crm";
+import { getCRMLeads, updateLeadEtapa, addLeadNote, updateLeadInfo, type CRMLead, type PipelineEtapa } from "@/lib/supabase/crm";
 import AdminBreadcrumbs from "@/components/admin/AdminBreadcrumbs";
 
 const PIPELINE: { etapa: PipelineEtapa; label: string; color: string; bg: string }[] = [
@@ -20,6 +20,8 @@ export default function CRMPage() {
     const [search, setSearch] = useState("");
     const [selectedLead, setSelectedLead] = useState<CRMLead | null>(null);
     const [noteText, setNoteText] = useState("");
+    const [editingName, setEditingName] = useState(false);
+    const [editName, setEditName] = useState("");
 
     const load = useCallback(async () => { setLoading(true); setLeads(await getCRMLeads()); setLoading(false); }, []);
     useEffect(() => { load(); }, [load]);
@@ -79,7 +81,7 @@ export default function CRMPage() {
                             <div className="space-y-2 flex-1">
                                 {colLeads.map(lead => (
                                     <div key={lead.id} onClick={() => setSelectedLead(lead)} className={`bg-white dark:bg-zinc-900 rounded-xl border p-3 cursor-pointer hover:shadow-md hover:border-red-200 transition-all ${selectedLead?.id === lead.id ? 'ring-2 ring-red-500 border-red-300' : 'border-zinc-200/60'}`}>
-                                        <p className="text-sm font-bold text-zinc-900 truncate mb-1">{lead.nombre}</p>
+                                        <p className="text-sm font-bold text-zinc-900 truncate mb-1 group-hover:text-red-600 transition-colors">{lead.nombre}</p>
                                         <div className="flex items-center gap-1 text-[10px] text-zinc-500 mb-1"><Phone size={10} /> {lead.telefono}</div>
                                         {lead.property_titulo && <div className="flex items-center gap-1 text-[10px] text-zinc-400 truncate"><Building2 size={10} /> {lead.property_titulo.slice(0, 35)}</div>}
                                         <div className="flex items-center gap-1 mt-2 text-[9px] text-zinc-400"><Clock size={9} /> {new Date(lead.created_at).toLocaleDateString('es-CO', { day: 'numeric', month: 'short' })}</div>
@@ -108,7 +110,42 @@ export default function CRMPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 p-5">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div>
-                            <h3 className="text-base font-black text-zinc-900 mb-3">{selectedLead.nombre}</h3>
+                            {editingName && selectedLead ? (
+                                <div className="flex items-center gap-2 mb-3">
+                                    <input
+                                        type="text" value={editName}
+                                        onChange={e => setEditName(e.target.value)}
+                                        onKeyDown={async e => {
+                                            if (e.key === 'Enter') {
+                                                await updateLeadInfo(selectedLead.id, { nombre: editName });
+                                                setSelectedLead({ ...selectedLead, nombre: editName });
+                                                setEditingName(false);
+                                                load();
+                                            }
+                                            if (e.key === 'Escape') setEditingName(false);
+                                        }}
+                                        onBlur={async () => {
+                                            if (editName.trim() && editName !== selectedLead.nombre) {
+                                                await updateLeadInfo(selectedLead.id, { nombre: editName });
+                                                setSelectedLead({ ...selectedLead, nombre: editName });
+                                                load();
+                                            }
+                                            setEditingName(false);
+                                        }}
+                                        className="text-base font-black text-zinc-900 bg-zinc-50 border border-zinc-300 rounded-lg px-3 py-1.5 outline-none focus:ring-2 focus:ring-red-500/20 w-full"
+                                        autoFocus
+                                    />
+                                </div>
+                            ) : (
+                                <h3
+                                    className="text-base font-black text-zinc-900 mb-3 cursor-pointer hover:text-red-600 transition-colors flex items-center gap-2"
+                                    onClick={() => { setEditName(selectedLead?.nombre || ''); setEditingName(true); }}
+                                    title="Click para editar"
+                                >
+                                    {selectedLead?.nombre}
+                                    <span className="text-[10px] text-zinc-400 font-normal">✎</span>
+                                </h3>
+                            )}
                             <div className="space-y-2 text-sm">
                                 {selectedLead.telefono && (
                                     <a href={`https://wa.me/57${selectedLead.telefono.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-zinc-700 hover:text-green-600 font-bold">

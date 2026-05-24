@@ -74,6 +74,13 @@ export async function addLeadNote(id: string, nota: string) {
     return { success: true };
 }
 
+export async function updateLeadInfo(id: string, fields: { nombre?: string; telefono?: string; email?: string }) {
+    const supabase = createAdminClient();
+    const { error } = await supabase.from("advisory_requests").update({ ...fields, ultimo_contacto: new Date().toISOString() }).eq("id", id);
+    if (error) return { error: error.message };
+    return { success: true };
+}
+
 export async function getCRMMetrics() {
     const supabase = createAdminClient();
     const [advisoryRes, agentesRes] = await Promise.all([
