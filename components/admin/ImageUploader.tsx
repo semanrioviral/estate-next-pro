@@ -288,6 +288,9 @@ export default function ImageUploader({
                 formData.append("file", fileObj.file!);
                 formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
                 formData.append("folder", "properties");
+                // Auto-compress & convert to WebP on upload
+                formData.append("quality", "auto");
+                formData.append("fetch_format", "auto");
 
                 const uploadRes = await fetch(
                     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
