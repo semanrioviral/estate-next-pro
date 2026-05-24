@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import {
     LayoutDashboard, Home, Users, LogOut, PhoneCall, ChevronRight,
-    Search, Star, Clock, Plus, Command, MessageSquare, KanbanSquare
+    Search, Star, Clock, Plus, Command, MessageSquare, KanbanSquare, Sparkles
 } from 'lucide-react'
 import Link from 'next/link'
 import { logout } from './actions'
@@ -13,6 +13,7 @@ export const dynamic = 'force-dynamic';
 const NAV_ITEMS = [
     { href: '/admin', label: 'Dashboard', icon: 'dashboard' as const, exact: true as const, badge: undefined as number | null | undefined },
     { href: '/admin/propiedades', label: 'Propiedades', icon: 'home' as const, exact: false as const, badge: undefined as number | null | undefined },
+    { href: '/admin/propiedades/ia', label: 'Crear con IA', icon: 'sparkles' as const, exact: false as const, badge: undefined as number | null | undefined },
     { href: '/admin/crm', label: 'CRM', icon: 'crm' as const, exact: false as const, badge: undefined as number | null | undefined },
     { href: '/admin/solicitudes', label: 'Solicitudes', icon: 'solicitudes' as const, exact: false as const, badge: undefined as number | null | undefined },
     { href: '/admin/equipo', label: 'Equipo', icon: 'team' as const, exact: false as const, badge: undefined as number | null | undefined },
@@ -22,6 +23,7 @@ const ICON_MAP = {
     dashboard: LayoutDashboard,
     home: Home,
     crm: KanbanSquare,
+    sparkles: Sparkles,
     leads: PhoneCall,
     solicitudes: MessageSquare,
     team: Users,
