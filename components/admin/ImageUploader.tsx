@@ -75,7 +75,12 @@ function SortableImage({
             className={`relative aspect-square rounded-2xl overflow-hidden border-2 group transition-all ${file.es_principal ? "border-red-500 shadow-lg shadow-red-100" : "border-zinc-100 dark:border-zinc-800"
                 }`}
         >
-            <Image src={file.preview} alt="preview" fill className="object-cover" />
+            {/* Use regular img for blob URLs - next/image fails with them on mobile */}
+            {file.preview.startsWith('blob:') ? (
+                <img src={file.preview} alt="preview" className="absolute inset-0 w-full h-full object-cover" />
+            ) : (
+                <Image src={file.preview} alt="preview" fill className="object-cover" unoptimized />
+            )}
 
             {/* Drag Handle */}
             <div
