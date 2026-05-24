@@ -32,18 +32,24 @@ export default function AIChatCreator() {
     const [publishing, setPublishing] = useState(false);
     const [edited, setEdited] = useState<Partial<GeneratedProperty>>({});
     const [uploadReady, setUploadReady] = useState(false);
+    const [apiKey, setApiKey] = useState(() => {
+        if (typeof window !== 'undefined') return localStorage.getItem('ai_api_key') || '';
+        return '';
+    });
 
     const prop = generated ? { ...generated, ...edited } : null;
 
     const handleGenerate = async () => {
         if (text.trim().length < 10) { toastErr("Escribe al menos 10 caracteres describiendo la propiedad."); return; }
         if (!uploadReady || images.length === 0) { toastErr("Espera a que las imágenes terminen de subir."); return; }
+        if (!apiKey.trim()) { toastErr("Ingresa tu API Key de IA primero."); return; }
+        localStorage.setItem('ai_api_key', apiKey.trim());
         setLoading(true);
         try {
             const res = await fetch("/api/ai/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ text: text.trim(), imageUrls: images.map(i => i.url) }),
+                body: JSON.stringify({ text: text.trim(), imageUrls: images.map(i => i.url), apiKey: apiKey.trim() }),
             });
             const data = await res.json();
             if (data.error) { toastErr(data.error); return; }
@@ -111,6 +117,14 @@ export default function AIChatCreator() {
             {/* INPUT */}
             {!generated && (
                 <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200/60 p-6 space-y-4">
+                    <label className="block">
+                        <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">🔑 API Key de IA (se guarda en tu navegador)</span>
+                        <input
+                            type="password" value={apiKey} onChange={e => setApiKey(e.target.value)}
+                            placeholder="sk-..."
+                            className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-4 py-2 text-sm font-mono text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-amber-500/20"
+                        />
+                    </label>
                     <label className="block">
                         <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">📝 Pega aquí la info de la propiedad</span>
                         <textarea

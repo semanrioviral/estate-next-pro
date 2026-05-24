@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "";
 const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || "https://api.deepseek.com/v1";
 const MODEL = process.env.AI_MODEL || "deepseek-chat";
 
@@ -68,7 +67,12 @@ DEVUELVE SOLO EL JSON, sin explicaciones, sin markdown, sin texto adicional.`;
 
 export async function POST(req: NextRequest) {
     try {
-        const { text, imageUrls } = await req.json();
+        const { text, imageUrls, apiKey } = await req.json();
+
+        const effectiveKey = apiKey || process.env.OPENAI_API_KEY;
+        if (!effectiveKey) {
+            return NextResponse.json({ error: "API Key no configurada. Ingresa tu key en el campo 🔑." }, { status: 401 });
+        }
 
         if (!text || text.trim().length < 10) {
             return NextResponse.json({ error: "Necesito al menos 10 caracteres de descripción." }, { status: 400 });
@@ -84,7 +88,7 @@ ${imageUrls && imageUrls.length > 0 ? `IMÁGENES ADJUNTAS: ${imageUrls.length} f
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${OPENAI_API_KEY}`,
+                    "Authorization": `Bearer ${effectiveKey}`,
             },
             body: JSON.stringify({
                 model: MODEL,
