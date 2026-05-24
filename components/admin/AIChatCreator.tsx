@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sparkles, Loader2, Send, Check, Pencil, X, Upload, Building2 } from "lucide-react";
+import { Sparkles, Loader2, Send, Check, Pencil, X, Upload, Building2, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import ImageUploader from "@/components/admin/ImageUploader";
 import { GalleryImage } from "@/lib/supabase/properties";
@@ -31,11 +31,13 @@ export default function AIChatCreator() {
     const [generated, setGenerated] = useState<GeneratedProperty | null>(null);
     const [publishing, setPublishing] = useState(false);
     const [edited, setEdited] = useState<Partial<GeneratedProperty>>({});
+    const [uploadReady, setUploadReady] = useState(false);
 
     const prop = generated ? { ...generated, ...edited } : null;
 
     const handleGenerate = async () => {
         if (text.trim().length < 10) { toastErr("Escribe al menos 10 caracteres describiendo la propiedad."); return; }
+        if (!uploadReady || images.length === 0) { toastErr("Espera a que las imágenes terminen de subir."); return; }
         setLoading(true);
         try {
             const res = await fetch("/api/ai/generate", {
@@ -118,10 +120,10 @@ export default function AIChatCreator() {
                             className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl p-4 text-sm font-medium text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-amber-500/20 resize-y"
                         />
                     </label>
-                    <div>
-                        <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">📸 Imágenes (la primera será la principal)</span>
-                        <ImageUploader onUploadComplete={setImages} />
-                    </div>
+                <div>
+                    <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 block">📸 Imágenes ({images.length} {uploadReady ? '✓ listas' : 'subiendo...'})</span>
+                    <ImageUploader onUploadComplete={(imgs) => { setImages(imgs); setUploadReady(true); }} />
+                </div>
                     <button onClick={handleGenerate} disabled={loading} className="w-full flex items-center justify-center gap-2 py-3.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl text-sm font-bold transition-colors disabled:opacity-50">
                         {loading ? <Loader2 size={18} className="animate-spin" /> : <Sparkles size={18} />}
                         {loading ? "Analizando con IA..." : "Generar propiedad con IA"}
@@ -135,8 +137,19 @@ export default function AIChatCreator() {
                     <div className="bg-emerald-50 dark:bg-emerald-900/20 px-5 py-3 border-b border-emerald-200 flex items-center gap-2">
                         <Check size={18} className="text-emerald-600" />
                         <span className="text-sm font-black text-emerald-700">Propiedad generada — revisa y publica</span>
-                        <button onClick={() => { setGenerated(null); setText(""); setEdited({}); }} className="ml-auto text-xs font-bold text-zinc-500 hover:text-red-600">× Cancelar</button>
+                        <span className="text-xs text-emerald-600 ml-2">{images.length} fotos listas</span>
+                        <button onClick={() => { setGenerated(null); setText(""); setEdited({}); setUploadReady(false); setImages([]); }} className="ml-auto text-xs font-bold text-zinc-500 hover:text-red-600">× Cancelar</button>
                     </div>
+                    {images.length > 0 && (
+                        <div className="px-6 py-3 border-b border-zinc-100 flex gap-2 overflow-x-auto">
+                            {images.slice(0, 8).map((img, i) => (
+                                <div key={i} className="relative h-16 w-24 rounded-lg overflow-hidden shrink-0 border-2 border-zinc-200">
+                                    <Image src={img.url} alt={`Foto ${i+1}`} fill className="object-cover" sizes="96px" />
+                                    {img.es_principal && <div className="absolute top-1 left-1 bg-amber-400 text-white rounded px-1 text-[9px] font-black">★</div>}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
                         <EditableField label="Título" value={prop.titulo} onChange={v => update("titulo", v)} />
                         <div className="flex gap-3">
