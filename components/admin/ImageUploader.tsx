@@ -288,11 +288,9 @@ export default function ImageUploader({
                 formData.append("file", fileObj.file!);
                 formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
                 formData.append("folder", "properties");
-                // Auto-compress & convert to WebP on upload
+                // Convertir a WebP + comprimir (Google exige WebP para Core Web Vitals)
+                formData.append("format", "webp");
                 formData.append("quality", "auto");
-                formData.append("fetch_format", "auto");
-                // Force conversion from HEIC/HEIF/bmp to jpg
-                formData.append("format", "jpg");
 
                 const uploadRes = await fetch(
                     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
