@@ -68,6 +68,23 @@
         "set GMC_ACCOUNT_ID=5080257993&& set GMC_SERVICE_ACCOUNT_KEY=C:\\Users\\jonat\\OneDrive\\Escritorio\\estate-next-pro\\gmc-key.json&& gmc-mcp run"
       ],
       "enabled": true
+    },
+
+    "google-business-profile": {
+      "type": "remote",
+      "url": "https://mcp.viasocket.com/mcp/6a14dadf926db8f5d680e4ae-114502",
+      "timeout": 15000,
+      "oauth": false,
+      "enabled": true
+    },
+
+    "google-business-profile-local": {
+      "type": "local",
+      "command": [
+        "python",
+        "C:\\Users\\jonat\\OneDrive\\Escritorio\\estate-next-pro\\gbp_mcp.py"
+      ],
+      "enabled": false
     }
   }
 }

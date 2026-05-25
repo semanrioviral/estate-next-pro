@@ -44,7 +44,7 @@ const getFeedProperties = unstable_cache(
 
         return attachImagesToProperties((data ?? []) as unknown as Property[], supabase);
     },
-    ['google-feed-v1'],
+    ['google-feed-v2'],
     { revalidate: 3600, tags: ['properties'] }
 );
 
@@ -121,17 +121,17 @@ function mapAvailability(estado: string | null | undefined): 'in stock' | 'out o
 function mapPropertyType(tipo: string | null | undefined): string {
     switch (tipo) {
         case 'casa':
-            return 'house';
+            return 'Single Family Home';
         case 'apartamento':
-            return 'apartment';
+            return 'Apartment';
         case 'lote':
-            return 'land';
+            return 'Lot';
         case 'comercial':
-            return 'commercial';
+            return 'Commercial';
         case 'proyecto':
-            return 'new_development';
+            return 'New Development';
         default:
-            return 'house';
+            return 'Single Family Home';
     }
 }
 
@@ -216,6 +216,7 @@ export async function GET(): Promise<Response> {
                 tag('g:condition', condition),
                 tag('g:identifier_exists', 'FALSE'),
                 tag('g:google_product_category', '1290'),
+                tag('g:feed_label', 'CO'),
                 tag('g:property_type', propertyType),
                 tag('g:country', 'CO'),
                 tag('g:content_language', 'es'),
