@@ -316,9 +316,10 @@ export default function ImageUploader({
                 formData.append("file", fileObj.file!);
                 formData.append("upload_preset", uploadPreset);
                 formData.append("folder", "properties");
-                // Convertir a WebP + comprimir (Google exige WebP para Core Web Vitals)
-                formData.append("format", "webp");
-                formData.append("quality", "auto");
+                // NOTA: format y quality no se envían en unsigned uploads.
+                // La conversión a WebP y compresión deben configurarse en el
+                // Upload Preset de Cloudinary (Settings > Upload > Upload Presets).
+                // Configurar: Incoming Transformation con f_auto,q_auto
 
                 const uploadRes = await fetch(
                     `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
