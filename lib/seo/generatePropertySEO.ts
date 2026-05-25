@@ -168,7 +168,10 @@ export function generatePropertyOGDescription(property: Property): string {
 export function generatePropertyJSONLD(property: Property, siteUrl: string): Record<string, unknown> {
   siteUrl = normalizeSiteUrl(siteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
-  const brandedOgImage = `${siteUrl}/api/og/propiedad/${property.slug}`;
+
+  // Usar la imagen de Cloudinary directamente (misma estrategia que og:image)
+  const rawImage = property.imagen_principal || '';
+  const brandedOgImage = rawImage ? getCloudinaryOGImage(rawImage) : `${siteUrl}/api/og/propiedad/${property.slug}`;
 
   const propertyImages = Array.from(
     new Set([property.imagen_principal, ...(property.galeria || [])].filter(Boolean))
@@ -263,6 +266,17 @@ export function generatePropertyJSONLD(property: Property, siteUrl: string): Rec
   };
 }
 
+/**
+ * Convierte una URL de Cloudinary en una URL optimizada para Open Graph (1200×630).
+ * Si la URL no es de Cloudinary, la devuelve tal cual.
+ */
+function getCloudinaryOGImage(imageUrl: string): string {
+  if (imageUrl?.includes('/upload/')) {
+    return imageUrl.replace('/upload/', '/upload/f_auto,q_auto,c_fill,w_1200,h_630,g_auto/');
+  }
+  return imageUrl;
+}
+
 export function generatePropertySEO(
   property: Property,
   context: PropertySEOContext = { siteUrl: SITE_URL }
@@ -270,7 +284,12 @@ export function generatePropertySEO(
   const { siteUrl: rawSiteUrl } = context;
   const siteUrl = normalizeSiteUrl(rawSiteUrl);
   const propertyUrl = buildPropertyURL(property, siteUrl);
-  const ogImage = `${siteUrl}/api/og/propiedad/${property.slug}`;
+
+  // Usar la imagen de Cloudinary directamente en lugar del endpoint Satori
+  // (Satori devuelve 0 bytes en el Edge runtime actual)
+  const rawImage = property.imagen_principal || '';
+  const cloudinaryOG = rawImage ? getCloudinaryOGImage(rawImage) : '';
+  const ogImage = cloudinaryOG || `${siteUrl}/api/og/propiedad/${property.slug}`;
 
   const title = generatePropertyTitle(property);
   const description = generatePropertyDescription(property);

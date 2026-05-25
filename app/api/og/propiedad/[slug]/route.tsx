@@ -2,7 +2,9 @@ import { ImageResponse } from 'next/og';
 import { createPublicClient } from '@/lib/supabase-server';
 import { SITE_URL } from '@/lib/supabase/constants';
 
-export const runtime = 'edge';
+// Cambiado de 'edge' a 'nodejs' porque Satori/ImageResponse devuelve 0 bytes
+// en el Edge runtime de Next.js 16 (posible incompatibilidad con la versión rc).
+export const runtime = 'nodejs';
 
 function formatCOP(price: number): string {
     return '$' + price.toLocaleString('es-CO', { style: 'decimal', maximumFractionDigits: 0 }) + ' COP';
