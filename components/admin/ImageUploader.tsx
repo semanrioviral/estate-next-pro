@@ -216,18 +216,40 @@ export default function ImageUploader({
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(e.target.files || []);
-        if (files.length + selectedFiles.length > maxFiles) {
+        
+        // Validate each file
+        const validFiles = selectedFiles.filter(file => {
+            // Check file type
+            if (!file.type.startsWith('image/')) {
+                alert(`El archivo ${file.name} no es una imagen válida`);
+                return false;
+            }
+            
+            // Check file size (limit to 10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                alert(`El archivo ${file.name} es demasiado grande (máximo 10MB)`);
+                return false;
+            }
+            
+            return true;
+        });
+        
+        if (validFiles.length === 0) {
+            return; // All files were invalid
+        }
+        
+        if (files.length + validFiles.length > maxFiles) {
             alert(`Máximo ${maxFiles} imágenes permitidas`);
             return;
         }
 
-        const newFiles = selectedFiles.map((file) => ({
+        const newFiles = validFiles.map((file) => ({
             id: Math.random().toString(36).substring(7),
             file,
             preview: URL.createObjectURL(file),
             progress: 0,
             status: "pending" as const,
-            es_principal: files.length === 0, // Mark as principal if it's the first image ever
+            es_principal: files.length === 0 && validFiles.length > 0 && files.length === 0, // Mark as principal if it's the first image ever
         }));
 
         setFiles((prev) => [...prev, ...newFiles]);
@@ -284,9 +306,15 @@ export default function ImageUploader({
                     prev.map((f) => (f.id === fileObj.id ? { ...f, status: "uploading" } : f))
                 );
 
+                // Get and validate upload preset
+                const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET?.trim();
+                if (!uploadPreset) {
+                    throw new Error("Cloudinary upload preset is not configured");
+                }
+
                 const formData = new FormData();
                 formData.append("file", fileObj.file!);
-                formData.append("upload_preset", process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+                formData.append("upload_preset", uploadPreset);
                 formData.append("folder", "properties");
                 // Convertir a WebP + comprimir (Google exige WebP para Core Web Vitals)
                 formData.append("format", "webp");
@@ -300,7 +328,12 @@ export default function ImageUploader({
                     }
                 );
 
-                if (!uploadRes.ok) throw new Error("Upload failed");
+                if (!uploadRes.ok) {
+                    // Try to get error details from Cloudinary response
+                    const errorData = await uploadRes.json();
+                    console.error("Cloudinary upload error:", errorData);
+                    throw new Error(errorData.error?.message || "Upload failed");
+                }
 
                 const data = await uploadRes.json();
                 const secureUrl = data.secure_url;
