@@ -58,6 +58,16 @@
         "google-searchconsole-mcp"
       ],
       "enabled": true
+    },
+
+    "google-merchant-center": {
+      "type": "local",
+      "command": [
+        "cmd",
+        "/c",
+        "set GMC_ACCOUNT_ID=5080257993&& set GMC_SERVICE_ACCOUNT_KEY=C:\\Users\\jonat\\OneDrive\\Escritorio\\estate-next-pro\\gmc-key.json&& gmc-mcp run"
+      ],
+      "enabled": true
     }
   }
 }

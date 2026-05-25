@@ -48,3 +48,9 @@ import_data.csv
 properties.json
 
 inspection_results.txt
+
+# google merchant center key
+gmc-key.json
+
+# temp python diagnostic files
+gmc_*.py
