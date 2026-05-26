@@ -37,15 +37,14 @@ export async function GET(request: Request) {
 
     try {
         // ── Auth ──────────────────────────────────────────────
-        const isVercelCron = request.headers.get('x-vercel-cron');
+        // If CRON_SECRET is configured, require it. If not, allow (graceful fallback).
         const authHeader = request.headers.get('authorization');
         const secret = process.env.CRON_SECRET;
         const isDev = process.env.NODE_ENV === 'development';
 
-        if (!isVercelCron && !isDev) {
-            if (!secret || authHeader !== `Bearer ${secret}`) {
-                return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-            }
+        if (!isDev && secret && authHeader !== `Bearer ${secret}`) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
         }
 
         const supabase = createAdminClient();
