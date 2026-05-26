@@ -2,9 +2,9 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase-server';
 
 export const runtime = 'nodejs';
-export const maxDuration = 60; // Cron can take longer due to multiple API calls
+export const maxDuration = 60;
 
-// ── Types (manual, avoid Supabase TS parser confusion with special chars) ──
+// ── Types ──
 interface CronProperty {
     id: string;
     titulo: string;
@@ -20,24 +20,35 @@ interface CronProperty {
     baños: number | null;
     area_m2: number | null;
     imagen_principal: string | null;
+    estrato: number | null;
+    parqueaderos: number | null;
+    antigüedad: string | null;
+    negociable: boolean | null;
+    financiamiento: string | null;
+    estado: string | null;
+    servicios: string[] | null;
+    moneda: string | null;
+    año_construccion: number | null;
+}
+
+interface ImageResult {
+    url: string;
+    es_principal: boolean | null;
 }
 
 /**
  * Weekly Automation Cron
  *
- * Runs on schedule (default: every Monday 9AM COT) to:
+ * Runs every Monday 9AM COT to:
  * 1. Pick a random featured/available property
- * 2. Create a blog post about it
- * 3. Publish a GBP post about it
- *
- * Auth: x-vercel-cron (Vercel built-in) or Authorization: Bearer <CRON_SECRET>
+ * 2. Generate & publish SEO-optimized blog post
+ * 3. Publish a GBP post with photo
  */
 export async function GET(request: Request) {
     const startTime = Date.now();
 
     try {
-        // ── Auth ──────────────────────────────────────────────
-        // If CRON_SECRET is configured, require it. If not, allow (graceful fallback).
+        // ── Auth ──
         const authHeader = request.headers.get('authorization');
         const secret = process.env.CRON_SECRET;
         const isDev = process.env.NODE_ENV === 'development';
@@ -49,8 +60,7 @@ export async function GET(request: Request) {
         const supabase = createAdminClient();
         const results: Record<string, unknown>[] = [];
 
-        // ── 1. Pick a property ─────────────────────────────────
-        // Use * select to avoid TS parser issues with special chars (baños, área)
+        // ── 1. Pick a property ──
         async function fetchProperties(onlyFeatured: boolean): Promise<CronProperty[]> {
             let query = supabase
                 .from('properties')
@@ -83,7 +93,6 @@ export async function GET(request: Request) {
             }, { status: 404 });
         }
 
-        // Random selection
         const property = pool[Math.floor(Math.random() * pool.length)];
 
         results.push({
@@ -93,24 +102,78 @@ export async function GET(request: Request) {
             title: property.titulo
         });
 
-        // ── 2. Create Blog Post ────────────────────────────────
+        // ── 2. Format data ──
         const formattedPrice = new Intl.NumberFormat('es-CO', {
             style: 'currency',
-            currency: 'COP',
+            currency: property.moneda || 'COP',
+            maximumFractionDigits: 0
+        }).format(property.precio);
+
+        const formattedPriceShort = new Intl.NumberFormat('es-CO', {
+            style: 'decimal',
             maximumFractionDigits: 0
         }).format(property.precio);
 
         const tipoLabel =
             property.tipo === 'casa' ? 'Casa' :
             property.tipo === 'apartamento' ? 'Apartamento' :
-            property.tipo === 'lote' ? 'Lote' : 'Propiedad';
+            property.tipo === 'lote' ? 'Lote' :
+            property.tipo === 'comercial' ? 'Local Comercial' :
+            property.tipo === 'proyecto' ? 'Proyecto' : 'Propiedad';
 
         const operacionLabel = property.operacion === 'venta' ? 'Venta' : 'Arriendo';
+        const operacionPrep = property.operacion === 'venta' ? 'en venta' : 'en arriendo';
+
         const categoria =
             property.tipo === 'lote' ? 'Inversión' :
+            property.tipo === 'proyecto' ? 'Proyectos' :
             'Compra y Venta';
 
-        // Sanitize slug: remove special chars, lowercase, hyphenate
+        const ubicacionStr = `${property.barrio ? property.barrio + ', ' : ''}${property.ciudad}`;
+
+        // ── 3. Fetch additional data ──
+        // 3a. Property images (for GBP post)
+        const { data: propertyImages } = await supabase
+            .from('property_images')
+            .select('url, es_principal')
+            .eq('property_id', property.id)
+            .order('es_principal', { ascending: false })
+            .order('orden', { ascending: true })
+            .limit(5) as unknown as { data: ImageResult[] | null };
+
+        const mainImage = property.imagen_principal ||
+            propertyImages?.find(i => i.es_principal)?.url ||
+            propertyImages?.[0]?.url ||
+            null;
+
+        const allImages = propertyImages?.map(i => i.url).filter(Boolean) || [];
+        const galleryImages = allImages.length > 1 ? allImages.slice(1) : [];
+
+        // 3b. Property amenities
+        const { data: amenidadLinks } = await supabase
+            .from('property_amenidades')
+            .select('amenidad_id')
+            .eq('property_id', property.id);
+
+        let amenidadNames: string[] = [];
+        if (amenidadLinks?.length) {
+            const ids = amenidadLinks.map(a => a.amenidad_id);
+            const { data: amenidades } = await supabase
+                .from('amenidades')
+                .select('nombre')
+                .in('id', ids);
+            amenidadNames = (amenidades || []).map(a => a.nombre);
+        }
+
+        // Merge servicios + amenidades
+        const allFeatures = [
+            ...(property.servicios || []),
+            ...amenidadNames.filter(n => !(property.servicios || []).some(s =>
+                s.toLowerCase().includes(n.toLowerCase())
+            ))
+        ];
+
+        // ── 4. Generate SEO blog content ──
         const cleanSlug = (s: string) =>
             s.toLowerCase()
                 .normalize('NFD')
@@ -119,93 +182,167 @@ export async function GET(request: Request) {
                 .replace(/-+/g, '-')
                 .replace(/^-|-$/g, '');
 
-        const baseSlug = cleanSlug(`propiedad-en-venta-en-${property.slug}`);
+        const baseSlug = cleanSlug(`${tipoLabel.toLowerCase()}-${operacionPrep.replace(' ', '-')}-${property.slug}`);
         let blogSlug = baseSlug;
 
-        // Ensure slug uniqueness
-        const { data: existing } = await supabase
+        const { data: existingSlug } = await supabase
             .from('blog_posts')
             .select('slug')
             .eq('slug', blogSlug)
             .maybeSingle();
 
-        if (existing) {
+        if (existingSlug) {
             blogSlug = `${baseSlug}-${Date.now().toString(36)}`;
         }
 
-        const title = `${tipoLabel} en ${operacionLabel} en ${property.barrio || property.ciudad}, ${property.ciudad}`;
+        const title = `${tipoLabel} ${operacionPrep} en ${ubicacionStr}`;
+
+        // SEO Meta description (max 160 chars)
+        const metaDescripcion = (
+            `${tipoLabel} ${operacionPrep} en ${ubicacionStr}. ` +
+            (property.habitaciones ? `${property.habitaciones} hab, ` : '') +
+            (property.baños ? `${property.baños} baños, ` : '') +
+            (property.area_m2 ? `${property.area_m2}m², ` : '') +
+            `${formattedPrice}. ` +
+            (property.negociable ? 'Precio negociable. ' : '') +
+            `✓ Trato directo con Inmobiliaria Tu Casa Los Patios. ¡Agenda tu visita!`
+        ).substring(0, 160);
+
+        // SEO-optimized excerpt (for blog cards)
         const excerpt = property.descripcion_corta ||
-            `Descubre esta ${tipoLabel.toLowerCase()} en ${property.barrio || property.ciudad}. ` +
-            `${property.habitaciones ?? '—'} habitaciones, ${property.baños ?? '—'} baños, ` +
-            `${property.area_m2 ?? '—'}m². ${formattedPrice}.`;
+            `${tipoLabel} ${operacionPrep} en ${ubicacionStr}. ` +
+            `${property.habitaciones ? property.habitaciones + ' habitaciones, ' : ''}` +
+            `${property.baños ? property.baños + ' baños, ' : ''}` +
+            `${property.area_m2 ? property.area_m2 + 'm², ' : ''}` +
+            `${formattedPrice}. ` +
+            `Conoce todos los detalles y agenda tu visita.`;
 
-        const metaDescripcion =
-            `${tipoLabel} en ${operacionLabel.toLowerCase()} en ${property.barrio || property.ciudad}, ${property.ciudad}. ` +
-            `${property.habitaciones ? property.habitaciones + ' hab, ' : ''}` +
-            `${property.baños ? property.baños + ' bañ, ' : ''}` +
-            `${property.area_m2 ? property.area_m2 + 'm². ' : ''}` +
-            `${formattedPrice}. ¡Agenda tu cita!`.substring(0, 160);
+        // ---- SEO Blog Content Template ----
+        // Rich, structured content optimized for search intent
+        const introDesc = property.descripcion ||
+            `${tipoLabel} disponible ${operacionPrep} en ${ubicacionStr}. ` +
+            `Una excelente oportunidad en el mercado inmobiliario de Norte de Santander.`;
 
-        const desc = property.descripcion || 'Propiedad disponible en excelente ubicación.';
+        // Build features bullet list
+        const featuresBullets = [
+            `**Tipo de propiedad:** ${tipoLabel}`,
+            `**Operación:** ${operacionLabel}`,
+            `**Ubicación:** ${ubicacionStr}`,
+            `**Precio:** ${formattedPrice}${property.negociable ? ' (negociable)' : ''}`,
+            property.area_m2 ? `**Área:** ${property.area_m2} m²` : null,
+            property.habitaciones ? `**Habitaciones:** ${property.habitaciones}` : null,
+            property.baños ? `**Baños:** ${property.baños}` : null,
+            property.parqueaderos ? `**Parqueaderos:** ${property.parqueaderos}` : null,
+            property.estrato ? `**Estrato:** ${property.estrato}` : null,
+            property.antigüedad ? `**Antigüedad:** ${property.antigüedad}` : null,
+            property.año_construccion ? `**Año de construcción:** ${property.año_construccion}` : null,
+            property.financiamiento ? `**Financiamiento:** ${property.financiamiento}` : null,
+        ].filter(Boolean).join('\n');
 
-        const contenidos = [
-            // Template 1: Block-style with features list
-            `${tipoLabel} en ${operacionLabel} — ${property.barrio || property.ciudad}, ${property.ciudad}
+        // Neighborhood description
+        const neighborhoodDesc = property.barrio
+            ? `${property.barrio} es un sector residencial bien ubicado en ${property.ciudad}, ` +
+              `con fácil acceso a vías principales, transporte público, ` +
+              `centros comerciales, instituciones educativas y servicios de salud. ` +
+              `Es una zona de alta demanda inmobiliaria por su tranquilidad y ` +
+              `excelente relación calidad-precio.`
+            : `${property.ciudad} se ha consolidado como uno de los municipios ` +
+              `con mayor crecimiento urbano en el área metropolitana de Cúcuta, ` +
+              `ofreciendo excelente calidad de vida, conectividad y proyección de valorización.`;
 
-${desc}
-
-**Características Principales**
-- Tipo: ${tipoLabel}
-- Operación: ${operacionLabel}
-- Ubicación: ${property.barrio || property.ciudad}, ${property.ciudad}
-- Precio: ${formattedPrice}
-- Área: ${property.area_m2 ? property.area_m2 + ' m²' : '—'}
-- Habitaciones: ${property.habitaciones ?? '—'}
-- Baños: ${property.baños ?? '—'}
-
-**Ubicación Estratégica**
-${property.barrio || property.ciudad} es una de las zonas más atractivas del área metropolitana, con excelente conectividad, cerca de centros comerciales, instituciones educativas y principales vías de acceso.
-
-**Agende su Visita**
-No pierda la oportunidad de conocer personalmente esta propiedad.
-
-Agendar Visita → https://tucasalospatios.com/propiedades/${property.slug}
-WhatsApp: https://wa.me/573214699604?text=Hola,%20me%20interesa%20la%20propiedad%20${encodeURIComponent(property.titulo)}
-
----
-
-*Artículo generado el ${new Date().toLocaleDateString('es-CO')} — Precios y disponibilidad sujetos a cambio.*`,
-
-            // Template 2: Table-style with CTA
-            `${tipoLabel} Disponible en ${property.barrio || property.ciudad} — Oportunidad de Inversión
-
-${desc}
-
-**Lo Que Necesita Saber**
-Tipo: ${tipoLabel} | Ubicación: ${property.barrio || property.ciudad}, ${property.ciudad} | Precio: ${formattedPrice}
-Área: ${property.area_m2 ? property.area_m2 + ' m²' : '—'} | Habitaciones: ${property.habitaciones ?? '—'} | Baños: ${property.baños ?? '—'}
-
-**El Sector**
-${property.barrio || property.ciudad} se ha consolidado como uno de los sectores más atractivos para la inversión inmobiliaria, con alta plusvalía y calidad de vida.
-
-**¡Separe su Cita!**
-WhatsApp: https://wa.me/573214699604?text=Quiero%20agendar%20una%20visita%20para%20${encodeURIComponent(property.titulo)}
-Ficha completa: https://tucasalospatios.com/propiedades/${property.slug}
-
----
-
-${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. Cra. 4 #23a-18, Los Patios.`
+        // FAQ section
+        const faqItems = [
+            {
+                q: `¿Cuál es el precio de ${operacionPrep === 'en venta' ? 'esta' : 'esta'} ${tipoLabel.toLowerCase()}?`,
+                a: `El precio de ${operacionPrep === 'en venta' ? 'venta' : 'arriendo'} es de ${formattedPrice}${property.negociable ? ', aunque es negociable.' : '.'} Para más detalles, contáctanos.`
+            },
+            {
+                q: `¿Dónde queda ${operacionPrep === 'en venta' ? 'esta' : 'esta'} ${tipoLabel.toLowerCase()}?`,
+                a: `Está ubicada en ${ubicacionStr}, una zona residencial de fácil acceso y con todos los servicios cerca.`
+            },
+            {
+                q: `¿Cómo puedo agendar una visita para ver ${operacionPrep === 'en venta' ? 'esta' : 'esta'} propiedad?`,
+                a: `Puedes agendar tu visita llamándonos al 322 304 7435 o enviándonos un WhatsApp. También puedes ver la ficha completa en nuestro sitio web.`
+            },
+            {
+                q: `¿Qué documentos necesito para ${property.operacion === 'venta' ? 'comprar' : 'arrendar'}?`,
+                a: `Para ${property.operacion === 'venta' ? 'la compra' : 'el arriendo'} se requiere documentación básica como cédula de ciudadanía, ` +
+                   `certificado de tradición y libertad, y en caso de ${property.operacion === 'venta' ? 'compra con crédito hipotecario, carta de aprobación bancaria' : 'contrato laboral y referencias'}. ` +
+                   `Nosotros te guiamos en todo el proceso.`
+            }
         ];
 
-        // Alternate template based on property id
-        const contentIndex = property.id.charCodeAt(0) % contenidos.length;
-        const contenido = contenidos[contentIndex];
+        const faqSection = faqItems.map((item, i) =>
+            `**${i + 1}. ${item.q}**\n${item.a}`
+        ).join('\n\n');
 
-        // Check if this property was already blogged
+        // Main content body
+        const sitioUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
+        const propUrl = `${sitioUrl}/propiedades/${property.slug}`;
+        const whatsappUrl = `https://wa.me/573214699604?text=${encodeURIComponent(`Hola, me interesa la propiedad: ${property.titulo} (${propUrl})`)}`;
+
+        // Rich content with H2/H3 structure
+        const contenido_1 = `${tipoLabel} ${operacionPrep} en ${ubicacionStr}
+
+${introDesc}
+
+---
+
+## 📋 Características de la ${tipoLabel.toLowerCase()}
+
+${featuresBullets}
+
+${allFeatures.length ? `**Servicios y amenidades incluidas:**\n${allFeatures.map(f => `✅ ${f.charAt(0).toUpperCase() + f.slice(1)}`).join('\n')}` : ''}
+
+---
+
+## 📍 Ubicación y entorno
+
+${neighborhoodDesc}
+
+${property.barrio ? `${property.barrio} cuenta con vías pavimentadas, alumbrado público, ` +
+`transporte urbano cercano y acceso rápido a centros comerciales como ` +
+`[venta de centros comerciales locales]. Es una zona con excelente proyección ` +
+`de valorización inmobiliaria.` : ''}
+
+---
+
+## 💰 Precio y condiciones
+
+**Precio:** ${formattedPrice}${property.negociable ? ' *(negociable)*' : ''}
+${property.financiamiento ? `**Opciones de financiamiento aceptadas:** ${property.financiamiento}` : ''}
+
+> 💡 *¿Te interesa esta propiedad? Contáctanos hoy y recibe asesoría personalizada sin compromiso.*
+
+---
+
+## ❓ Preguntas Frecuentes
+
+${faqSection}
+
+---
+
+## 📞 ¿Cómo agendar una visita?
+
+Puedes contactarnos de las siguientes formas:
+
+📱 **WhatsApp Directo:** [322 304 7435](${whatsappUrl})
+📋 **Ficha completa de la propiedad:** [${property.titulo}](${propUrl})
+🏢 **Oficina:** Inmobiliaria Tu Casa Los Patios, Cra. 4 #23a-18, Los Patios
+
+---
+
+*Artículo actualizado el ${new Date().toLocaleDateString('es-CO', { year: 'numeric', month: 'long', day: 'numeric' })}. ` +
+`Precios y disponibilidad sujetos a cambio sin previo aviso. ` +
+`© Inmobiliaria Tu Casa Los Patios — Expertos en bienes raíces en Norte de Santander.`;
+
+        const contenido = contenido_1;
+
+        // ── 5. Upsert blog post ──
         const { data: alreadyBlogged } = await supabase
             .from('blog_posts')
             .select('id')
-            .ilike('slug', `%${property.slug}%`)
+            .ilike('slug', `%${cleanSlug(property.slug)}%`)
             .order('created_at', { ascending: false })
             .limit(1);
 
@@ -215,13 +352,14 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
         };
 
         if (alreadyBlogged?.length) {
-            // Update existing
             blogResult = await supabase
                 .from('blog_posts')
                 .update({
                     titulo: title,
                     excerpt,
                     contenido,
+                    meta_titulo: title.substring(0, 60),
+                    meta_descripcion: metaDescripcion,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', alreadyBlogged[0].id)
@@ -236,7 +374,6 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                 error: blogResult.error?.message || null
             });
         } else {
-            // Create new
             blogResult = await supabase
                 .from('blog_posts')
                 .insert({
@@ -264,30 +401,93 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
             });
         }
 
-        // ── 3. Create GBP Post ──────────────────────────────────
+        // ── 6. Create GBP Post (with photo via Google API) ──
         const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://tucasalospatios.com';
         const propertyUrl = `${siteUrl}/propiedades/${property.slug}`;
 
+        const googleClientId = process.env.GOOGLE_CLIENT_ID;
+        const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+        const googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+        const googleAccountId = process.env.GOOGLE_ACCOUNT_ID;
+        const googleLocationId = process.env.GOOGLE_LOCATION_ID;
         const viaSocketUrl = process.env.VIASOCKET_MCP_URL;
 
-        // Helper: try legacy auto-poster as fallback
-        const callLegacyPoster = async () => {
-            return await fetch(
-                `${siteUrl}/api/automation/google-business`,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${secret || ''}`
-                    },
+        // Helper: post via Google My Business API directly (supports photos)
+        const postToGoogleDirect = async (): Promise<{ ok: boolean; data: unknown }> => {
+            if (!googleClientId || !googleClientSecret || !googleRefreshToken ||
+                !googleAccountId || !googleLocationId) {
+                return { ok: false, data: { error: 'Missing Google OAuth or account vars' } };
+            }
+
+            try {
+                // Get access token via OAuth
+                const tokenResp = await fetch('https://oauth2.googleapis.com/token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        client_id: googleClientId,
+                        client_secret: googleClientSecret,
+                        refresh_token: googleRefreshToken,
+                        grant_type: 'refresh_token',
+                    }).toString(),
                     signal: AbortSignal.timeout(10000)
+                });
+
+                const tokenData = await tokenResp.json() as { access_token?: string; error?: string };
+                if (!tokenResp.ok || !tokenData.access_token) {
+                    return { ok: false, data: { error: 'Token refresh failed', details: tokenData } };
                 }
-            );
+
+                const accessToken = tokenData.access_token;
+                const gbpPostText = `🏡 ${property.titulo}\n📍 ${ubicacionStr}\n💰 ${formattedPrice}\n\nAgenda tu visita hoy:\n${propertyUrl}`;
+
+                // Build media array if mainImage exists
+                const media = mainImage ? [
+                    {
+                        mediaFormat: 'PHOTO',
+                        sourceUrl: mainImage
+                    }
+                ] : [];
+
+                // Post to Google My Business API
+                const gbpResp = await fetch(
+                    `https://mybusiness.googleapis.com/v4/accounts/${googleAccountId}/locations/${googleLocationId}/localPosts`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            languageCode: 'es',
+                            summary: gbpPostText,
+                            callToAction: {
+                                actionType: 'LEARN_MORE',
+                                url: propertyUrl
+                            },
+                            media,
+                            topicType: 'STANDARD'
+                        }),
+                        signal: AbortSignal.timeout(15000)
+                    }
+                );
+
+                const gbpData = await gbpResp.json() as Record<string, unknown>;
+                return { ok: gbpResp.ok, data: gbpData };
+
+            } catch (err: unknown) {
+                const errMsg = err instanceof Error ? err.message : String(err);
+                return { ok: false, data: { error: errMsg } };
+            }
         };
 
-        if (viaSocketUrl) {
+        // Helper: post via viaSocket MCP (no photo support)
+        const postToViaSocket = async (): Promise<{ ok: boolean; data: unknown }> => {
+            if (!viaSocketUrl) {
+                return { ok: false, data: { error: 'No viaSocket URL configured' } };
+            }
+
             try {
-                // viaSocket MCP exposes ONE tool: "Google_Business_Profile"
-                // with action_name enum to select the specific GBP action.
-                // "Create Local Post" = row286m6edjb
                 const mcpPayload = {
                     jsonrpc: '2.0',
                     id: 1,
@@ -302,7 +502,7 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                                 `Topic type: STANDARD`,
                                 `Summary:`,
                                 `🏡 ${property.titulo}`,
-                                `📍 ${property.barrio || property.ciudad}, ${property.ciudad}`,
+                                `📍 ${ubicacionStr}`,
                                 `💰 ${formattedPrice}`,
                                 ``,
                                 `Learn more: ${propertyUrl}`,
@@ -312,7 +512,7 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                     }
                 };
 
-                const viaSocketResponse = await fetch(viaSocketUrl, {
+                const resp = await fetch(viaSocketUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -322,57 +522,66 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                     signal: AbortSignal.timeout(60000)
                 });
 
-                const viaSocketText = await viaSocketResponse.text();
-                let viaSocketData: unknown;
-                try {
-                    viaSocketData = JSON.parse(viaSocketText);
-                } catch {
-                    viaSocketData = viaSocketText;
-                }
+                const text = await resp.text();
+                let data: unknown;
+                try { data = JSON.parse(text); } catch { data = text; }
+                return { ok: resp.ok, data };
 
+            } catch (err: unknown) {
+                const errMsg = err instanceof Error ? err.message : String(err);
+                return { ok: false, data: { error: errMsg } };
+            }
+        };
+
+        // Strategy: try Google API direct first (with photo), fallback to viaSocket
+        const hasGoogleVars = !!(googleClientId && googleClientSecret && googleRefreshToken &&
+            googleAccountId && googleLocationId);
+
+        if (hasGoogleVars) {
+            // Try direct Google API (supports photos)
+            const directResult = await postToGoogleDirect();
+
+            if (directResult.ok) {
                 results.push({
                     step: 'create-gbp-post',
-                    method: 'viasocket',
-                    success: viaSocketResponse.ok,
-                    response: viaSocketData
+                    method: 'google-api-direct',
+                    hasPhoto: !!mainImage,
+                    success: true,
+                    response: directResult.data
+                });
+            } else {
+                results.push({
+                    step: 'create-gbp-post',
+                    method: 'google-api-direct',
+                    success: false,
+                    error: directResult.data
                 });
 
-                if (!viaSocketResponse.ok) {
-                    // Fallback if viaSocket fails
-                    console.warn('viaSocket returned non-OK, trying legacy fallback');
-                    const legacyFallback = await callLegacyPoster();
-                    const legacyData = await legacyFallback.json();
-                    results.push({
-                        step: 'create-gbp-post-fallback',
-                        method: 'legacy-fallback',
-                        success: legacyFallback.ok,
-                        response: legacyData
-                    });
-                }
-
-            } catch (mcpError: unknown) {
-                const mcpErrMsg = mcpError instanceof Error ? mcpError.message : String(mcpError);
-                console.error('viaSocket MCP call failed:', mcpErrMsg);
-
-                const legacyResponse = await callLegacyPoster();
-                const legacyData = await legacyResponse.json();
+                // Fallback to viaSocket
+                console.warn('Google direct API failed, trying viaSocket fallback');
+                const viaResult = await postToViaSocket();
                 results.push({
-                    step: 'create-gbp-post',
-                    method: 'legacy-fallback',
-                    success: legacyResponse.ok,
-                    viasocketError: mcpErrMsg,
-                    response: legacyData
+                    step: 'create-gbp-post-fallback',
+                    method: 'viasocket-fallback',
+                    success: viaResult.ok,
+                    response: viaResult.data
                 });
             }
-        } else {
-            // No viaSocket — use legacy auto-poster
-            const legacyResponse = await callLegacyPoster();
-            const legacyData = await legacyResponse.json();
+        } else if (viaSocketUrl) {
+            // No Google OAuth vars — use viaSocket
+            const viaResult = await postToViaSocket();
             results.push({
                 step: 'create-gbp-post',
-                method: 'legacy',
-                success: legacyResponse.ok,
-                response: legacyData
+                method: 'viasocket',
+                success: viaResult.ok,
+                response: viaResult.data
+            });
+        } else {
+            results.push({
+                step: 'create-gbp-post',
+                method: 'none',
+                success: false,
+                error: 'No GBP posting method configured (neither Google OAuth nor viaSocket)'
             });
         }
 
