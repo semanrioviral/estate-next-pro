@@ -1,10 +1,4 @@
 {
-  "crons": [
-    {
-      "path": "/api/cron/weekly",
-      "schedule": "0 14 * * 1"
-    }
-  ],
   "functions": {
     "app/api/cron/weekly/route.ts": {
       "memory": 512,

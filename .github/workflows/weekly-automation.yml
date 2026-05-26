@@ -1,0 +1,34 @@
+name: Weekly Automation (Blog + GBP)
+
+on:
+  schedule:
+    # Every Monday at 14:00 UTC = 9:00 AM Colombia (UTC-5)
+    - cron: '0 14 * * 1'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  run-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call weekly cron endpoint
+        run: |
+          RESPONSE=$(curl -s -w "\n%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "https://tucasalospatios.com/api/cron/weekly")
+
+          HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+
+          echo "Status: $HTTP_CODE"
+          echo "Response: $HTTP_BODY"
+
+          # Fail if not 200
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Cron failed with status $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "::warning::Weekly automation cron failed. Check the endpoint."
