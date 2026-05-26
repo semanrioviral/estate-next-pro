@@ -314,9 +314,10 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Accept': 'application/json, text/event-stream',
                     },
                     body: JSON.stringify(mcpPayload),
-                    signal: AbortSignal.timeout(15000)
+                    signal: AbortSignal.timeout(20000)
                 });
 
                 const viaSocketText = await viaSocketResponse.text();
