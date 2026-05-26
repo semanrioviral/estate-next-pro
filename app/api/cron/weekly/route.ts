@@ -285,27 +285,29 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
 
         if (viaSocketUrl) {
             try {
-                // MCP JSON-RPC call to viaSocket for Create Local Post
+                // viaSocket MCP exposes ONE tool: "Google_Business_Profile"
+                // with action_name enum to select the specific GBP action.
+                // "Create Local Post" = row286m6edjb
                 const mcpPayload = {
                     jsonrpc: '2.0',
                     id: 1,
                     method: 'tools/call',
                     params: {
-                        name: 'Create Local Post',
+                        name: 'Google_Business_Profile',
                         arguments: {
-                            summary: [
+                            thread_id: `cron-weekly-${Date.now().toString(36)}`,
+                            action_name: 'row286m6edjb',
+                            instructions: [
+                                `Create a Local Post on Google Business Profile.`,
+                                `Topic type: STANDARD`,
+                                `Summary:`,
                                 `🏡 ${property.titulo}`,
                                 `📍 ${property.barrio || property.ciudad}, ${property.ciudad}`,
                                 `💰 ${formattedPrice}`,
                                 ``,
-                                `Agenda tu visita hoy!`,
-                                propertyUrl,
-                            ].join('\n'),
-                            topicType: 'STANDARD',
-                            callToAction: {
-                                actionType: 'LEARN_MORE',
-                                url: propertyUrl
-                            }
+                                `Learn more: ${propertyUrl}`,
+                                `Call to action: LEARN_MORE → ${propertyUrl}`
+                            ].join('\n')
                         }
                     }
                 };
