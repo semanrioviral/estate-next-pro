@@ -1,6 +1,6 @@
 const https = require('https');
 
-const API_KEY = process.env.OPENAI_API_KEY || "KEY_REVOCADA_OPENROUTER";
+const API_KEY = process.env.OPENAI_API_KEY;
 const BASE_URL = process.env.OPENAI_BASE_URL || "https://api.openai.com/v1";
 const MODEL = process.env.AI_MODEL || "gpt-4o-mini";
 

@@ -1,7 +1,7 @@
 const https = require('https');
 
-const KEY = "KEY_REVOCADA_DEEPSEEK";
-const BASE = "https://api.deepseek.com/v1";
+const KEY = process.env.OPENAI_API_KEY || process.env.DEEPSEEK_API_KEY;
+const BASE = process.env.OPENAI_BASE_URL || "https://api.deepseek.com/v1";
 const MODEL = "deepseek-chat";
 
 const body = JSON.stringify({
