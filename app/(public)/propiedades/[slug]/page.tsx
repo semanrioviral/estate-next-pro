@@ -12,13 +12,13 @@ import {
 } from 'lucide-react';
 import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, getAdjacentProperties, Property } from '@/lib/supabase/properties';
 import { generatePropertySEO, generatePropertyJSONLD } from '@/lib/seo/generatePropertySEO';
-import PropertyGallery from '@/components/PropertyGallery';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
 import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
 import { SITE_URL } from '@/lib/supabase/constants';
 import PropertyContactForm from '@/components/PropertyContactForm';
 
+const PropertyGallery = dynamic(() => import('@/components/PropertyGallery'), { ssr: true });
 const PropertyViewTracker = dynamic(() => import('@/components/PropertyViewTracker'));
 const RetentionModal = dynamic(() => import('@/components/RetentionModal'));
 const MetaPixelViewContent = dynamic(() => import('@/components/tracking/MetaPixelViewContent'));

@@ -11,6 +11,7 @@ export interface BlogPost {
     categoria: string | null;
     meta_titulo: string | null;
     meta_descripcion: string | null;
+    canonical_url: string | null; // Si se define, el blog post debe apuntar su canonical a esta URL (ej: propiedad origen)
     published: boolean; // Mantener por compatibilidad temporal
     status: 'draft' | 'scheduled' | 'published';
     published_at: string;

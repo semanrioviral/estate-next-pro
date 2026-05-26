@@ -33,7 +33,9 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const siteUrl = SITE_URL;
     const title = post.meta_titulo || `${post.titulo}`;
     const description = post.meta_descripcion || post.excerpt || '';
-    const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
+    // Si el blog post tiene una canonical_url (ej: heredada de una ficha de propiedad),
+    // úsala en lugar de auto-referenciarse para evitar contenido duplicado
+    const canonicalUrl = post.canonical_url || `${siteUrl}/blog/${post.slug}`;
 
     return {
         title,
@@ -65,6 +67,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     const headings = extractHeadings(post.contenido);
     const siteUrl = SITE_URL;
 
+    const canonicalUrl = post.canonical_url || `${siteUrl}/blog/${post.slug}`;
+
     const blogJsonLd = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -87,7 +91,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         },
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": `${siteUrl}/blog/${post.slug}`
+            "@id": canonicalUrl
         },
         "image": `${siteUrl}/images/og-blog.jpg`
     };
@@ -112,7 +116,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 "@type": "ListItem",
                 "position": 3,
                 "name": post.titulo,
-                "item": `${siteUrl}/blog/${post.slug}`
+                "item": canonicalUrl
             }
         ]
     };

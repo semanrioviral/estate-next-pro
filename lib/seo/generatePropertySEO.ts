@@ -100,7 +100,21 @@ function buildPropertyURL(property: Property, siteUrl: string): string {
   return `${normalizeSiteUrl(siteUrl)}/propiedades/${property.slug}`;
 }
 
+/**
+ * Genera un slug amigable desde el nombre del barrio (fallback cuando barrio_slug es nulo).
+ */
+function slugifyBarrio(barrio: string): string {
+  return barrio
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
 function buildBarrioURL(barrioSlug: string, siteUrl: string): string {
+  if (!barrioSlug) return '';
   return `${normalizeSiteUrl(siteUrl)}/barrio/${barrioSlug}`;
 }
 
@@ -259,7 +273,7 @@ export function generatePropertyJSONLD(property: Property, siteUrl: string): Rec
         'itemListElement': [
           { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': siteUrl },
           { '@type': 'ListItem', 'position': 2, 'name': 'Venta', 'item': `${siteUrl}/venta` },
-          { '@type': 'ListItem', 'position': 3, 'name': getBarrioDisplay(property.barrio), 'item': buildBarrioURL(property.barrio_slug || '', siteUrl) },
+          { '@type': 'ListItem', 'position': 3, 'name': getBarrioDisplay(property.barrio), 'item': buildBarrioURL(property.barrio_slug || slugifyBarrio(property.barrio), siteUrl) },
           { '@type': 'ListItem', 'position': 4, 'name': property.titulo, 'item': propertyUrl }
         ]
       }

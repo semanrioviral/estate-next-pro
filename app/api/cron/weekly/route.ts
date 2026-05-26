@@ -363,6 +363,7 @@ Puedes contactarnos de las siguientes formas:
                     contenido,
                     meta_titulo: title.substring(0, 60),
                     meta_descripcion: metaDescripcion,
+                    canonical_url: propUrl,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', alreadyBlogged[0].id)
@@ -388,6 +389,7 @@ Puedes contactarnos de las siguientes formas:
                     categoria,
                     meta_titulo: title.substring(0, 60),
                     meta_descripcion: metaDescripcion,
+                    canonical_url: propUrl,
                     status: 'published',
                     published: true,
                     published_at: new Date().toISOString(),
