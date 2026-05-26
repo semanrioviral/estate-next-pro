@@ -182,7 +182,9 @@ export async function GET(request: Request) {
                 .replace(/-+/g, '-')
                 .replace(/^-|-$/g, '');
 
-        const baseSlug = cleanSlug(`${tipoLabel.toLowerCase()}-${operacionPrep.replace(' ', '-')}-${property.slug}`);
+        const barrioSlug = cleanSlug(property.barrio || property.ciudad);
+        const baseSlug = `${cleanSlug(tipoLabel)}-${property.operacion}-${barrioSlug}-${cleanSlug(property.ciudad)}`;
+        // c.f.: casa-venta-12-de-octubre-los-patios
         let blogSlug = baseSlug;
 
         const { data: existingSlug } = await supabase
