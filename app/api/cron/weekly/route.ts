@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase-server';
 
+// Redeploy v2: nuevas API keys Supabase sb_publishable_ / sb_secret_
 export const runtime = 'nodejs';
 export const maxDuration = 60;
 
