@@ -1029,7 +1029,8 @@ export const getPropertiesByOperacion = (
     orden?: string,
     page: number = 1
 ): Promise<PaginatedProperties> => {
-    const key = `props-operacion-${operacion}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
+    // v2: cache bust for new Supabase keys (sb_publishable_)
+    const key = `props-operacion-v2-${operacion}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
     return unstable_cache(
         async (op: string, hab?: number, ord?: string, pg: number = 1): Promise<PaginatedProperties> => {
             // inner function — params come from outer closure via cache key
