@@ -45,7 +45,6 @@ export async function GET(request: Request) {
         if (!isDev && secret && authHeader !== `Bearer ${secret}`) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        }
 
         const supabase = createAdminClient();
         const results: Record<string, unknown>[] = [];
