@@ -319,7 +319,7 @@ ${new Date().toLocaleDateString('es-CO')} — Inmobiliaria Tu Casa Los Patios. C
                         'Accept': 'application/json, text/event-stream',
                     },
                     body: JSON.stringify(mcpPayload),
-                    signal: AbortSignal.timeout(20000)
+                    signal: AbortSignal.timeout(60000)
                 });
 
                 const viaSocketText = await viaSocketResponse.text();
