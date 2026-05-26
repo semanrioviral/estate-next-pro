@@ -31,7 +31,9 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
@@ -60,3 +62,8 @@ gbp_token.json
 gbp-oauth.json
 auth_gbp.py
 check_discovery.py
+
+# dev/scratch files
+temp_query.js
+run_sql_temp.js
+login.png

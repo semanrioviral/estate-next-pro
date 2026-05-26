@@ -1,7 +1,7 @@
 const { createClient } = require('@supabase/supabase-js');
 const supabase = createClient(
-  'https://uehajzlrvqvirtsubsdq.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlaGFqemxydnF2aXJ0c3Vic2RxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDkzOTU5MiwiZXhwIjoyMDg2NTE1NTkyfQ.Nu-MXHv32NU7fPvtqfzC7QZ0IZ4Q48RJF0r7_kOaEPI'
+  process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://uehajzlrvqvirtsubsdq.supabase.co',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || (() => { throw new Error('SUPABASE_SERVICE_ROLE_KEY no configurada'); })()
 );
 async function main() {
   const { data, error } = await supabase.rpc('exec_sql', {

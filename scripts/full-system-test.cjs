@@ -1,6 +1,6 @@
 const https = require('https');
 const http = require('http');
-const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVlaGFqemxydnF2aXJ0c3Vic2RxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDkzOTU5MiwiZXhwIjoyMDg2NTE1NTkyfQ.Nu-MXHv32NU7fPvtqfzC7QZ0IZ4Q48RJF0r7_kOaEPI';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || (() => { throw new Error('SUPABASE_SERVICE_ROLE_KEY no configurada'); })();
 const SUPABASE = 'uehajzlrvqvirtsubsdq.supabase.co';
 const LOCAL = 'localhost:3000';
 const TEST_PROPERTY_ID = '152ca562-9a49-464a-8f23-eff935f12b9a';
