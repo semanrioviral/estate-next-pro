@@ -137,4 +137,4 @@ Debes entregar:
 
 Nunca aplicar múltiples cambios críticos simultáneamente.
 
-Trabajar incrementalmente.  
+Trabajar incrementalmente.      

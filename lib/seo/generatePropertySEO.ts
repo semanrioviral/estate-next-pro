@@ -28,6 +28,7 @@ export interface SEOOutput {
   alternates: {
     canonical: string;
   };
+  other?: Record<string, string>;
 }
 
 export interface PropertySEOContext {

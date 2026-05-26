@@ -54,3 +54,9 @@ gmc-key.json
 
 # temp python diagnostic files
 gmc_*.py
+
+# google business profile oauth
+gbp_token.json
+gbp-oauth.json
+auth_gbp.py
+check_discovery.py
