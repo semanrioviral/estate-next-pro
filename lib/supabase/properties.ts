@@ -935,7 +935,7 @@ export async function getBarrioBySlug(slug: string) {
         const supabase = await createClient();
         const { data, error } = await supabase
             .from('barrios')
-            .select('id, nombre, slug, descripcion, meta_titulo, meta_descripcion, destacado, orden')
+            .select('id, nombre, slug, ciudad, descripcion, meta_titulo, meta_descripcion, destacado, orden')
             .eq('slug', slug)
             .maybeSingle();
 

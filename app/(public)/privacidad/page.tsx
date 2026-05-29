@@ -8,6 +8,19 @@ export const metadata: Metadata = {
     alternates: {
         canonical: `${SITE_URL}/privacidad`,
     },
+    openGraph: {
+        title: 'Política de Privacidad | Inmobiliaria Tucasa Los Patios',
+        description: 'Política de privacidad y tratamiento de datos personales de Inmobiliaria Tucasa Los Patios.',
+        url: `${SITE_URL}/privacidad`,
+        siteName: 'Inmobiliaria Tucasa Los Patios',
+        locale: 'es_CO',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Política de Privacidad | Inmobiliaria Tucasa Los Patios',
+        description: 'Política de privacidad y tratamiento de datos personales de Inmobiliaria Tucasa Los Patios.',
+    },
 };
 
 export default function PrivacidadPage() {

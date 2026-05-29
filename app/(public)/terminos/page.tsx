@@ -8,6 +8,19 @@ export const metadata: Metadata = {
     alternates: {
         canonical: `${SITE_URL}/terminos`,
     },
+    openGraph: {
+        title: 'Términos y Condiciones | Inmobiliaria Tucasa Los Patios',
+        description: 'Términos y condiciones de uso del sitio web de Inmobiliaria Tucasa Los Patios.',
+        url: `${SITE_URL}/terminos`,
+        siteName: 'Inmobiliaria Tucasa Los Patios',
+        locale: 'es_CO',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Términos y Condiciones | Inmobiliaria Tucasa Los Patios',
+        description: 'Términos y condiciones de uso del sitio web de Inmobiliaria Tucasa Los Patios.',
+    },
 };
 
 export default function TerminosPage() {

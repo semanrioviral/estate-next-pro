@@ -8,6 +8,19 @@ export const metadata: Metadata = {
     alternates: {
         canonical: `${SITE_URL}/nosotros`,
     },
+    openGraph: {
+        title: 'Sobre Nosotros | Inmobiliaria Tucasa Los Patios',
+        description: 'Conoce la historia, misión y visión de Inmobiliaria Tucasa Los Patios. Expertos en finca raíz en Norte de Santander con más de 10 años de experiencia.',
+        url: `${SITE_URL}/nosotros`,
+        siteName: 'Inmobiliaria Tucasa Los Patios',
+        locale: 'es_CO',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Sobre Nosotros | Inmobiliaria Tucasa Los Patios',
+        description: 'Conoce la historia, misión y visión de Inmobiliaria Tucasa Los Patios. Expertos en finca raíz en Norte de Santander.',
+    },
 };
 
 export default function NosotrosPage() {
