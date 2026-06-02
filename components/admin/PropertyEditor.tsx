@@ -117,11 +117,16 @@ export default function PropertyEditor({ initialData, onSubmitAction, tags, amen
         return fd;
     }, [data]);
 
+    // Helper: capitalize each word in a string
+    const capitalizeWords = (str: string): string =>
+        str.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
+
     // Build titulo from tipo + operacion + barrio if no titulo set
     const displayTitle = data.titulo || [
-        data.operacion === 'venta' ? 'Propiedad en Venta' : 'Propiedad en Arriendo',
-        data.tipo ? data.tipo.charAt(0).toUpperCase() + data.tipo.slice(1) : '',
-        data.barrio ? `en ${data.barrio}` : '',
+        data.tipo ? capitalizeWords(data.tipo) : 'Propiedad',
+        data.operacion === 'venta' ? 'en Venta' : 'en Arriendo',
+        data.barrio ? `en ${capitalizeWords(data.barrio)}` : '',
+        data.ciudad ? `- ${capitalizeWords(data.ciudad)}` : '',
     ].filter(Boolean).join(' ');
 
     // Submit handler

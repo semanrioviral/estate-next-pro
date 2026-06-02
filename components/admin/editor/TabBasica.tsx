@@ -129,6 +129,23 @@ export default function TabBasica({ data, onChange }: TabBasicaProps) {
                     />
                 </label>
 
+                {/* Título (requerido) */}
+                <label className="sm:col-span-2 block">
+                    <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1.5 block">Título *</span>
+                    <input
+                        type="text"
+                        value={data.titulo || ''}
+                        onChange={e => onChange('titulo', e.target.value)}
+                        placeholder="Ej: Casa en Venta en Tierra Linda, Los Patios — 3 Habitaciones"
+                        className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm font-semibold text-zinc-900 dark:text-zinc-100 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
+                    />
+                    {!data.titulo && (
+                        <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium mt-1">
+                            ⚠️ Si no escribes un título, se generará uno automáticamente
+                        </p>
+                    )}
+                </label>
+
                 {/* Dirección */}
                 <label className="sm:col-span-2 block">
                     <span className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-1.5 block">Dirección</span>
