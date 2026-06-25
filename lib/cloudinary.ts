@@ -7,7 +7,7 @@ export function getCloudinaryUrl(publicId: string, options: { width?: number; he
 
     const transformations = [
         'f_auto',
-        'q_auto',
+        'q_auto:good',
         options.width ? `w_${options.width}` : null,
         options.height ? `h_${options.height}` : null,
         options.crop ? `c_${options.crop}` : null,

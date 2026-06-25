@@ -5,10 +5,13 @@ export default function cloudinaryLoader({ src, width, quality }: {
 }) {
     if (src.includes('res.cloudinary.com') && src.includes('/upload/')) {
         const transforms = `c_limit,w_${width}`;
-        if (src.includes('f_auto,q_auto')) {
-            return src.replace('/f_auto,q_auto/', `/f_auto,q_auto,${transforms}/`);
+        if (src.includes('f_auto,q_auto:good')) {
+            return src.replace('/f_auto,q_auto:good/', `/f_auto,q_auto:good,${transforms}/`);
         }
-        return src.replace('/upload/', `/upload/f_auto,q_auto,${transforms}/`);
+        if (src.includes('f_auto,q_auto,')) {
+            return src.replace('f_auto,q_auto,', 'f_auto,q_auto:good,');
+        }
+        return src.replace('/upload/', `/upload/f_auto,q_auto:good,${transforms}/`);
     }
     if (src.startsWith('http')) {
       const url = new URL(src);

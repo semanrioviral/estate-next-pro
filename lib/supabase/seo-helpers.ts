@@ -180,18 +180,29 @@ export async function upsertBarrio(
 /**
  * Optimiza las URLs de Cloudinary agregando parámetros de autoformato, calidad y ancho automático.
  * f_auto: formato automático (webp/avif)
- * q_auto: calidad automática
+ * q_auto:good: calidad automática en modo "bueno" (balance calidad/peso)
  * w_auto: ancho automático (útil para transformaciones dinámicas)
  */
 export function optimizeCloudinaryUrl(url: string, width?: number): string {
     if (!url) return '';
-    if (url.includes('cloudinary.com') && !url.includes('f_auto,q_auto')) {
-        if (url.includes('/upload/')) {
-            const params = width ? `f_auto,q_auto,w_${width}` : 'f_auto,q_auto';
-            return url.replace('/upload/', `/upload/${params}/`);
-        }
+    if (!url.includes('cloudinary.com') || !url.includes('/upload/')) return url;
+    
+    // Si ya tiene q_auto:good, solo agregar c_limit,w_{width} si es necesario
+    if (url.includes('f_auto,q_auto:good')) {
+        return url;
     }
-    return url;
+    
+    // Si tiene q_auto antiguo, actualizarlo a q_auto:good
+    if (url.includes('f_auto,q_auto,')) {
+        return url.replace('f_auto,q_auto,', 'f_auto,q_auto:good,');
+    }
+    if (url.includes('/f_auto,q_auto/')) {
+        return url.replace('/f_auto,q_auto/', '/f_auto,q_auto:good/');
+    }
+    
+    // No tiene transformaciones, agregarlas
+    const params = width ? `f_auto,q_auto:good,w_${width}` : 'f_auto,q_auto:good';
+    return url.replace('/upload/', `/upload/${params}/`);
 }
 
 export function getCloudinaryOGImage(url: string): string {
