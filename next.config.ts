@@ -55,7 +55,7 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/consignar-inmueble-los-patios-cucuta',
-        destination: '/vender-casa-en-los-patios',
+        destination: '/consignar-propiedad',
         permanent: true,
       },
       {
@@ -70,12 +70,12 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/quieres-vender-tu-casa-en-los-patios-cucuta-y-colombia',
-        destination: '/vender-casa-en-los-patios',
+        destination: '/consignar-propiedad',
         permanent: true,
       },
       {
         source: '/vender-casa-en-los-patios-cucuta-y-colombia',
-        destination: '/vender-casa-en-los-patios',
+        destination: '/consignar-propiedad',
         permanent: true,
       },
       // WordPress neighborhood taxonomy pages

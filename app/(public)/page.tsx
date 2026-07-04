@@ -39,7 +39,7 @@ const navItems = [
 ];
 
 const services = [
-  { title: "Gestión de Ventas", href: "/vender-casa-en-cucuta", desc: "Venda su propiedad rápido y al valor comercial justo.", icon: <Building2 className="w-7 h-7" /> },
+  { title: "Gestión de Ventas", href: "/consignar-propiedad", desc: "Venda su propiedad rápido y al valor comercial justo.", icon: <Building2 className="w-7 h-7" /> },
   { title: "Arriendos Seguros", href: "/arriendo", desc: "Arriende con la tranquilidad de pólizas de seguros integrales.", icon: <Star className="w-7 h-7 text-whatsapp fill-whatsapp/10" /> },
   { title: "Avalúos Técnicos", href: "/contacto", desc: "Certificamos el valor real de su inmueble con total transparencia.", icon: <ShieldCheck className="w-7 h-7" /> }
 ];
@@ -182,7 +182,7 @@ function ConversionSection() {
           <h2 className="text-5xl md:text-7xl font-black text-slate-900 mb-10 leading-[1] tracking-tighter">Asegure su <span className="text-brand-600">Patrimonio</span> hoy mismo</h2>
           <p className="text-slate-500 text-xl md:text-2xl mb-16 font-medium leading-relaxed max-w-3xl mx-auto">Inicie su proceso de venta o avalúo con el respaldo técnico y legal más sólido de Cúcuta.</p>
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-            <Link href="/vender-casa-en-cucuta" className="bg-brand-600 text-white px-12 h-20 rounded-full font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center hover:bg-brand-700 transition-all shadow-xl shadow-brand-900/20 active:scale-[0.98] min-w-[300px]">Consignar Propiedad</Link>
+            <Link href="/consignar-propiedad" className="bg-brand-600 text-white px-12 h-20 rounded-full font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center hover:bg-brand-700 transition-all shadow-xl shadow-brand-900/20 active:scale-[0.98] min-w-[300px]">Consignar Propiedad</Link>
             <Link href="/contacto" className="bg-slate-900 text-white px-12 h-20 rounded-full font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/20 active:scale-[0.98] min-w-[300px]">Hablar con un Experto</Link>
           </div>
         </div>

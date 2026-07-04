@@ -57,7 +57,7 @@ export default function FooterV3() {
                             <ul className="space-y-5">
                                 <li><Link href="/venta" className="text-sm font-bold text-white/60 hover:text-white transition-colors flex items-center gap-2 group"><ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /> En venta</Link></li>
                                 <li><Link href="/arriendo" className="text-sm font-bold text-white/60 hover:text-white transition-colors flex items-center gap-2 group"><ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /> En arriendo</Link></li>
-                                <li><Link href="/vender-casa-en-cucuta" className="text-sm font-bold text-white/60 hover:text-white transition-colors flex items-center gap-2 group"><ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /> Vender propiedad</Link></li>
+                                <li><Link href="/consignar-propiedad" className="text-sm font-bold text-white/60 hover:text-white transition-colors flex items-center gap-2 group"><ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-all" /> Consignar propiedad</Link></li>
                             </ul>
                         </div>
                         <div className="space-y-8 col-span-2 md:col-span-1">

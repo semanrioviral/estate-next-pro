@@ -11,7 +11,7 @@ const NAV_LINKS = [
     { label: "Venta", href: "/venta" },
     { label: "Arriendo", href: "/arriendo" },
     { label: "Blog", href: "/blog" },
-    { label: "Vender", href: "/vender-casa-en-cucuta" },
+    { label: "Consignar", href: "/consignar-propiedad" },
     { label: "Contacto", href: "/contacto" },
 ];
 

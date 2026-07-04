@@ -80,7 +80,7 @@ export default async function BarrioPage({ params, searchParams }: BarrioPagePro
     if (orden) bFiltersParams.set('orden', orden);
     const bFiltersQueryString = bFiltersParams.toString();
 
-    const jsonLd = generateBarrioJSONLD(barrio.nombre, barrio.nombre, totalCount, siteUrl, slug);
+    const jsonLd = generateBarrioJSONLD(barrio.nombre, barrio.ciudad || barrio.nombre, totalCount, siteUrl, slug);
 
     return (
         <main className="min-h-screen bg-white">

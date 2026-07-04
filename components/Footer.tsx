@@ -43,10 +43,10 @@ export default function Footer() {
                     <div className="md:col-span-2">
                         <h3 className="text-sm font-black text-zinc-900 dark:text-white uppercase tracking-[0.2em] mb-8">Propietarios</h3>
                         <ul className="space-y-4">
-                            <li><Link href="/vender-casa-en-los-patios" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender Los Patios</Link></li>
-                            <li><Link href="/vender-casa-en-cucuta" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender en Cúcuta</Link></li>
-                            <li><Link href="/vender-casa-en-villa-del-rosario" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender V. Rosario</Link></li>
-                            <li><Link href="/contacto" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Consignar</Link></li>
+                                <li><Link href="/consignar-propiedad" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Consignar propiedad</Link></li>
+                                <li><Link href="/vender-casa-en-los-patios" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender Los Patios</Link></li>
+                                <li><Link href="/vender-casa-en-cucuta" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender Cúcuta</Link></li>
+                                <li><Link href="/vender-casa-en-villa-del-rosario" className="text-zinc-600 dark:text-zinc-400 hover:text-[#fb2c36] dark:hover:text-[#fb2c36] transition-colors font-medium">Vender V. Rosario</Link></li>
                         </ul>
                     </div>
 

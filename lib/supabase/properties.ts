@@ -305,6 +305,7 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
             .from('properties')
             .select(PROPERTY_SELECT_FIELDS)
             .eq('slug', slug)
+            .not('estado', 'in', '("Vendido","Reservado")')
             .single();
 
         if (error || !data) {
@@ -362,6 +363,7 @@ export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
             .from('properties')
             .select(PROPERTY_SELECT_FIELDS)
             .eq('destacado', true)
+            .not('estado', 'in', '("Vendido","Reservado")')
             .order('created_at', { ascending: false })
             .limit(limit);
 
@@ -1755,7 +1757,8 @@ export async function getAllPropertySlugs(): Promise<string[]> {
         const supabase = createPublicClient();
         const { data, error } = await supabase
             .from('properties')
-            .select('slug');
+            .select('slug')
+            .not('estado', 'in', '("Vendido","Reservado")');
 
         if (error) {
             console.error('[DB] Error fetching property slugs:', error.message);

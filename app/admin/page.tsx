@@ -4,13 +4,14 @@ import { createClient } from '@/lib/supabase-server';
 import AdminBreadcrumbs from '@/components/admin/AdminBreadcrumbs';
 import { getMostViewedProperties } from '@/lib/supabase/properties';
 import { getCRMMetrics } from '@/lib/supabase/crm';
+import LeadTrendChart from '@/components/admin/LeadTrendChart';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboard() {
     const supabase = await createClient();
 
-    const [propertiesRes, leadsRes, agentsRes, pendingRes, recentProps, recentLeadsRes, statusRes, viewsRes, crmMetrics] = await Promise.all([
+    const [propertiesRes, leadsRes, agentsRes, pendingRes, recentProps, recentLeadsRes, statusRes, viewsRes, crmMetrics, leadsTrendRes] = await Promise.all([
         supabase.from('properties').select('id', { count: 'exact', head: true }),
         supabase.from('advisory_requests').select('id', { count: 'exact', head: true }),
         supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('role', 'agente'),
@@ -20,6 +21,7 @@ export default async function AdminDashboard() {
         supabase.from('properties').select('estado').not('estado', 'is', null),
         supabase.from('property_views').select('id', { count: 'exact', head: true }),
         getCRMMetrics().catch(() => ({ total: 0, pipeline: { nuevo: 0, contactado: 0, visitando: 0, negociando: 0, cerrado: 0 }, agentes: [] })),
+        supabase.from('advisory_requests').select('created_at').gte('created_at', new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString()).order('created_at', { ascending: true }),
     ]);
 
     const totalProps = propertiesRes.count || 0;
@@ -42,6 +44,49 @@ export default async function AdminDashboard() {
     if (pendingLeads > 0) alerts.push({ message: `${pendingLeads} lead${pendingLeads !== 1 ? 's' : ''} sin contacto`, href: '/admin/crm' });
     const noPhotoProps = recentProperties.filter((p: any) => !p.imagen_principal).length;
     if (noPhotoProps > 0) alerts.push({ message: `${noPhotoProps} propiedade${noPhotoProps !== 1 ? 's' : ''} sin foto`, href: '/admin/propiedades' });
+
+    // ── Lead trend (weekly + monthly) ──
+    const rawDates = (leadsTrendRes.data || []) as { created_at: string }[];
+    const now = new Date();
+
+    // Weekly: last 12 weeks
+    const weeklyBuckets: Record<string, number> = {};
+    for (let i = 11; i >= 0; i--) {
+        const m = new Date(now);
+        m.setDate(now.getDate() - now.getDay() + 1 - 7 * i);
+        const key = m.toISOString().slice(0, 10);
+        weeklyBuckets[key] = 0;
+    }
+    for (const item of rawDates) {
+        const d = new Date(item.created_at);
+        const mon = new Date(d);
+        mon.setDate(d.getDate() - d.getDay() + 1);
+        const key = mon.toISOString().slice(0, 10);
+        if (key in weeklyBuckets) weeklyBuckets[key]++;
+    }
+    const weeklyTrend = Object.entries(weeklyBuckets).map(([iso, count]) => {
+        const d = new Date(iso + 'T12:00:00');
+        return { label: d.toLocaleDateString('es-CO', { day: 'numeric', month: 'short' }), count };
+    });
+
+    // Monthly: last 12 months
+    const monthlyBuckets: Record<string, number> = {};
+    for (let i = 11; i >= 0; i--) {
+        const m = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const key = `${m.getFullYear()}-${String(m.getMonth() + 1).padStart(2, '0')}`;
+        monthlyBuckets[key] = 0;
+    }
+    for (const item of rawDates) {
+        const d = new Date(item.created_at);
+        const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        if (key in monthlyBuckets) monthlyBuckets[key]++;
+    }
+    const monthlyTrend = Object.entries(monthlyBuckets).map(([iso, count]) => {
+        const d = new Date(iso + '-01T12:00:00');
+        return { label: d.toLocaleDateString('es-CO', { month: 'short', year: '2-digit' }), count };
+    });
+
+    const totalTrendLeads = rawDates.length;
 
     return (
         <div className="space-y-6">
@@ -134,6 +179,9 @@ export default async function AdminDashboard() {
                     ))}
                 </div>
             </div>
+
+            {/* Lead Trend Chart */}
+            <LeadTrendChart weekly={weeklyTrend} monthly={monthlyTrend} total={totalTrendLeads} />
 
             {/* Alerts */}
             {alerts.length > 0 && (

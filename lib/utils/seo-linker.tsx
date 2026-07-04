@@ -13,7 +13,7 @@ const KEYWORD_MAP: { [key: string]: string } = {
     "Villa del Rosario": "/inmobiliaria-en-villa-del-rosario",
     "venta": "/venta",
     "arriendo": "/arriendo",
-    "propietarios": "/vender-casa-en-los-patios",
+    "propietarios": "/consignar-propiedad",
     "invertir": "/blog/ciudad/cucuta",
     "apartamentos": "/tag/apartamentos",
     "casas": "/tag/casas",

@@ -17,10 +17,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { data: barrios },
         { data: blogPosts },
     ] = await Promise.all([
-        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('operacion', 'venta'),
-        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('operacion', 'arriendo'),
-        supabase.from('properties').select('slug, updated_at'),
-        supabase.from('properties').select('ciudad, tipo').eq('operacion', 'venta'),
+        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('operacion', 'venta').not('estado', 'in', '("Vendido","Reservado")'),
+        supabase.from('properties').select('id', { count: 'exact', head: true }).eq('operacion', 'arriendo').not('estado', 'in', '("Vendido","Reservado")'),
+        supabase.from('properties').select('slug, updated_at').not('estado', 'in', '("Vendido","Reservado")'),
+        supabase.from('properties').select('ciudad, tipo').eq('operacion', 'venta').not('estado', 'in', '("Vendido","Reservado")'),
         supabase.from('barrios').select('id, nombre, slug'),
         supabase.from('blog_posts').select('slug, published_at').eq('status', 'published').lte('published_at', now),
     ]);
@@ -38,6 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         '/vender-casa-en-cucuta',
         '/vender-casa-en-los-patios',
         '/vender-casa-en-villa-del-rosario',
+        '/consignar-propiedad',
         ...(ventaCount && ventaCount > 0 ? ['/propiedades'] : []),
         ...(arriendoCount && arriendoCount >= 2 ? ['/arriendo'] : []),
     ].map((route) => ({
@@ -59,7 +60,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: barrioIdsWithProps } = await supabase
         .from('properties')
         .select('barrio_id')
-        .not('barrio_id', 'is', null);
+        .not('barrio_id', 'is', null)
+        .not('estado', 'in', '("Vendido","Reservado")');
 
     const activeBarrioIds = [...new Set((barrioIdsWithProps || []).map((p) => p.barrio_id).filter(Boolean))];
 
