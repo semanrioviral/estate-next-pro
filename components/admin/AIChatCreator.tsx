@@ -109,7 +109,7 @@ export default function AIChatCreator() {
         <div className="space-y-6 max-w-5xl mx-auto">
             <AdminBreadcrumbs items={[{ label: "Dashboard", href: "/admin" }, { label: "Propiedades", href: "/admin/propiedades" }, { label: "Crear con IA" }]} />
             <div>
-                <h1 className="text-2xl font-black text-zinc-900 flex items-center gap-2"><Sparkles size={24} className="text-amber-500" /> Creador IA</h1>
+                <h1 className="text-2xl font-black text-zinc-900 dark:text-zinc-100 flex items-center gap-2"><Sparkles size={24} className="text-amber-500" /> Creador IA</h1>
                 <p className="text-sm text-zinc-500 mt-0.5">Pega la información de la propiedad y la IA genera todo automáticamente.</p>
             </div>
 

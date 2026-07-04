@@ -161,7 +161,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Info size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Información General</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Información General</h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -294,7 +294,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <MapPin size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Ubicación Precisa</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Ubicación Precisa</h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -370,7 +370,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Layout size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Especificaciones Técnicas</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Especificaciones Técnicas</h2>
                         </div>
 
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
@@ -500,7 +500,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Building2 size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Galería Visual</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Galería Visual</h2>
                         </div>
                         <ImageUploader
                             onUploadComplete={setImages}
@@ -527,7 +527,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Tags size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Extras y Tags</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Extras y Tags</h2>
                         </div>
 
                         <div className="space-y-6">
@@ -566,7 +566,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Video size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Multimedia Extra</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Multimedia Extra</h2>
                         </div>
 
                         <div className="space-y-6">
@@ -598,7 +598,7 @@ export default function PropertyForm({ initialData, onSubmitAction, title, subti
                             <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                                 <Globe size={24} />
                             </div>
-                            <h2 className="font-black uppercase tracking-[0.2em] text-lg">Optimización SEO</h2>
+                            <h2 className="font-black uppercase tracking-[0.2em] text-lg dark:text-white">Optimización SEO</h2>
                         </div>
 
                         <div className="space-y-6">

@@ -74,7 +74,7 @@ export default function BulkImporter() {
                 <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-2xl">
                     <Upload size={24} />
                 </div>
-                <h2>Importación Masiva</h2>
+                <h2 className="dark:text-white">Importación Masiva</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -110,7 +110,7 @@ export default function BulkImporter() {
                 <div className="bg-zinc-50 dark:bg-zinc-950 p-8 rounded-[2rem] space-y-4">
                     <div className="flex items-center gap-3 text-zinc-400 font-black uppercase tracking-widest text-[10px]">
                         <Info size={14} />
-                        <h3>Reglas de Importación</h3>
+                        <h3 className="dark:text-white">Reglas de Importación</h3>
                     </div>
                     <ul className="space-y-3 text-[11px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest leading-loose">
                         <li className="flex gap-3"><span className="text-red-600">•</span> Duplicados omitidos por slug/dirección</li>
