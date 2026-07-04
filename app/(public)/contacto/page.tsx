@@ -38,7 +38,7 @@ export default function ContactoPage() {
                             <MessageCircle className="w-3 h-3" />
                             <span>Respuesta Inmediata</span>
                         </div>
-                        <h1 className="text-white mb-8">
+                        <h1 className="!text-white mb-8">
                             Estamos para <span className="text-brand">ayudarle</span>
                         </h1>
                         <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">

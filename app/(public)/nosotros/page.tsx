@@ -34,7 +34,7 @@ export default function NosotrosPage() {
                             <ShieldCheck className="w-3 h-3" />
                             <span>Confianza Verificada</span>
                         </div>
-                        <h1 className="text-white mb-8">
+                        <h1 className="!text-white mb-8">
                             Sobre <span className="text-brand">Nosotros</span>
                         </h1>
                         <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">

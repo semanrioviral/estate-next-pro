@@ -272,7 +272,7 @@ export default async function LosPatiosDominanceAuthorityPage({
             <section className="py-24 bg-slate-900">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-white mb-4">Dominio del <span className="text-brand">Territorio</span></h2>
+                        <h2 className="!text-white mb-4">Dominio del <span className="text-brand">Territorio</span></h2>
                         <p className="text-slate-400 font-medium">Conectamos las mejores oportunidades en el Norte de Santander.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

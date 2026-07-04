@@ -49,7 +49,7 @@ export default async function BlogListingPage() {
                             <Rss className="w-3 h-3" />
                             <span>Contenido de Valor</span>
                         </div>
-                        <h1 className="text-white mb-8">
+                        <h1 className="!text-white mb-8">
                             Blog <span className="text-brand">Inmobiliario</span>
                         </h1>
                         <p className="text-xl text-slate-400 font-medium max-w-2xl leading-relaxed">

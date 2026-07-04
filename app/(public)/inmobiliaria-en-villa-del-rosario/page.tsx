@@ -161,7 +161,7 @@ export default async function VillaRosarioPillarPage({
             <section className="py-24 bg-slate-900">
                 <div className="container-wide px-4">
                     <div className="text-center mb-16">
-                        <h2 className="text-white mb-4">Estrategia de <span className="text-brand">Cobertura</span></h2>
+                        <h2 className="!text-white mb-4">Estrategia de <span className="text-brand">Cobertura</span></h2>
                         <p className="text-slate-400 font-medium">Interconectamos las mejores opciones del área metropolitana.</p>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -243,7 +243,7 @@ export default async function VillaRosarioPillarPage({
                 <div className="container-wide px-4">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                         <div>
-                            <h2 className="text-white mb-6">¿Desea <span className="text-brand">vender</span> en Villa del Rosario?</h2>
+                            <h2 className="!text-white mb-6">¿Desea <span className="text-brand">vender</span> en Villa del Rosario?</h2>
                             <p className="text-xl text-slate-400 font-medium mb-12">
                                 Aproveche nuestra red de inversionistas para vender al mejor precio de mercado en 2026.
                             </p>

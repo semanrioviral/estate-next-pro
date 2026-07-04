@@ -161,7 +161,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                             </div>
                         </div>
 
-                        <h1 className="text-white mb-12 leading-tight">
+                        <h1 className="!text-white mb-12 leading-tight">
                             {post.titulo}
                         </h1>
 

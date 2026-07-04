@@ -67,7 +67,7 @@ export default function VenderVillaPage() {
                             <TrendingUp className="w-4 h-4 text-brand" />
                             <span className="text-[12px] font-black text-brand uppercase tracking-widest">Respaldo Metropolitano 2026</span>
                         </div>
-                        <h1 className="text-white mb-8">
+                        <h1 className="!text-white mb-8">
                             Venda su Inmueble en <span className="text-brand">Villa del Rosario</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mb-12 font-medium leading-relaxed">

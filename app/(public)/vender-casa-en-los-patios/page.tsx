@@ -67,7 +67,7 @@ export default function VenderLosPatiosPage() {
                             <TrendingUp className="w-4 h-4 text-brand" />
                             <span className="text-[12px] font-black text-brand uppercase tracking-widest">Maximización de Activos 2026</span>
                         </div>
-                        <h1 className="text-white mb-8">
+                        <h1 className="!text-white mb-8">
                             Venda su Inmueble en <span className="text-brand">Los Patios</span>
                         </h1>
                         <p className="text-xl md:text-2xl text-slate-400 max-w-2xl mb-12 font-medium leading-relaxed">
@@ -116,7 +116,7 @@ export default function VenderLosPatiosPage() {
                 <div className="container-wide px-8 relative z-10">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                         <div>
-                            <h2 className="text-white mb-8">Liderazgo en el <span className="text-brand">Mercado Local</span></h2>
+                            <h2 className="!text-white mb-8">Liderazgo en el <span className="text-brand">Mercado Local</span></h2>
                             <div className="grid grid-cols-2 gap-10">
                                 <div>
                                     <div className="text-5xl font-black text-brand mb-2">+450</div>
