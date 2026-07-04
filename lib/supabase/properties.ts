@@ -343,7 +343,7 @@ export async function getPropertyBySlugIncludeInactive(slug: string): Promise<Pr
             .single();
 
         if (error || !data) return null;
-        return data as Property;
+        return data as unknown as Property;
     } catch (err: any) {
         return null;
     }
