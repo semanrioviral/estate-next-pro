@@ -51,11 +51,7 @@ export async function generateMetadata({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlugCached(slug);
     if (!property) {
-        const inactiveProperty = await getPropertyBySlugIncludeInactive(slug);
-        if (inactiveProperty) {
-            return { title: 'Propiedad no disponible', robots: { index: false, follow: true } };
-        }
-        return { title: 'Propiedad no encontrada' };
+        return { title: 'Propiedad no disponible', robots: { index: false, follow: true } };
     }
     const seo = generatePropertySEO(property, { siteUrl: SITE_URL });
     return { title: { absolute: seo.title }, description: seo.description, alternates: seo.alternates, openGraph: seo.openGraph, twitter: seo.twitter, other: { 'googlebot': 'index, follow, max-image-preview:large' } };
@@ -69,7 +65,7 @@ export default async function PropertyDetailPage({ params }: Props) {
         if (inactiveProperty) {
             permanentRedirect('/propiedades');
         }
-        notFound();
+        permanentRedirect('/propiedades');
     }
 
     const siteUrl = SITE_URL;
