@@ -4,13 +4,13 @@ import { unstable_cache } from 'next/cache';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import {
     MapPin, BedDouble, Bath, Maximize, Car, ChevronRight, ChevronLeft,
     Phone, Check, CalendarDays, Video, Send, User, Mail, MessageSquare,
 } from 'lucide-react';
-import { getPropertyBySlug, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, getAdjacentProperties, Property } from '@/lib/supabase/properties';
+import { getPropertyBySlug, getPropertyBySlugIncludeInactive, getAllPropertySlugs, getSimilarProperties, getPopularInBarrio, getTrendingProperties, recordPropertyView, getWeeklyViews, getAveragePriceByBarrio, getAdjacentProperties, Property } from '@/lib/supabase/properties';
 import { generatePropertySEO, generatePropertyJSONLD } from '@/lib/seo/generatePropertySEO';
 import PropertyCardV3 from '@/components/design-system/PropertyCardV3';
 import MobileStickyCTA from '@/components/MobileStickyCTA';
@@ -50,7 +50,13 @@ export async function generateStaticParams() { const slugs = await getAllPropert
 export async function generateMetadata({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlugCached(slug);
-    if (!property) return { title: 'Propiedad no encontrada' };
+    if (!property) {
+        const inactiveProperty = await getPropertyBySlugIncludeInactive(slug);
+        if (inactiveProperty) {
+            return { title: 'Propiedad no disponible', robots: { index: false, follow: true } };
+        }
+        return { title: 'Propiedad no encontrada' };
+    }
     const seo = generatePropertySEO(property, { siteUrl: SITE_URL });
     return { title: { absolute: seo.title }, description: seo.description, alternates: seo.alternates, openGraph: seo.openGraph, twitter: seo.twitter, other: { 'googlebot': 'index, follow, max-image-preview:large' } };
 }
@@ -58,7 +64,13 @@ export async function generateMetadata({ params }: Props) {
 export default async function PropertyDetailPage({ params }: Props) {
     const { slug } = await params;
     const property = await getPropertyBySlugCached(slug);
-    if (!property) notFound();
+    if (!property) {
+        const inactiveProperty = await getPropertyBySlugIncludeInactive(slug);
+        if (inactiveProperty) {
+            permanentRedirect('/propiedades');
+        }
+        notFound();
+    }
 
     const siteUrl = SITE_URL;
     const propertyUrl = `${siteUrl}/propiedades/${property.slug}`;

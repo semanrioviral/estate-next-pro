@@ -332,6 +332,23 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
     }
 }
 
+// 2b. getPropertyBySlugIncludeInactive: Consulta sin filtro de estado (para 301 redirect)
+export async function getPropertyBySlugIncludeInactive(slug: string): Promise<Property | null> {
+    try {
+        const supabase = createPublicClient();
+        const { data, error } = await supabase
+            .from('properties')
+            .select(PROPERTY_SELECT_FIELDS)
+            .eq('slug', slug)
+            .single();
+
+        if (error || !data) return null;
+        return data as Property;
+    } catch (err: any) {
+        return null;
+    }
+}
+
 // 3. getPropertyById: Retorna UN objeto
 export async function getPropertyById(id: string): Promise<Property | null> {
     try {
