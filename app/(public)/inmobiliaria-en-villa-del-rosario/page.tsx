@@ -166,17 +166,17 @@ export default async function VillaRosarioPillarPage({
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <Link href="/inmobiliaria-en-cucuta" className="p-10 bg-white/5 rounded-xl border border-white/10 hover:border-brand transition-colors group">
-                            <h3 className="text-xl font-black mb-2 text-white">Cúcuta</h3>
+                            <h3 className="text-xl font-black mb-2 !text-white">Cúcuta</h3>
                             <p className="text-sm text-slate-500 mb-6 font-medium group-hover:text-slate-400">Motor comercial regional.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-brand">Ver Guía →</span>
                         </Link>
                         <Link href="/inmobiliaria-en-los-patios" className="p-10 bg-white/5 rounded-xl border border-white/10 hover:border-brand transition-colors group">
-                            <h3 className="text-xl font-black mb-2 text-white">Los Patios</h3>
+                            <h3 className="text-xl font-black mb-2 !text-white">Los Patios</h3>
                             <p className="text-sm text-slate-500 mb-6 font-medium group-hover:text-slate-400">Excelencia residencial.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-brand">Ver Guía →</span>
                         </Link>
                         <div className="p-10 bg-brand rounded-xl shadow-xl">
-                            <h3 className="text-xl font-black mb-2 text-white">Villa del Rosario</h3>
+                            <h3 className="text-xl font-black mb-2 !text-white">Villa del Rosario</h3>
                             <p className="text-sm text-white/80 mb-6 font-medium">Patrimonio y expansión.</p>
                             <span className="text-xs font-black uppercase tracking-widest text-white">Página Actual</span>
                         </div>

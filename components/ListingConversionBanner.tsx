@@ -15,7 +15,7 @@ export default function ListingConversionBanner() {
                         <Sparkles className="w-4 h-4 text-yellow-400" />
                         <span className="text-xs font-black text-white uppercase tracking-widest">Servicio Personalizado</span>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-4">
+                    <h2 className="text-3xl md:text-5xl font-black !text-white tracking-tight mb-4">
                         ¿No encuentra lo que busca?
                     </h2>
                     <p className="text-lg text-red-50 font-medium leading-relaxed opacity-90">

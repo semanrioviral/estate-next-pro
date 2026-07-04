@@ -213,7 +213,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                     <div className="my-24 p-12 bg-slate-900 rounded-xl flex flex-col md:flex-row items-center justify-between gap-10 overflow-hidden relative group">
                         <div className="absolute top-0 left-0 w-1 h-full bg-brand"></div>
                         <div className="relative z-10">
-                            <h3 className="text-2xl font-black mb-2 text-white">¿Busca asesoría inmediata?</h3>
+                            <h3 className="text-2xl font-black mb-2 !text-white">¿Busca asesoría inmediata?</h3>
                             <p className="text-slate-400 font-medium mb-0">Atención prioritaria para su inversión en Cúcuta.</p>
                         </div>
                         <Link
