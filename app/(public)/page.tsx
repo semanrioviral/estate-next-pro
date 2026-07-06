@@ -10,7 +10,7 @@ import { SITE_URL } from '@/lib/supabase/constants';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-    title: { absolute: 'Casas y Apartamentos en Venta en Los Patios y Cúcuta | Inmobiliaria Tucasa Los Patios' },
+    title: { absolute: 'Inmobiliaria en Cúcuta y Los Patios | Casas y Apartamentos en Venta' },
     description: 'Casas y apartamentos en venta en Los Patios, Cúcuta y Norte de Santander. Encuentra tu próxima propiedad con la mejor inmobiliaria de la región.',
     alternates: {
         canonical: SITE_URL,
@@ -59,7 +59,7 @@ function StatsSection() {
             <Link key={i} href={nav.href} className="flex flex-col items-center text-center p-8 bg-white rounded-3xl border border-slate-100 shadow-sm transition-all hover:border-brand-600/20 hover:shadow-xl hover:-translate-y-2 group">
               <div className="w-14 h-14 bg-slate-50 rounded-2xl flex items-center justify-center text-brand-600 shadow-sm mb-5 border border-slate-100 group-hover:bg-brand-600 group-hover:text-white transition-all duration-500">{nav.icon}</div>
               <span className="text-xl font-black text-slate-900 mb-1 tracking-tight group-hover:text-brand-600 transition-colors uppercase">{nav.val}</span>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">{nav.label}</span>
+              <span className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">{nav.label}</span>
             </Link>
           ))}
         </div>
@@ -91,7 +91,7 @@ function ServicesSection() {
                 <div className="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center text-brand-600 mb-8 shadow-sm group-hover:bg-brand-600 group-hover:text-white transition-all duration-500 border border-slate-100">{service.icon}</div>
                 <h3 className="text-lg font-black text-slate-900 mb-4 tracking-tight">{service.title}</h3>
                 <p className="text-slate-500 leading-relaxed text-sm font-medium mb-8">{service.desc}</p>
-                <div className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-brand-600 transition-colors">Ver más detalles</div>
+                <div className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-brand-600 transition-colors">Ver más detalles</div>
               </Link>
             ))}
           </div>
@@ -123,8 +123,8 @@ function CitiesSection() {
               <div className="p-8 flex flex-col flex-grow">
                 <h3 className="text-2xl font-black text-slate-900 mb-6 tracking-tight group-hover:text-brand-600 transition-colors uppercase">{city.name}</h3>
                 <div className="grid grid-cols-2 gap-4 mb-8">
-                  <div className="flex flex-col gap-1"><span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Plusvalía Est.</span><span className="text-sm font-black text-slate-700">8% - 12% Anual</span></div>
-                  <div className="flex flex-col gap-1"><span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Perfil</span><span className="text-sm font-black text-slate-700">Residencial A</span></div>
+                  <div className="flex flex-col gap-1"><span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Plusvalía Est.</span><span className="text-sm font-black text-slate-700">8% - 12% Anual</span></div>
+                  <div className="flex flex-col gap-1"><span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Perfil</span><span className="text-sm font-black text-slate-700">Residencial A</span></div>
                 </div>
                 <div className="mt-auto flex items-center justify-between">
                   <div className="text-[10px] font-black uppercase tracking-widest text-brand-600">Explorar Mercado</div>
@@ -137,7 +137,7 @@ function CitiesSection() {
         <div className="mt-20 p-10 bg-slate-800 rounded-[2.5rem] border border-slate-700/50 relative overflow-hidden">
           <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center">
             <div className="w-16 h-16 rounded-2xl bg-brand-600 flex items-center justify-center shrink-0 shadow-xl shadow-brand-900/20"><Building2 className="w-8 h-8 text-white" /></div>
-            <p className="text-sm text-slate-400 leading-relaxed font-medium">
+            <p className="text-sm text-slate-500 leading-relaxed font-medium">
               <span className="text-white font-bold">Liderazgo Regional:</span> Tucasa Inmobiliaria se consolida como el referente técnico en Norte de Santander. Nuestra plataforma integra analítica de datos y visibilidad multi-canal para que su propiedad en <span className="text-white">Cúcuta, Los Patios o Villa del Rosario</span> destaque ante compradores de alto perfil, garantizando una transacción eficiente, segura and transparente.
             </p>
           </div>
@@ -154,7 +154,7 @@ function TestimonialsSection() {
         <div className="flex flex-col items-center text-center mb-24">
           <span className="text-brand-500 font-black text-[11px] uppercase tracking-[0.4em] mb-4">Garantía de Excelencia</span>
           <h2 className="text-4xl md:text-5xl font-black !text-white mb-8 tracking-tight">Experiencias de <span className="text-brand-600 underline decoration-slate-800 underline-offset-8">Confianza</span></h2>
-          <p className="text-slate-400 font-medium max-w-xl">La satisfacción de nuestros clientes es el pilar de nuestra trayectoria profesional.</p>
+          <p className="text-slate-500 font-medium max-w-xl">La satisfacción de nuestros clientes es el pilar de nuestra trayectoria profesional.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           {testimonials.map((tm, i) => (

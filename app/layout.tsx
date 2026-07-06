@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 import { SITE_URL } from "@/lib/supabase/constants";
 
 const outfit = Outfit({

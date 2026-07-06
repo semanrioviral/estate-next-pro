@@ -124,43 +124,50 @@ function getAbsoluteImageUrl(imageUrl: string, siteUrl: string): string {
 }
 
 export function generatePropertyTitle(property: Property): string {
+  // If a custom meta title is set in the DB, use it directly
+  if (property.meta_titulo?.trim()) {
+    return property.meta_titulo.trim();
+  }
+
+  // Use the property's own title which contains searchable names
+  // (e.g., "Conjunto Siena", "Terra Viva") that users actually search for.
+  // The old format used property.barrio (e.g., "Chaparral") which doesn't
+  // match what users type into Google.
+  const titulo = property.titulo?.trim();
+  if (titulo) {
+    const maxLen = 60 - BRAND.length - 3; // 3 = " | "
+    const cleanTitulo = titulo.length > maxLen ? truncate(titulo, maxLen) : titulo;
+    return `${cleanTitulo} | ${BRAND}`;
+  }
+
+  // Fallback to structured format if no titulo
   const tipo = getTipoDisplay(property.tipo);
   const operacion = getOperacionText(property.operacion);
   const barrio = getBarrioDisplay(property.barrio);
   const ciudad = getCiudadDisplay(property.ciudad);
-
   return `${tipo} en ${operacion} en ${barrio}, ${ciudad} | ${BRAND}`;
 }
 
 export function generatePropertyDescription(property: Property): string {
+  // If a custom meta description is set in the DB, use it directly
+  if (property.meta_descripcion?.trim()) {
+    return property.meta_descripcion.trim();
+  }
+
   const tipo = getTipoDisplay(property.tipo);
   const operacion = getOperacionText(property.operacion);
   const barrio = getBarrioDisplay(property.barrio);
   const ciudad = getCiudadDisplay(property.ciudad);
 
-  const parts: string[] = [];
-
-  parts.push(`${capitalizeFirst(tipo)} en ${operacion.toLowerCase()} ubicada en el sector de ${barrio}, ${ciudad}.`);
-
   const features: string[] = [];
-  if (property.habitaciones) {
-    features.push(`${property.habitaciones} habitaciones`);
-  }
-  if (property.baños) {
-    features.push(`${property.baños} baños`);
-  }
-  if (property.area_m2) {
-    features.push(`${formatArea(property.area_m2)}`);
-  }
+  if (property.habitaciones) features.push(`${property.habitaciones} hab`);
+  if (property.baños) features.push(`${property.baños} baños`);
+  if (property.area_m2) features.push(formatArea(property.area_m2));
 
-  if (features.length > 0) {
-    parts.push(`${capitalizeFirst(features.join(', '))}.`);
-  }
+  const featureText = features.length > 0 ? ` ${features.join(', ')}.` : '';
+  const priceText = ` $${formatPriceCOP(property.precio)}${property.negociable ? ' (negociable)' : ''}.`;
 
-  parts.push(`Precio $${formatPriceCOP(property.precio)}${property.negociable ? ', precio negociable' : ''}.`);
-  parts.push(`Consulta disponibilidad y agenda tu visita sin compromiso.`);
-
-  const description = parts.join(' ');
+  const description = `${capitalizeFirst(tipo)} en ${operacion.toLowerCase()} en ${barrio}, ${ciudad}.${featureText}${priceText} Agenda tu visita hoy.`;
   return truncate(description, 155);
 }
 
@@ -215,7 +222,7 @@ export function generatePropertyJSONLD(property: Property, siteUrl: string): Rec
       {
         '@type': 'RealEstateListing',
         '@id': `${propertyUrl}#listing`,
-        'name': `${getTipoDisplay(property.tipo)} en ${getOperacionText(property.operacion)} en ${getBarrioDisplay(property.barrio)}, ${getCiudadDisplay(property.ciudad)}`,
+        'name': property.titulo?.trim() || `${getTipoDisplay(property.tipo)} en ${getOperacionText(property.operacion)} en ${getBarrioDisplay(property.barrio)}, ${getCiudadDisplay(property.ciudad)}`,
         'description': generatePropertyDescription(property),
         'url': propertyUrl,
         'image': propertyImages.map(img => getAbsoluteImageUrl(img, siteUrl)),

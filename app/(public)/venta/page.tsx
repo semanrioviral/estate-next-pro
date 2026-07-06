@@ -30,8 +30,8 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
     const siteUrl = SITE_URL;
 
     const baseTitle = numHabitaciones
-        ? `${numHabitaciones}+ Hab | Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario`
-        : 'Casas y Apartamentos en Venta en Cúcuta, Los Patios y Villa del Rosario';
+        ? `${numHabitaciones}+ Hab | Casas y Apartamentos en Venta en Cúcuta y Los Patios`
+        : 'Casas y Apartamentos en Venta en Cúcuta y Los Patios';
 
     const baseDescription = numHabitaciones
         ? `Explora casas y apartamentos en venta con ${numHabitaciones} o más habitaciones en Cúcuta, Los Patios y Villa del Rosario. Asesoría personalizada con respaldo jurídico. ¡Encuentra tu hogar hoy!`

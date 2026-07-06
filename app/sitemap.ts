@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { count: arriendoCount },
         { data: properties },
         { data: ventaProperties },
+        { data: arriendoProperties },
         { data: barrios },
         { data: blogPosts },
     ] = await Promise.all([
@@ -21,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         supabase.from('properties').select('id', { count: 'exact', head: true }).eq('operacion', 'arriendo').not('estado', 'in', '("Vendido","Reservado")'),
         supabase.from('properties').select('slug, updated_at').not('estado', 'in', '("Vendido","Reservado")'),
         supabase.from('properties').select('ciudad, tipo').eq('operacion', 'venta').not('estado', 'in', '("Vendido","Reservado")'),
+        supabase.from('properties').select('ciudad, tipo').eq('operacion', 'arriendo').not('estado', 'in', '("Vendido","Reservado")'),
         supabase.from('barrios').select('id, nombre, slug'),
         supabase.from('blog_posts').select('slug, published_at').eq('status', 'published').lte('published_at', now),
     ]);
@@ -115,6 +117,46 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         }
     }
 
+    // 5b. Arriendo city routes and city+tipo combos
+    const arriendoCityCounts = (arriendoProperties || []).reduce<Record<string, number>>((acc, item) => {
+        const city = item.ciudad?.trim();
+        if (!city) return acc;
+        acc[city] = (acc[city] || 0) + 1;
+        return acc;
+    }, {});
+
+    const arriendoCityRoutes = Object.entries(arriendoCityCounts)
+        .filter(([, count]) => count >= 2)
+        .map(([city]) => ({
+            url: `${siteUrl}/arriendo/${slugify(city)}`,
+            lastModified: now,
+            changeFrequency: 'weekly' as const,
+            priority: 0.6,
+        }));
+
+    const arriendoCityTipoCounts: Record<string, Record<string, number>> = {};
+    for (const item of arriendoProperties || []) {
+        const city = item.ciudad?.trim().toLowerCase();
+        const tipo = item.tipo?.trim().toLowerCase();
+        if (!city || !tipo) continue;
+        if (!arriendoCityTipoCounts[city]) arriendoCityTipoCounts[city] = {};
+        arriendoCityTipoCounts[city][tipo] = (arriendoCityTipoCounts[city][tipo] || 0) + 1;
+    }
+
+    const arriendoCityTipoRoutes: MetadataRoute.Sitemap = [];
+    for (const [city, tipos] of Object.entries(arriendoCityTipoCounts)) {
+        for (const [tipo, count] of Object.entries(tipos)) {
+            if (count >= 2) {
+                arriendoCityTipoRoutes.push({
+                    url: `${siteUrl}/arriendo/${slugify(city)}/${slugify(tipo)}`,
+                    lastModified: now,
+                    changeFrequency: 'weekly' as const,
+                    priority: 0.5,
+                });
+            }
+        }
+    }
+
     // 6. Blog posts (DB-only filtering — no external fetch)
     const blogRoutes = (blogPosts || []).map((post) => ({
         url: `${siteUrl}/blog/${post.slug}`,
@@ -129,6 +171,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...barrioRoutes,
         ...cityRoutes,
         ...cityTipoRoutes,
+        ...arriendoCityRoutes,
+        ...arriendoCityTipoRoutes,
         ...blogRoutes,
     ];
 

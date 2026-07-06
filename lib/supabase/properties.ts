@@ -154,7 +154,6 @@ export async function attachImagesToProperties(props: any[], supabase: any): Pro
             ? prop.etiquetas
             : (typeof prop.etiquetas === 'string' ? prop.etiquetas.split(',').map((s: string) => s.trim()).filter(Boolean) : []);
 
-        console.log(`[MAP] Property ${prop.slug} - Mapped Etiquetas:`, etiquetas, "Raw Area:", prop.area_m2);
 
         return {
             ...prop,
@@ -318,10 +317,6 @@ export async function getPropertyBySlug(slug: string): Promise<Property | null> 
             });
             return null;
         }
-
-        // Log para depuración de 404s inconsistentes
-        const debugData = data as any;
-        console.log(`[DB] getPropertyBySlug success for: ${slug}. ID: ${debugData.id}. Status: ${debugData.estado}. Area: ${debugData.area_m2}. Etiquetas:`, debugData.etiquetas);
 
         // attachImagesToProperties espera un array, así que envolvemos 'data'
         const propsWithImages = await attachImagesToProperties([data], supabase);
@@ -521,7 +516,6 @@ export async function getPropertiesByTagSlug(slug: string, orden?: string, page:
             .eq('tag_id', tag.id);
 
         if (junctionError || !propertyTags || propertyTags.length === 0) {
-            console.log('[DB] No properties found for tag:', slug);
             return { properties: [], totalCount: 0 };
         }
 
@@ -563,16 +557,12 @@ export async function createProperty(
     let propertyId: string | null = null;
 
     try {
-        console.log('---------------------------------------------------------');
-        console.log('[DB] INICIANDO CREACIÓN DE PROPIEDAD:', propertyData.titulo);
 
         // 0. NUEVO: Sincronizar Barrio (Phase 7)
         let barrio_id: string | undefined = undefined;
         if (propertyData.barrio) {
-            console.log('[SEO] Sincronizando Barrio...');
             try {
                 barrio_id = await upsertBarrio(propertyData.barrio, propertyData.ciudad, supabase);
-                console.log('[SEO] Barrio sincronizado. ID:', barrio_id);
             } catch (barrioError: any) {
                 console.error('[SEO] Error en sincronización de barrio:', barrioError.message);
                 // No bloqueamos la creación por ahora si falla el barrio, pero guardamos el log
@@ -610,11 +600,9 @@ export async function createProperty(
         }
 
         propertyId = property.id;
-        console.log('[DB] Propiedad creada exitosamente. ID:', propertyId);
 
         // 2. Insertar fotos en tabla 'property_images'
         if (images && images.length > 0) {
-            console.log(`[DB] Preparando inserción de ${images.length} imágenes en 'property_images'...`);
 
             const imagesToInsert = images.map((img) => ({
                 property_id: propertyId,
@@ -623,7 +611,7 @@ export async function createProperty(
                 es_principal: img.es_principal
             }));
 
-            const { data: imgData, error: imgError } = await supabase
+            const { error: imgError } = await supabase
                 .from('property_images')
                 .insert(imagesToInsert)
                 .select();
@@ -632,19 +620,13 @@ export async function createProperty(
                 console.error('[DB] ERROR CRÍTICO al insertar imágenes:', imgError.message);
                 throw new Error(`Error al persistir galería de imágenes: ${imgError.message}`);
             }
-
-            console.log(`[DB] ÉXITO: Se insertaron ${imgData?.length || 0} registros en 'property_images'.`);
-        } else {
-            console.warn('[DB] ADVERTENCIA: No se recibieron URLs de imágenes para insertar en la galería.');
         }
 
         // 3. NUEVO: Sincronizar tags en tablas relacionales
         if (propertyData.etiquetas && propertyData.etiquetas.length > 0) {
-            console.log('[SEO] Sincronizando tags...');
             try {
                 const tagIds = await upsertTags(propertyData.etiquetas, supabase);
                 await syncPropertyTags(propertyId!, tagIds, supabase);
-                console.log(`[SEO] ${tagIds.length} tags sincronizados correctamente`);
             } catch (seoError: any) {
                 console.error('[SEO] Error en sincronización de tags:', seoError.message);
                 throw seoError; // Propagar para activar rollback
@@ -653,19 +635,15 @@ export async function createProperty(
 
         // 4. NUEVO: Sincronizar amenidades en tablas relacionales
         if (propertyData.servicios && propertyData.servicios.length > 0) {
-            console.log('[SEO] Sincronizando amenidades...');
             try {
                 const amenidadIds = await upsertAmenidades(propertyData.servicios, supabase);
                 await syncPropertyAmenidades(propertyId!, amenidadIds, supabase);
-                console.log(`[SEO] ${amenidadIds.length} amenidades sincronizadas correctamente`);
             } catch (seoError: any) {
                 console.error('[SEO] Error en sincronización de amenidades:', seoError.message);
                 throw seoError; // Propagar para activar rollback
             }
         }
 
-        console.log('[DB] FLUJO FINALIZADO CORRECTAMENTE');
-        console.log('---------------------------------------------------------');
 
         return { data: property };
     } catch (err: any) {
@@ -673,7 +651,6 @@ export async function createProperty(
 
         // ROLLBACK COMPLETO: Eliminar propiedad y todas sus relaciones
         if (propertyId) {
-            console.warn(`[DB] REALIZANDO ROLLBACK: Eliminando propiedad ID ${propertyId}`);
             const { error: rollbackError } = await supabase
                 .from('properties')
                 .delete()
@@ -687,7 +664,6 @@ export async function createProperty(
             if (rollbackError) {
                 console.error('[DB] ERROR ADICIONAL en rollback:', rollbackError.message);
             } else {
-                console.log('[DB] Rollback completado: propiedad y relaciones eliminadas');
             }
         }
 
@@ -699,7 +675,6 @@ export async function deleteProperty(id: string) {
     // Use service_role client — auth is enforced by middleware before reaching this function
     const supabase = createAdminClient();
     try {
-        console.log('[DB] INICIANDO ELIMINACIÓN DE PROPIEDAD ID:', id);
 
         // El esquema tiene ON DELETE CASCADE en property_images referenciando properties(id)
         // Por lo tanto, borrar de 'properties' debería limpiar automáticamente 'property_images'
@@ -713,7 +688,6 @@ export async function deleteProperty(id: string) {
             return { error: error.message };
         }
 
-        console.log('[DB] Propiedad eliminada exitosamente');
         return { success: true };
     } catch (err: any) {
         console.error('[DB] EXCEPCIÓN en deleteProperty:', err.message);
@@ -742,8 +716,6 @@ function sanitizePayload<T extends Record<string, unknown>>(data: T): Partial<T>
     for (const [key, value] of Object.entries(data)) {
         if (KNOWN_PROPERTY_COLUMNS.has(key)) {
             sanitized[key] = value;
-        } else {
-            console.warn(`[DB] Sanitized: skipping unknown column "${key}"`);
         }
     }
     return sanitized as Partial<T>;
@@ -757,16 +729,12 @@ export async function updateProperty(
     // Use service_role client — auth is enforced by middleware before reaching this function
     const supabase = createAdminClient();
     try {
-        console.log('---------------------------------------------------------');
-        console.log('[DB] INICIANDO ACTUALIZACIÓN DE PROPIEDAD ID:', id);
 
         // 0. NUEVO: Sincronizar Barrio (Phase 7)
         let barrio_id: string | undefined = undefined;
         if (propertyData.barrio) {
-            console.log('[SEO] Sincronizando Barrio...');
             try {
                 barrio_id = await upsertBarrio(propertyData.barrio, propertyData.ciudad || '', supabase);
-                console.log('[SEO] Barrio sincronizado. ID:', barrio_id);
             } catch (barrioError: any) {
                 console.error('[SEO] Error en sincronización de barrio:', barrioError.message);
             }
@@ -785,7 +753,6 @@ export async function updateProperty(
         // Sanitize: strip any keys that don't match known columns (safety net for partial migrations)
         const sanitized = sanitizePayload(updatePayload);
 
-        console.log('[DB] Update Payload (sanitized):', JSON.stringify(sanitized, null, 2));
 
         // Use .select() with maybeSingle() to verify the row was actually updated (RLS can silently block)
         const { data: updatedRow, error: propError } = await supabase
@@ -810,10 +777,8 @@ export async function updateProperty(
             return { error: 'No se pudo actualizar la propiedad. Verifica que exista y tengas permisos.' };
         }
 
-        console.log('[DB] UPDATE confirmado — fila afectada. ID:', id);
 
         // 2. Sincronizar galería de imágenes
-        console.log('[DB] Sincronizando galería de imágenes...');
         const { error: deleteError } = await supabase
             .from('property_images')
             .delete()
@@ -843,7 +808,6 @@ export async function updateProperty(
 
         // 3. NUEVO: Sincronizar tags si se enviaron
         if (propertyData.etiquetas !== undefined) {
-            console.log('[SEO] Re-sincronizando tags...');
             try {
                 if (propertyData.etiquetas.length > 0) {
                     const tagIds = await upsertTags(propertyData.etiquetas, supabase);
@@ -852,17 +816,14 @@ export async function updateProperty(
                     // Si no hay tags, eliminar todas las relaciones
                     await syncPropertyTags(id, [], supabase);
                 }
-                console.log('[SEO] Tags sincronizados correctamente');
             } catch (seoError: any) {
                 console.error('[SEO] Error sincronizando tags:', seoError.message);
                 // No retornamos error porque la propiedad ya se actualizó
-                console.warn('[SEO] La propiedad se actualizó pero faltó sincronizar tags');
             }
         }
 
         // 4. NUEVO: Sincronizar amenidades si se enviaron
         if (propertyData.servicios !== undefined) {
-            console.log('[SEO] Re-sincronizando amenidades...');
             try {
                 if (propertyData.servicios.length > 0) {
                     const amenidadIds = await upsertAmenidades(propertyData.servicios, supabase);
@@ -871,15 +832,11 @@ export async function updateProperty(
                     // Si no hay amenidades, eliminar todas las relaciones
                     await syncPropertyAmenidades(id, [], supabase);
                 }
-                console.log('[SEO] Amenidades sincronizadas correctamente');
             } catch (seoError: any) {
                 console.error('[SEO] Error sincronizando amenidades:', seoError.message);
-                console.warn('[SEO] La propiedad se actualizó pero faltó sincronizar amenidades');
             }
         }
 
-        console.log('[DB] ACTUALIZACIÓN FINALIZADA CON ÉXITO');
-        console.log('---------------------------------------------------------');
         return { success: true };
     } catch (err: any) {
         console.error('[DB] EXCEPCIÓN en updateProperty:', err.message);
@@ -891,7 +848,6 @@ export async function syncPropertyGallery(propertyId: string, images: GalleryIma
     // Use service_role client — auth is enforced by middleware before reaching this function
     const supabase = createAdminClient();
     try {
-        console.log(`[DB] Iniciando syncPropertyGallery para propiedad: ${propertyId}`);
 
         // 1. Recalcular orden secuencial (0, 1, 2...)
         const imagesWithOrder = images.map((img, index) => ({
@@ -918,7 +874,6 @@ export async function syncPropertyGallery(propertyId: string, images: GalleryIma
             );
 
         if (updates.length > 0) {
-            console.log(`[DB] Ejecutando ${updates.length} actualizaciones en 'property_images'...`);
             const results = await Promise.all(updates);
 
             const firstError = results.find(r => r.error);
@@ -928,7 +883,6 @@ export async function syncPropertyGallery(propertyId: string, images: GalleryIma
         }
 
         // 4. Actualizar properties.imagen_principal
-        console.log(`[DB] Sincronizando imagen_principal: ${primaryUrl}`);
         const { error: propError } = await supabase
             .from('properties')
             .update({ imagen_principal: primaryUrl })
@@ -938,7 +892,6 @@ export async function syncPropertyGallery(propertyId: string, images: GalleryIma
             throw new Error(`Error actualizando propiedad principal: ${propError.message}`);
         }
 
-        console.log('[DB] Sincronización de galería completada con éxito');
         return { success: true };
     } catch (err: any) {
         console.error('[DB] EXCEPCIÓN en syncPropertyGallery:', err.message);
@@ -1167,7 +1120,6 @@ export const getPropertiesByOperacionAndCiudad = (
                         .single();
 
                     if (barrioError || !barrioData) {
-                        console.warn(`[DB] Barrio slug '${bsl}' not found.`);
                         // Si el barrio no existe, no devolvemos nada para evitar confusión
                         return { properties: [], totalCount: 0 };
                     }
@@ -1603,7 +1555,6 @@ export async function recordPropertyView(propertyId: string, clientIp?: string, 
             ]);
 
         if (error) {
-            console.warn('[ANALYTICS] Error recording view (maybe table not ready):', error.message);
         }
     } catch (err: any) {
         console.error('[ANALYTICS] Critical error in recordPropertyView:', err.message);
@@ -1627,7 +1578,6 @@ export const getMostViewedProperties = unstable_cache(
 
             if (error) {
                 // Si el RPC no existe, fallback a recent properties para no romper la UI
-                console.warn('[ANALYTICS] RPC get_most_viewed_properties_ids not found, using fallback.');
                 return getFeaturedProperties(limit);
             }
 

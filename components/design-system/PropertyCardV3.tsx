@@ -88,7 +88,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                 <div className="mb-2">
                     <span className="text-[24px] font-bold text-slate-900 tracking-tighter flex items-baseline gap-1 leading-none">
                         {formattedPrice}
-                        <span className="text-[12px] font-bold text-slate-400 uppercase tracking-tighter">COP</span>
+                        <span className="text-[12px] font-bold text-slate-500 uppercase tracking-tighter">COP</span>
                     </span>
                 </div>
 
@@ -99,7 +99,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
 
                 {/* 2.3 Location - Secondary Scanner */}
                 <div className="flex items-center gap-1 mb-4">
-                    <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                    <MapPin className="w-3.5 h-3.5 text-slate-500" />
                     <span className="text-[13px] font-medium text-slate-500 uppercase tracking-tight truncate">
                         {property.barrio ? `${property.barrio}, ` : ''}{property.ciudad}
                     </span>

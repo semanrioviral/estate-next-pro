@@ -34,6 +34,16 @@ export default function RetentionModal({ ciudad }: RetentionModalProps) {
         checkRetention();
     }, []);
 
+    // Cerrar con tecla Escape
+    useEffect(() => {
+        if (!isOpen) return;
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') setIsOpen(false);
+        };
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, [isOpen]);
+
     if (!isOpen) return null;
 
     const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573223047435';
@@ -41,10 +51,11 @@ export default function RetentionModal({ ciudad }: RetentionModalProps) {
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center px-4 bg-zinc-950/40 backdrop-blur-sm animate-in fade-in duration-500">
+        <div role="dialog" aria-modal="true" aria-labelledby="retention-modal-title" className="fixed inset-0 z-[200] flex items-center justify-center px-4 bg-zinc-950/40 backdrop-blur-sm animate-in fade-in duration-500">
             <div className="relative w-full max-w-md bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-2xl border border-zinc-200 dark:border-zinc-800 animate-in zoom-in-95 duration-300">
                 <button
                     onClick={() => setIsOpen(false)}
+                    aria-label="Cerrar ventana"
                     className="absolute top-6 right-6 p-2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
                 >
                     <X className="w-5 h-5" />
@@ -54,7 +65,7 @@ export default function RetentionModal({ ciudad }: RetentionModalProps) {
                     <div className="w-16 h-16 bg-red-50 dark:bg-red-500/10 rounded-2xl flex items-center justify-center mb-6">
                         <MessageCircle className="w-8 h-8 text-[#fb2c36]" />
                     </div>
-                    <h3 className="text-2xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight mb-3">
+                    <h3 id="retention-modal-title" className="text-2xl font-black text-zinc-900 dark:text-zinc-50 tracking-tight mb-3">
                         ¿Quiere recibir propiedades similares directamente en WhatsApp?
                     </h3>
                     <p className="text-zinc-500 dark:text-zinc-400 font-medium">

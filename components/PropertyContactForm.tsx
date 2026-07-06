@@ -60,37 +60,55 @@ export default function PropertyContactForm({ propertyId, propertyTitle }: Prope
 
     return (
         <form onSubmit={handleSubmit} className="space-y-3">
-            <input
-                type="text"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                placeholder="Nombre completo *"
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
-                required
-            />
-            <input
-                type="tel"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                placeholder="Teléfono / WhatsApp *"
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
-                required
-            />
-            <input
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                placeholder="Correo electrónico (opcional)"
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
-            />
-            <textarea
-                value={message}
-                onChange={e => setMessage(e.target.value)}
-                placeholder={`Hola, me interesa esta propiedad...`}
-                rows={2}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all resize-none"
-            />
-            {error && <p className="text-xs font-bold text-red-600">{error}</p>}
+            <div className="space-y-1">
+                <label htmlFor={`pc-name-${propertyId}`} className="sr-only">Nombre completo (requerido)</label>
+                <input
+                    id={`pc-name-${propertyId}`}
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Nombre completo *"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
+                    required
+                    aria-required="true"
+                />
+            </div>
+            <div className="space-y-1">
+                <label htmlFor={`pc-phone-${propertyId}`} className="sr-only">Teléfono / WhatsApp (requerido)</label>
+                <input
+                    id={`pc-phone-${propertyId}`}
+                    type="tel"
+                    value={phone}
+                    onChange={e => setPhone(e.target.value)}
+                    placeholder="Teléfono / WhatsApp *"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
+                    required
+                    aria-required="true"
+                />
+            </div>
+            <div className="space-y-1">
+                <label htmlFor={`pc-email-${propertyId}`} className="sr-only">Correo electrónico (opcional)</label>
+                <input
+                    id={`pc-email-${propertyId}`}
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Correo electrónico (opcional)"
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all"
+                />
+            </div>
+            <div className="space-y-1">
+                <label htmlFor={`pc-msg-${propertyId}`} className="sr-only">Mensaje</label>
+                <textarea
+                    id={`pc-msg-${propertyId}`}
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    placeholder={`Hola, me interesa esta propiedad...`}
+                    rows={2}
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-lg px-3.5 py-2.5 text-sm font-medium text-zinc-900 placeholder:text-zinc-400 outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500 transition-all resize-none"
+                />
+            </div>
+            {error && <p role="alert" className="text-xs font-bold text-red-600">{error}</p>}
             <button
                 type="submit"
                 disabled={loading}

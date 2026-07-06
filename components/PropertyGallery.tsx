@@ -114,9 +114,9 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
     if (allImages.length === 1) {
         return (
             <>
-                <div className="relative aspect-[16/9] md:aspect-[2/1] w-full overflow-hidden bg-zinc-100 cursor-pointer rounded-none md:rounded-xl" onClick={() => openLightbox(0)}>
+                <button type="button" onClick={() => openLightbox(0)} aria-label="Abrir galería de imágenes" className="relative aspect-[16/9] md:aspect-[2/1] w-full overflow-hidden bg-zinc-100 cursor-pointer rounded-none md:rounded-xl block">
                     <Image src={allImages[0]} alt={title} fill className="object-cover" priority sizes="(max-width: 768px) 100vw, 1200px" />
-                </div>
+                </button>
                 {lightbox}
             </>
         )
@@ -128,9 +128,9 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
             <>
                 <div className="grid grid-cols-2 gap-1 md:gap-2 rounded-none md:rounded-xl overflow-hidden">
                     {allImages.map((src, i) => (
-                        <div key={i} className="relative aspect-[4/3] cursor-pointer bg-zinc-100 overflow-hidden" onClick={() => openLightbox(i)}>
+                        <button key={i} type="button" onClick={() => openLightbox(i)} aria-label={`Ver foto ${i + 1} de ${allImages.length}`} className="relative aspect-[4/3] cursor-pointer bg-zinc-100 overflow-hidden">
                             <Image src={src} alt={`${title} - Foto ${i + 1}`} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 50vw, 600px" priority={i === 0} />
-                        </div>
+                        </button>
                     ))}
                 </div>
                 {lightbox}
@@ -148,24 +148,26 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
             {/* ---- DESKTOP: Grid 3-col ---- */}
             <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 md:gap-1.5 md:rounded-xl md:overflow-hidden md:h-[520px]">
                 {/* Main image: col-span-2 row-span-2 */}
-                <div className="relative col-span-2 row-span-2 cursor-pointer bg-zinc-100 overflow-hidden" onClick={() => openLightbox(0)}>
+                <button type="button" onClick={() => openLightbox(0)} aria-label="Ver foto principal" className="relative col-span-2 row-span-2 cursor-pointer bg-zinc-100 overflow-hidden">
                     <Image src={allImages[0]} alt={`${title} - Principal`} fill className="object-cover hover:scale-105 transition-transform duration-700" priority sizes="50vw" />
-                </div>
+                </button>
                 {/* Secondary images */}
                 {allImages.slice(1, 3).map((src, i) => (
-                    <div key={i} className="relative cursor-pointer bg-zinc-100 overflow-hidden" onClick={() => openLightbox(i + 1)}>
+                    <button key={i} type="button" onClick={() => openLightbox(i + 1)} aria-label={`Ver foto ${i + 2}`} className="relative cursor-pointer bg-zinc-100 overflow-hidden">
                         <Image src={src} alt={`${title} - Foto ${i + 2}`} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="25vw" />
-                    </div>
+                    </button>
                 ))}
                 {/* Third row: image 4 + "show all" button */}
                 {allImages.length > 3 ? (
-                    <div className="relative cursor-pointer bg-zinc-100 overflow-hidden" onClick={() => openLightbox(3)}>
+                    <button type="button" onClick={() => openLightbox(3)} aria-label="Ver foto 4" className="relative cursor-pointer bg-zinc-100 overflow-hidden">
                         <Image src={allImages[3]} alt={`${title} - Foto 4`} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="25vw" />
-                    </div>
+                    </button>
                 ) : <div className="bg-zinc-50" />}
-                <div
-                    className="relative cursor-pointer bg-zinc-100 overflow-hidden"
+                <button
+                    type="button"
                     onClick={() => openLightbox(allImages.length > 3 ? 4 : 3)}
+                    aria-label={`Ver todas las ${allImages.length} fotos`}
+                    className="relative cursor-pointer bg-zinc-100 overflow-hidden"
                 >
                     {allImages.length > 4 ? (
                         <>
@@ -179,7 +181,7 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                     ) : (
                         <Image src={allImages[4]} alt={`${title} - Foto 5`} fill className="object-cover hover:scale-105 transition-transform duration-500" sizes="25vw" />
                     )}
-                </div>
+                </button>
             </div>
 
             {/* ---- MOBILE: Horizontal swipe ---- */}
@@ -187,9 +189,9 @@ export default function PropertyGallery({ images, title }: PropertyGalleryProps)
                 <div className="overflow-hidden rounded-none" ref={mainViewportRef}>
                     <div className="flex">
                         {allImages.map((src, i) => (
-                            <div key={i} className="relative flex-[0_0_100%] min-w-0 aspect-[4/3] cursor-pointer bg-zinc-100" onClick={() => openLightbox(i)}>
+                            <button key={i} type="button" onClick={() => openLightbox(i)} aria-label={`Ver foto ${i + 1}`} className="relative flex-[0_0_100%] min-w-0 aspect-[4/3] cursor-pointer bg-zinc-100">
                                 <Image src={src} alt={`${title} - Foto ${i + 1}`} fill className="object-cover" sizes="100vw" priority={i === 0} />
-                            </div>
+                            </button>
                         ))}
                     </div>
                 </div>

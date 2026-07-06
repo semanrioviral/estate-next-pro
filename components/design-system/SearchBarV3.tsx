@@ -140,7 +140,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         onClick={() => setOperacion('venta')}
                         className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'venta'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
-                            : 'text-slate-400 hover:text-slate-600'
+                            : 'text-slate-500 hover:text-slate-600'
                             }`}
                     >
                         Venta
@@ -149,7 +149,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         onClick={() => setOperacion('arriendo')}
                         className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'arriendo'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
-                            : 'text-slate-400 hover:text-slate-600'
+                            : 'text-slate-500 hover:text-slate-600'
                             }`}
                     >
                         Arriendo
@@ -159,7 +159,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 {/* 2. City Selector */}
                 <div className="relative flex-1 group min-w-[130px]">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <MapPin className="w-4 h-4 text-slate-400 group-focus-within:text-brand transition-colors" />
+                        <MapPin className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={ciudad}
@@ -180,7 +180,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 {/* 3. Barrio Selector (Dynamic) */}
                 <div className="relative flex-1 group min-w-[140px]">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Map className={`w-4 h-4 transition-colors ${!ciudad ? 'text-slate-200' : 'text-slate-400 group-focus-within:text-brand'}`} />
+                        <Map className={`w-4 h-4 transition-colors ${!ciudad ? 'text-slate-200' : 'text-slate-500 group-focus-within:text-brand'}`} />
                     </div>
                     <select
                         value={barrio}
@@ -202,7 +202,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 {/* 4. Type Selector */}
                 <div className="relative flex-1 group min-w-[140px]">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Building2 className="w-4 h-4 text-slate-400 group-focus-within:text-brand transition-colors" />
+                        <Building2 className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={tipo}
@@ -223,7 +223,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                 {/* 5. Bedrooms Selector */}
                 <div className="relative flex-1 group min-w-[120px]">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Bed className="w-4 h-4 text-slate-400 group-focus-within:text-brand transition-colors" />
+                        <Bed className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={habitaciones}
