@@ -46,6 +46,8 @@ interface SearchRequestBody {
     habitaciones?: number;
     orden?: string;
     page?: number;
+    precioMin?: number;
+    precioMax?: number;
 }
 
 export async function POST(request: NextRequest) {
@@ -62,7 +64,9 @@ export async function POST(request: NextRequest) {
                     body.operacion || 'venta',
                     body.habitaciones,
                     body.orden,
-                    page
+                    page,
+                    body.precioMin,
+                    body.precioMax
                 );
                 break;
 

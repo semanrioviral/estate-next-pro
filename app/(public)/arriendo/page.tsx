@@ -17,15 +17,19 @@ interface ArriendoPageProps {
         habitaciones?: string;
         orden?: string;
         page?: string;
+        precioMin?: string;
+        precioMax?: string;
     }>;
 }
 
 export async function generateMetadata({ searchParams }: ArriendoPageProps): Promise<Metadata> {
-    const { habitaciones, orden, page: pageParam } = await searchParams;
+    const { habitaciones, orden, page: pageParam, precioMin, precioMax } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
+    const numPrecioMin = precioMin ? parseInt(precioMin) : undefined;
+    const numPrecioMax = precioMax ? parseInt(precioMax) : undefined;
     const currentPage = Number(pageParam) || 1;
 
-    const { properties } = await getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage);
+    const { properties } = await getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage, numPrecioMin, numPrecioMax);
     const siteUrl = SITE_URL;
     let title = 'Casas y Apartamentos en Arriendo en Cúcuta y Los Patios';
     let description = 'Encuentra las mejores propiedades en arriendo en Norte de Santander. Casas, apartamentos, locales y más.';
@@ -59,12 +63,14 @@ export async function generateMetadata({ searchParams }: ArriendoPageProps): Pro
 }
 
 export default async function ArriendoPage({ searchParams }: ArriendoPageProps) {
-    const { habitaciones, orden, page: pageParam } = await searchParams;
+    const { habitaciones, orden, page: pageParam, precioMin, precioMax } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
+    const numPrecioMin = precioMin ? parseInt(precioMin) : undefined;
+    const numPrecioMax = precioMax ? parseInt(precioMax) : undefined;
     const currentPage = Number(pageParam) || 1;
 
     const [{ properties, totalCount }, trendingProperties] = await Promise.all([
-        getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage),
+        getPropertiesByOperacion('arriendo', numHabitaciones, orden, currentPage, numPrecioMin, numPrecioMax),
         getTrendingProperties(7, 3)
     ]);
     const siteUrl = SITE_URL;
@@ -73,6 +79,8 @@ export default async function ArriendoPage({ searchParams }: ArriendoPageProps) 
     // Build filters query string for static pagination links
     const aFiltersParams = new URLSearchParams();
     if (habitaciones) aFiltersParams.set('habitaciones', habitaciones);
+    if (precioMin) aFiltersParams.set('precioMin', precioMin);
+    if (precioMax) aFiltersParams.set('precioMax', precioMax);
     if (orden) aFiltersParams.set('orden', orden);
     const aFiltersQueryString = aFiltersParams.toString();
 

@@ -38,6 +38,8 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
     const [barrio, setBarrio] = useState('');
     const [tipo, setTipo] = useState('');
     const [habitaciones, setHabitaciones] = useState('');
+    const [precioMin, setPrecioMin] = useState('');
+    const [precioMax, setPrecioMax] = useState('');
 
     const [availableBarrios, setAvailableBarrios] = useState<{ nombre: string; slug: string }[]>([]);
     const [isLoadingBarrios, setIsLoadingBarrios] = useState(false);
@@ -73,9 +75,13 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
 
         const barrioQuery = searchParams.get('barrio') || '';
         const habsQuery = searchParams.get('habitaciones') || '';
+        const precioMinQuery = searchParams.get('precioMin') || '';
+        const precioMaxQuery = searchParams.get('precioMax') || '';
 
         setBarrio((prev) => (prev === barrioQuery ? prev : barrioQuery));
         setHabitaciones((prev) => (prev === habsQuery ? prev : habsQuery));
+        setPrecioMin((prev) => (prev === precioMinQuery ? prev : precioMinQuery));
+        setPrecioMax((prev) => (prev === precioMaxQuery ? prev : precioMaxQuery));
     }, [params.ciudad, params.tipo, pathname, searchParams]);
 
     // Fetch barrios when city changes
@@ -118,6 +124,8 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
         const qParams = new URLSearchParams();
         if (barrio) qParams.set('barrio', barrio);
         if (habitaciones) qParams.set('habitaciones', habitaciones);
+        if (precioMin) qParams.set('precioMin', precioMin);
+        if (precioMax) qParams.set('precioMax', precioMax);
 
         const queryString = qParams.toString();
         if (queryString) {
@@ -239,6 +247,39 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                         <ChevronDown className="w-4 h-4 text-slate-300" />
+                    </div>
+                </div>
+
+                {/* 6. Price Range (Min - Max) */}
+                <div className="relative flex-1 group min-w-[200px] flex gap-1 px-2">
+                    <div className="relative flex-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 pointer-events-none">$</span>
+                        <input
+                            type="number"
+                            inputMode="numeric"
+                            value={precioMin}
+                            onChange={(e) => setPrecioMin(e.target.value)}
+                            placeholder="Min"
+                            aria-label="Precio mínimo"
+                            min="0"
+                            step="1000000"
+                            className={`w-full pl-7 pr-2 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm focus:outline-none placeholder:text-slate-300 placeholder:font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                        />
+                    </div>
+                    <span className="self-center text-slate-300 font-bold text-xs">-</span>
+                    <div className="relative flex-1">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 pointer-events-none">$</span>
+                        <input
+                            type="number"
+                            inputMode="numeric"
+                            value={precioMax}
+                            onChange={(e) => setPrecioMax(e.target.value)}
+                            placeholder="Max"
+                            aria-label="Precio máximo"
+                            min="0"
+                            step="1000000"
+                            className={`w-full pl-7 pr-2 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm focus:outline-none placeholder:text-slate-300 placeholder:font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                        />
                     </div>
                 </div>
 

@@ -18,15 +18,19 @@ interface VentaPageProps {
         habitaciones?: string;
         orden?: string;
         page?: string;
+        precioMin?: string;
+        precioMax?: string;
     }>;
 }
 
 export async function generateMetadata({ searchParams }: VentaPageProps): Promise<Metadata> {
-    const { habitaciones, orden, page: pageParam } = await searchParams;
+    const { habitaciones, orden, page: pageParam, precioMin, precioMax } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
+    const numPrecioMin = precioMin ? parseInt(precioMin) : undefined;
+    const numPrecioMax = precioMax ? parseInt(precioMax) : undefined;
     const currentPage = Number(pageParam) || 1;
 
-    const { properties, totalCount } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage);
+    const { properties, totalCount } = await getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage, numPrecioMin, numPrecioMax);
     const siteUrl = SITE_URL;
 
     const baseTitle = numHabitaciones
@@ -71,12 +75,14 @@ export async function generateMetadata({ searchParams }: VentaPageProps): Promis
 }
 
 export default async function VentaPage({ searchParams }: VentaPageProps) {
-    const { habitaciones, orden, page: pageParam } = await searchParams;
+    const { habitaciones, orden, page: pageParam, precioMin, precioMax } = await searchParams;
     const numHabitaciones = habitaciones ? parseInt(habitaciones) : undefined;
+    const numPrecioMin = precioMin ? parseInt(precioMin) : undefined;
+    const numPrecioMax = precioMax ? parseInt(precioMax) : undefined;
     const currentPage = Number(pageParam) || 1;
 
     const [{ properties, totalCount }, trendingProperties] = await Promise.all([
-        getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage),
+        getPropertiesByOperacion('venta', numHabitaciones, orden, currentPage, numPrecioMin, numPrecioMax),
         getTrendingProperties(7, 3)
     ]);
     const siteUrl = SITE_URL;
@@ -87,6 +93,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
     // Build filters query string for static pagination links (preserves filters without JS)
     const vFiltersParams = new URLSearchParams();
     if (habitaciones) vFiltersParams.set('habitaciones', habitaciones);
+    if (precioMin) vFiltersParams.set('precioMin', precioMin);
+    if (precioMax) vFiltersParams.set('precioMax', precioMax);
     if (orden) vFiltersParams.set('orden', orden);
     const vFiltersQueryString = vFiltersParams.toString();
 
@@ -183,6 +191,8 @@ export default async function VentaPage({ searchParams }: VentaPageProps) {
                                 source: 'operacion',
                                 operacion: 'venta',
                                 habitaciones: numHabitaciones,
+                                precioMin: numPrecioMin,
+                                precioMax: numPrecioMax,
                                 orden: orden,
                             }}
                             basePath="/venta"

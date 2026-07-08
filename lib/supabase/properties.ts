@@ -999,25 +999,37 @@ export const getPropertiesByOperacion = (
     operacion: string,
     habitaciones?: number,
     orden?: string,
-    page: number = 1
+    page: number = 1,
+    precioMin?: number,
+    precioMax?: number
 ): Promise<PaginatedProperties> => {
     // v2: cache bust for new Supabase keys (sb_publishable_)
-    const key = `props-operacion-v2-${operacion}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-p${page}`;
+    const key = `props-operacion-v2-${operacion}-hab${habitaciones ?? 'all'}-ord${orden ?? 'default'}-pmin${precioMin ?? 'all'}-pmax${precioMax ?? 'all'}-p${page}`;
     return unstable_cache(
-        async (op: string, hab?: number, ord?: string, pg: number = 1): Promise<PaginatedProperties> => {
+        async (op: string, hab?: number, ord?: string, pg: number = 1, pmin?: number, pmax?: number): Promise<PaginatedProperties> => {
             // inner function — params come from outer closure via cache key
             try {
                 const supabase = createPublicClient();
                 const pageSize = 12;
-                const from = (page - 1) * pageSize;
+                const from = (pg - 1) * pageSize;
                 const to = from + pageSize - 1;
 
                 let query = supabase
                     .from('properties')
                     .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                    .eq('operacion', operacion);
+                    .eq('operacion', op);
 
-                query = applyOrder(query, orden);
+                if (hab) {
+                    query = query.gte('habitaciones', hab);
+                }
+                if (pmin) {
+                    query = query.gte('precio', pmin);
+                }
+                if (pmax) {
+                    query = query.lte('precio', pmax);
+                }
+
+                query = applyOrder(query, ord);
                 query = query.range(from, to);
 
                 const { data: properties, error, count } = await query;
@@ -1025,32 +1037,6 @@ export const getPropertiesByOperacion = (
                 if (error) {
                     console.error('[DB] Error fetching properties by operacion:', error.message);
                     return { properties: [], totalCount: 0 };
-                }
-
-                // El filtrado manual de habitaciones se mantiene pero idealmente debería ser parte de la query
-                // para que la paginación de Supabase sea correcta. 
-                // SIN EMBARGO, para mantener la lógica actual de "filtrado en memoria" (que afecta al count):
-                // Si filtramos en memoria, el count de Supabase será incorrecto para el set filtrado.
-                // Para ser 100% correcto, el filtro de habitaciones debería estar en la query de Supabase.
-
-                // Re-evaluando: El código original filtraba en memoria.
-                // Para soporte correcto de paginación, MOVERÉ el filtro a la query.
-                if (habitaciones) {
-                    // Re-ejecutar query con filtro si es necesario, pero mejor modificarla desde el inicio
-                    // Volviendo a definir la query con el filtro de habitaciones
-                    let baseQuery = supabase
-                        .from('properties')
-                        .select(PROPERTY_SELECT_FIELDS, { count: 'exact' })
-                        .eq('operacion', operacion)
-                        .gte('habitaciones', habitaciones);
-
-                    baseQuery = applyOrder(baseQuery, orden);
-                    const { data: p2, error: e2, count: c2 } = await baseQuery.range(from, to);
-                    if (e2) return { properties: [], totalCount: 0 };
-                    return {
-                        properties: await attachImagesToProperties(p2 || [], supabase),
-                        totalCount: c2 || 0
-                    };
                 }
 
                 return {
@@ -1064,7 +1050,7 @@ export const getPropertiesByOperacion = (
         },
         [key],
         { revalidate: 3600, tags: ['properties'] }
-    )(operacion, habitaciones, orden, page);
+    )(operacion, habitaciones, orden, page, precioMin, precioMax);
 };
 
 /**
