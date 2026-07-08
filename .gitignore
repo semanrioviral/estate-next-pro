@@ -67,3 +67,7 @@ check_discovery.py
 temp_query.js
 run_sql_temp.js
 login.png
+
+# MCP config (can contain tokens)
+.mcp.json
+opencode.json

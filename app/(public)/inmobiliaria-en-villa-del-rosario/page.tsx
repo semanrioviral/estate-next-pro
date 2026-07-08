@@ -77,14 +77,43 @@ export default async function VillaRosarioPillarPage({
             {
                 "@type": ["LocalBusiness", "RealEstateAgent"],
                 "@id": `${siteUrl}/inmobiliaria-en-villa-del-rosario#localbusiness`,
-                "name": "Inmobiliaria Tucasa Los Patios - Villa del Rosario",
+                "name": "Inmobiliaria Tucasa Los Patios - División Villa del Rosario",
                 "image": `${siteUrl}/logo.png`,
                 "address": {
                     "@type": "PostalAddress",
                     "addressLocality": "Villa del Rosario",
                     "addressRegion": "Norte de Santander",
                     "addressCountry": "CO"
-                }
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": "7.8586",
+                    "longitude": "-72.4689"
+                },
+                "url": `${siteUrl}/inmobiliaria-en-villa-del-rosario`,
+                "telephone": "+573223047435",
+                "priceRange": "$$",
+                "areaServed": [
+                    { "@type": "City", "name": "Villa del Rosario" },
+                    { "@type": "City", "name": "Cúcuta" },
+                    { "@type": "City", "name": "Los Patios" }
+                ]
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": `${siteUrl}/inmobiliaria-en-villa-del-rosario#breadcrumb`,
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": siteUrl },
+                    { "@type": "ListItem", "position": 2, "name": "Inmobiliaria en Villa del Rosario", "item": `${siteUrl}/inmobiliaria-en-villa-del-rosario` }
+                ]
+            },
+            {
+                "@type": "FAQPage",
+                "mainEntity": FAQs.map(faq => ({
+                    "@type": "Question",
+                    "name": faq.q,
+                    "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+                }))
             }
         ]
     };

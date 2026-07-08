@@ -39,7 +39,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
         .trim();
 
     return (
-        <div className="group/card relative bg-white rounded-xl border border-slate-200/60 overflow-visible transition-all duration-250 ease-in-out h-[480px] lg:h-[490px] flex flex-col shadow-sm hover:border-brand-300/40 lg:hover:border-brand-200 lg:hover:scale-[1.02] lg:hover:shadow-md">
+        <div className="group/card relative bg-white rounded-xl border border-slate-200/60 overflow-visible transition-all duration-250 ease-in-out min-h-[480px] lg:min-h-[490px] flex flex-col shadow-sm hover:border-brand-300/40 lg:hover:border-brand-200 lg:hover:scale-[1.02] lg:hover:shadow-md">
 
             {/* 0. Ethereal Top Light (Atmospheric Highlight) */}
             <div className="absolute inset-x-0 -top-[1px] h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent z-40 opacity-0 group-hover/card:opacity-100 transition-opacity duration-500" />
@@ -73,7 +73,7 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                 {/* Status Badge */}
                 <div className="absolute top-3 left-3 z-20 flex gap-1.5">
                     <span className="bg-slate-100 text-slate-700 px-2 py-0.5 rounded-sm text-[11px] font-bold uppercase tracking-widest border border-slate-200">
-                        {property.operacion || 'VENTA'}
+                        {(property.operacion || 'venta').toUpperCase()}
                     </span>
                 </div>
 

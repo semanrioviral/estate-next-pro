@@ -7,15 +7,14 @@ export default function HomeHeroV3() {
             {/* Background Image with optimized overlay */}
             <div className="absolute inset-0 z-0">
                 <Image
-                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_40,w_400/hero/hero-homepage"
-                    alt="Propiedad de Lujo"
+                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_80,w_1600/hero/hero-homepage"
+                    alt="Propiedades destacadas en Los Patios y Cúcuta - Inmobiliaria líder en Norte de Santander"
                     fill
                     priority
                     fetchPriority="high"
                     sizes="100vw"
                     className="object-cover opacity-60"
                     decoding="sync"
-                    unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/40 to-slate-950/80"></div>
             </div>

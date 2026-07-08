@@ -100,15 +100,36 @@ export default async function LosPatiosDominanceAuthorityPage({
             },
             {
                 "@type": ["LocalBusiness", "RealEstateAgent"],
-                "@id": `${siteUrl}/#localbusiness`,
-                "name": "Inmobiliaria Tucasa Los Patios",
+                "@id": `${siteUrl}/inmobiliaria-en-los-patios#localbusiness`,
+                "name": "Inmobiliaria Tucasa Los Patios - Sede Principal",
                 "image": `${siteUrl}/logo.png`,
                 "address": {
                     "@type": "PostalAddress",
                     "addressLocality": "Los Patios",
                     "addressRegion": "Norte de Santander",
                     "addressCountry": "CO"
-                }
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": "7.8386",
+                    "longitude": "-72.5039"
+                },
+                "url": `${siteUrl}/inmobiliaria-en-los-patios`,
+                "telephone": "+573223047435",
+                "priceRange": "$$",
+                "areaServed": [
+                    { "@type": "City", "name": "Los Patios" },
+                    { "@type": "City", "name": "Cúcuta" },
+                    { "@type": "City", "name": "Villa del Rosario" }
+                ]
+            },
+            {
+                "@type": "BreadcrumbList",
+                "@id": `${siteUrl}/inmobiliaria-en-los-patios#breadcrumb`,
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Inicio", "item": siteUrl },
+                    { "@type": "ListItem", "position": 2, "name": "Inmobiliaria en Los Patios", "item": `${siteUrl}/inmobiliaria-en-los-patios` }
+                ]
             },
             {
                 "@type": "FAQPage",

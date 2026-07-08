@@ -279,7 +279,7 @@ export function generatePropertyJSONLD(property: Property, siteUrl: string): Rec
         '@id': `${propertyUrl}#breadcrumb`,
         'itemListElement': [
           { '@type': 'ListItem', 'position': 1, 'name': 'Inicio', 'item': siteUrl },
-          { '@type': 'ListItem', 'position': 2, 'name': 'Venta', 'item': `${siteUrl}/venta` },
+          { '@type': 'ListItem', 'position': 2, 'name': capitalizeFirst(property.operacion) || 'Venta', 'item': `${siteUrl}/${property.operacion || 'venta'}` },
           { '@type': 'ListItem', 'position': 3, 'name': getBarrioDisplay(property.barrio), 'item': buildBarrioURL(property.barrio_slug || slugifyBarrio(property.barrio), siteUrl) },
           { '@type': 'ListItem', 'position': 4, 'name': property.titulo, 'item': propertyUrl }
         ]
