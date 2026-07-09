@@ -61,6 +61,7 @@ export default function RootLayout({
 }>) {
   const siteUrl = SITE_URL;
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+  const ga4Id = process.env.NEXT_PUBLIC_GA4_ID;
 
   const globalJsonLd = {
     "@context": "https://schema.org",
@@ -148,6 +149,23 @@ export default function RootLayout({
                 alt=""
               />
             </noscript>
+          </>
+        ) : null}
+        {ga4Id ? (
+          <>
+            <Script id="ga4-base" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${ga4Id}', { send_page_view: true });
+              `}
+            </Script>
+            <Script
+              id="ga4-loader"
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}
+            />
           </>
         ) : null}
         <script

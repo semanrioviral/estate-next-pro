@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useParams, usePathname, useSearchParams } from 'next/navigation';
 import { Search, MapPin, Building2, ChevronDown, Map, Bed } from 'lucide-react';
 import { getActiveBarriosByCity } from '@/lib/supabase/client-queries';
+import { trackSearchFilter } from '@/components/tracking/gtag';
 
 const CITIES = [
     { id: 'cucuta', label: 'Cúcuta', slug: 'cucuta' },
@@ -131,6 +132,16 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
         if (queryString) {
             path += `?${queryString}`;
         }
+
+        // GA4 event tracking
+        const filterParams: Record<string, string | number> = { operacion };
+        if (ciudad) filterParams.ciudad = ciudad;
+        if (tipo) filterParams.tipo = tipo;
+        if (barrio) filterParams.barrio = barrio;
+        if (habitaciones) filterParams.habitaciones = Number(habitaciones);
+        if (precioMin) filterParams.precio_min = Number(precioMin);
+        if (precioMax) filterParams.precio_max = Number(precioMax);
+        trackSearchFilter(filterParams);
 
         router.push(path);
     };

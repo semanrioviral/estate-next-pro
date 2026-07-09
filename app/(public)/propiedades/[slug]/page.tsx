@@ -17,6 +17,7 @@ import MobileStickyCTA from '@/components/MobileStickyCTA';
 import TrackedWhatsappButton from '@/components/tracking/TrackedWhatsappButton';
 import { SITE_URL } from '@/lib/supabase/constants';
 import PropertyContactForm from '@/components/PropertyContactForm';
+import PropertyViewGA4 from '@/components/tracking/PropertyViewGA4';
 
 const PropertyGallery = dynamic(() => import('@/components/PropertyGallery'), { ssr: true });
 const PropertyViewTracker = dynamic(() => import('@/components/PropertyViewTracker'));
@@ -108,6 +109,7 @@ export default async function PropertyDetailPage({ params }: Props) {
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
             <PropertyViewTracker propertyId={property.id} />
             <MetaPixelViewContent contentIds={[property.id]} contentType="product" value={property.precio} currency="COP" />
+            <PropertyViewGA4 propertyId={property.id} propertyTitle={property.titulo} precio={property.precio} operacion={property.operacion} />
 
             {/* ====== GALLERY (NO price overlay) ====== */}
             <PropertyGallery images={allImages} title={property.titulo} />

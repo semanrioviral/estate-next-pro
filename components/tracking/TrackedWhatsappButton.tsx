@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { openWhatsapp } from '@/lib/trackWhatsapp';
 import { trackWhatsappLead } from '@/app/actions/crm';
+import { trackWhatsAppClick } from './gtag';
 
 interface TrackedWhatsappButtonProps {
     url: string;
@@ -16,6 +17,8 @@ interface TrackedWhatsappButtonProps {
 
 export default function TrackedWhatsappButton({ url, className, children, ariaLabel, propertyId, propertyTitle }: TrackedWhatsappButtonProps) {
     const handleClick = () => {
+        // GA4 event tracking
+        trackWhatsAppClick(propertyId ? 'property_detail' : 'general', propertyId, propertyTitle);
         // Auto-create CRM lead when property context is available
         if (propertyId || propertyTitle) {
             const phone = url.match(/wa\.me\/(\d+)/)?.[1] || '';
