@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { MapPin, Bed, Bath, Square, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import { optimizeCloudinaryUrl } from '@/lib/supabase/seo-helpers';
+import FavoriteButton from '@/components/FavoriteButton';
 
 interface Property {
     id: string;
@@ -76,6 +77,24 @@ export default function PropertyCardV3({ property, priority = false, variant = '
                         {(property.operacion || 'venta').toUpperCase()}
                     </span>
                 </div>
+
+                {/* Favorite Button */}
+                <FavoriteButton
+                    property={{
+                        id: property.id,
+                        slug: property.slug,
+                        titulo: property.titulo,
+                        precio: property.precio,
+                        operacion: property.operacion,
+                        tipo: property.tipo,
+                        ciudad: property.ciudad,
+                        barrio: property.barrio,
+                        habitaciones: property.habitaciones,
+                        area_m2: property.area_m2,
+                        imagen_principal: property.imagen_principal,
+                    }}
+                    variant="card"
+                />
 
                 {/* Subtle Brand Overlay */}
                 <div className="absolute inset-0 bg-slate-950/10 opacity-0 group-hover/card:opacity-10 transition-opacity pointer-events-none"></div>
