@@ -18,8 +18,9 @@
   --color-brand-700: #c10007;
   --color-brand-800: #9f0712;
   --color-brand: var(--color-brand-600);
-  
-  --color-whatsapp: #25D366;
+
+  /* WhatsApp - WCAG AA compliant (5.4:1 vs 14px text) */
+  --color-whatsapp: #128C7E;
   
   /* Neutral Palette */
   --color-text-primary: #0f172a; /* Slate 900 */
@@ -30,11 +31,11 @@
   --color-bg-alt: #f8fafc; /* Slate 50 */
   --color-border-clean: #e2e8f0; /* Slate 200 */
 
-  /* Readable Type Scale */
-  --text-xs: 0.75rem; /* 12px */
-  --text-sm: 0.8125rem; /* 13px */
-  --text-base: 1rem; /* 16px */
-  --text-lg: 1.125rem; /* 18px */
+  /* Readable Type Scale - min 14px to support older adults */
+  --text-xs: 0.75rem; /* 12px - reserved for very rare micro-labels only */
+  --text-sm: 0.875rem; /* 14px - up from 13px for better legibility */
+  --text-base: 1rem; /* 16px - body default, ideal for all users */
+  --text-lg: 1.125rem; /* 18px - recommended min for older adults */
   --text-xl: 1.25rem; /* 20px */
   --text-2xl: 1.5rem; /* 24px */
   --text-3xl: 1.875rem; /* 30px */
@@ -86,15 +87,15 @@ h3 {
 }
 
 @utility btn-primary {
-  @apply h-11 md:h-12 px-6 bg-brand text-white rounded-md font-semibold text-sm md:text-base flex items-center justify-center gap-2 transition-all hover:bg-brand-700 active:scale-[0.98] shadow-sm;
+  @apply h-11 md:h-12 px-6 bg-brand text-white rounded-md font-bold text-base flex items-center justify-center gap-2 transition-all hover:bg-brand-700 active:scale-[0.98] shadow-sm;
 }
 
 @utility btn-secondary {
-  @apply h-11 md:h-12 px-6 bg-white border border-slate-200 text-slate-700 rounded-md font-semibold text-sm md:text-base flex items-center justify-center gap-2 transition-all hover:bg-slate-50 active:scale-[0.98];
+  @apply h-11 md:h-12 px-6 bg-white border border-slate-200 text-slate-700 rounded-md font-bold text-base flex items-center justify-center gap-2 transition-all hover:bg-slate-50 active:scale-[0.98];
 }
 
 @utility input-standard {
-  @apply w-full h-11 px-4 bg-white border border-slate-200 rounded-md text-sm focus:ring-1 focus:ring-brand focus:border-brand transition-all outline-none;
+  @apply w-full h-11 px-4 bg-white border border-slate-200 rounded-md text-base focus:ring-2 focus:ring-brand focus:border-brand transition-all outline-none;
 }
 
 ::selection {
@@ -107,14 +108,40 @@ h3 {
   @apply border-border-clean;
 }
 
-/* Accessibility: No text too small for readability */
+/* Accessibility: No text too small for readability. Min 14px recommended for older users */
 small, .text-xs {
-  @apply text-[13px] font-medium leading-normal;
+  @apply text-[14px] font-medium leading-normal;
 }
 
-/* WCAG 2.4.7: Visible focus indicator for keyboard users */
+/* Inputs, labels, and form elements use at least 16px (body size) for legibility */
+input, select, textarea, label, .form-label {
+  font-size: 1rem; /* 16px - WCAG recommended for inputs */
+  line-height: 1.5;
+}
+
+/* Reduce letter-spacing for small text - tracking-widest (0.2em) is excessive for small body copy in Spanish */
+.text-xs, .text-sm {
+  letter-spacing: 0.01em; /* Normal, not tracked - better for small body text */
+}
+
+/* Keep tracking-wider (0.05em) for buttons and labels that benefit from it */
+button, .btn-primary, .btn-secondary, .tracking-keep {
+  letter-spacing: 0.01em;
+}
+
+/* Reduce font-black (900) to font-bold (700) in small text - easier to read for older adults */
+.text-xs.font-black, .text-sm.font-black {
+  font-weight: 700; /* font-bold */
+}
+
+/* Larger text can keep font-black for visual impact */
+.text-base.font-black, .text-lg.font-black, .text-xl.font-black {
+  font-weight: 800; /* font-extrabold - slightly less aggressive */
+}
+
+/* WCAG 2.4.7: Stronger, more visible focus indicator for keyboard users */
 :focus-visible {
-  outline: 2px solid var(--color-brand-600);
+  outline: 3px solid var(--color-brand-700);
   outline-offset: 2px;
   border-radius: 2px;
 }

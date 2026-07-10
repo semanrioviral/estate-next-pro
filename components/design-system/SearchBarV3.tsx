@@ -150,14 +150,14 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
 
     return (
         <div className={`w-full ${isCompact ? 'max-w-none' : 'max-w-6xl md:mx-auto px-4'} z-50`}>
-            {/* Main Search Bar Container */}
-            <div className={`bg-white ${isCompact ? 'rounded-xl shadow-sm border-slate-100' : 'rounded-3xl md:rounded-[6px] shadow-lg border-slate-100'} border md:border flex flex-col md:flex-row items-stretch p-2 gap-2`}>
+            {/* Main Search Bar Container - Grid 1 fila en desktop, 1 columna en mobile */}
+            <div className={`bg-white ${isCompact ? 'rounded-xl shadow-sm border-slate-100' : 'rounded-3xl md:rounded-[6px] shadow-lg border-slate-100'} border md:border grid grid-cols-1 md:grid-cols-12 gap-2.5 p-3 md:p-3`}>
 
-                {/* 1. Operation Selector (Toggle) */}
-                <div className={`flex bg-slate-50 p-1 ${isCompact ? 'rounded-xl' : 'rounded-2xl md:rounded-[4px]'} md:min-w-[160px]`}>
+                {/* 1. Operation Selector (Toggle) - col-span-3 */}
+                <div className={`md:col-span-3 flex bg-slate-50 p-1 ${isCompact ? 'rounded-xl' : 'rounded-2xl md:rounded-[4px]'}`}>
                     <button
                         onClick={() => setOperacion('venta')}
-                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'venta'
+                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3.5'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-xs font-black uppercase tracking-widest transition-all ${operacion === 'venta'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
                             : 'text-slate-500 hover:text-slate-600'
                             }`}
@@ -166,7 +166,7 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     </button>
                     <button
                         onClick={() => setOperacion('arriendo')}
-                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-[11px] font-black uppercase tracking-widest transition-all ${operacion === 'arriendo'
+                        className={`flex-1 px-4 ${isCompact ? 'py-4' : 'py-3.5'} ${isCompact ? 'rounded-[3px]' : 'rounded-xl md:rounded-[3px]'} text-xs font-black uppercase tracking-widest transition-all ${operacion === 'arriendo'
                             ? 'bg-white text-brand shadow-sm border border-slate-100'
                             : 'text-slate-500 hover:text-slate-600'
                             }`}
@@ -175,16 +175,16 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                     </button>
                 </div>
 
-                {/* 2. City Selector */}
-                <div className="relative flex-1 group min-w-[130px]">
+                {/* 2. City Selector - col-span-2 */}
+                <div className="md:col-span-2 relative group">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <MapPin className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
+                        <MapPin className="w-5 h-5 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={ciudad}
                         onChange={(e) => setCiudad(e.target.value)}
                         aria-label="Seleccionar ciudad"
-                        className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r`}
+                        className={`w-full pl-12 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r`}
                     >
                         <option value="">Ciudad</option>
                         {CITIES.map(c => (
@@ -192,21 +192,21 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDown className="w-4 h-4 text-slate-300" />
+                        <ChevronDown className="w-5 h-5 text-slate-300" />
                     </div>
                 </div>
 
-                {/* 3. Barrio Selector (Dynamic) */}
-                <div className="relative flex-1 group min-w-[140px]">
+                {/* 3. Barrio Selector (Dynamic) - col-span-2 */}
+                <div className="md:col-span-2 relative group">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Map className={`w-4 h-4 transition-colors ${!ciudad ? 'text-slate-200' : 'text-slate-500 group-focus-within:text-brand'}`} />
+                        <Map className={`w-5 h-5 transition-colors ${!ciudad ? 'text-slate-200' : 'text-slate-500 group-focus-within:text-brand'}`} />
                     </div>
                     <select
                         value={barrio}
                         onChange={(e) => setBarrio(e.target.value)}
                         disabled={!ciudad || isLoadingBarrios}
                         aria-label="Seleccionar barrio"
-                        className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r disabled:cursor-not-allowed disabled:text-slate-300`}
+                        className={`w-full pl-12 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer border-r border-slate-100 md:border-r disabled:cursor-not-allowed disabled:text-slate-300`}
                     >
                         <option value="">{isLoadingBarrios ? 'Cargando...' : 'Barrio (Opcional)'}</option>
                         {availableBarrios.map(b => (
@@ -214,20 +214,20 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDown className={`w-4 h-4 ${!ciudad ? 'text-slate-200' : 'text-slate-300'}`} />
+                        <ChevronDown className={`w-5 h-5 ${!ciudad ? 'text-slate-200' : 'text-slate-300'}`} />
                     </div>
                 </div>
 
-                {/* 4. Type Selector */}
-                <div className="relative flex-1 group min-w-[140px]">
+                {/* 4. Type Selector - col-span-2 */}
+                <div className="md:col-span-2 relative group">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Building2 className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
+                        <Building2 className="w-5 h-5 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={tipo}
                         onChange={(e) => setTipo(e.target.value)}
                         aria-label="Seleccionar tipo de inmueble"
-                        className={`w-full pl-11 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
+                        className={`w-full pl-12 pr-10 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
                     >
                         <option value="">Tipo Inmueble</option>
                         {PROPERTY_TYPES.map(t => (
@@ -235,20 +235,20 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         ))}
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDown className="w-4 h-4 text-slate-300" />
+                        <ChevronDown className="w-5 h-5 text-slate-300" />
                     </div>
                 </div>
 
-                {/* 5. Bedrooms Selector */}
-                <div className="relative flex-1 group min-w-[120px]">
+                {/* 5. Bedrooms Selector - col-span-2 */}
+                <div className="md:col-span-2 relative group">
                     <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                        <Bed className="w-4 h-4 text-slate-500 group-focus-within:text-brand transition-colors" />
+                        <Bed className="w-5 h-5 text-slate-500 group-focus-within:text-brand transition-colors" />
                     </div>
                     <select
                         value={habitaciones}
                         onChange={(e) => setHabitaciones(e.target.value)}
                         aria-label="Seleccionar número de habitaciones"
-                        className={`w-full pl-11 pr-10 ${isCompact ? 'py-2' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
+                        className={`w-full pl-12 pr-10 ${isCompact ? 'py-2' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm appearance-none focus:outline-none cursor-pointer last:border-0 md:border-r border-slate-100`}
                     >
                         <option value="">Habitaciones</option>
                         <option value="1">1+</option>
@@ -257,50 +257,18 @@ export default function SearchBarV3({ variant = 'hero' }: SearchBarV3Props) {
                         <option value="4">4+</option>
                     </select>
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDown className="w-4 h-4 text-slate-300" />
+                        <ChevronDown className="w-5 h-5 text-slate-300" />
                     </div>
                 </div>
 
-                {/* 6. Price Range (Min - Max) */}
-                <div className="relative flex-1 group min-w-[200px] flex gap-1 px-2">
-                    <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 pointer-events-none">$</span>
-                        <input
-                            type="number"
-                            inputMode="numeric"
-                            value={precioMin}
-                            onChange={(e) => setPrecioMin(e.target.value)}
-                            placeholder="Min"
-                            aria-label="Precio mínimo"
-                            min="0"
-                            step="1000000"
-                            className={`w-full pl-7 pr-2 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm focus:outline-none placeholder:text-slate-300 placeholder:font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
-                        />
-                    </div>
-                    <span className="self-center text-slate-300 font-bold text-xs">-</span>
-                    <div className="relative flex-1">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[11px] font-bold text-slate-400 pointer-events-none">$</span>
-                        <input
-                            type="number"
-                            inputMode="numeric"
-                            value={precioMax}
-                            onChange={(e) => setPrecioMax(e.target.value)}
-                            placeholder="Max"
-                            aria-label="Precio máximo"
-                            min="0"
-                            step="1000000"
-                            className={`w-full pl-7 pr-2 ${isCompact ? 'py-4' : 'py-4'} bg-transparent text-slate-900 font-bold text-sm focus:outline-none placeholder:text-slate-300 placeholder:font-medium [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
-                        />
-                    </div>
-                </div>
-
-                {/* 6. Search Button */}
+                {/* 6. Search Button - col-span-1 */}
                 <button
                     onClick={handleSearch}
-                    className={`bg-brand text-white ${isCompact ? 'px-6 py-4' : 'px-8 py-4 md:py-0'} ${isCompact ? 'rounded-[4px]' : 'rounded-xl md:rounded-[4px]'} font-black text-[11px] uppercase tracking-[0.2em] hover:bg-brand-700 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group min-w-[120px]`}
+                    className={`md:col-span-1 bg-brand text-white ${isCompact ? 'px-3 py-4' : 'px-4 py-4 md:py-0'} ${isCompact ? 'rounded-[4px]' : 'rounded-xl md:rounded-[4px]'} font-black text-xs uppercase tracking-widest hover:bg-brand-700 transition-all active:scale-[0.98] flex items-center justify-center gap-1.5 group shadow-md shadow-brand-900/10`}
+                    aria-label="Buscar propiedades"
                 >
-                    <Search className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                    {isCompact ? 'Filtrar' : 'Buscar'}
+                    <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    {isCompact && <span>Filtrar</span>}
                 </button>
             </div>
 
