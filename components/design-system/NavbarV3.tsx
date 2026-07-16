@@ -16,11 +16,9 @@ const NAV_LINKS = [
     { label: "Contacto", href: "/contacto" },
 ];
 
-const getScrolled = () => typeof window !== "undefined" && window.scrollY > 80;
-
 export default function NavbarV3() {
     const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(getScrolled);
+    const [scrolled, setScrolled] = useState(false);
     const pathname = usePathname();
 
     const isHome = pathname === "/";
@@ -34,7 +32,7 @@ export default function NavbarV3() {
 
     // Recalcular al cambiar de ruta (navegación SPA) para no quedarse en estado incorrecto
     useEffect(() => {
-        setScrolled(getScrolled());
+        setScrolled(window.scrollY > 80);
     }, [pathname]);
 
     useEffect(() => {
@@ -63,15 +61,14 @@ export default function NavbarV3() {
                     <div className="flex items-center justify-between gap-6 lg:gap-10">
                         {/* Logo (Left) */}
                         <Link href="/" className="flex items-center gap-2 shrink-0 group">
-                            <div className="relative w-44 h-14 md:w-52 md:h-16 transition-transform group-hover:scale-105">
+                            <div className="relative w-40 h-14 md:w-52 md:h-16 transition-transform group-hover:scale-105">
                                 <Image
-                                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_80,w_200/logo/logo"
+                                    src="https://res.cloudinary.com/dwdlmbftw/image/upload/f_webp,q_80,w_240/logo/logo"
                                     alt="Inmobiliaria Tucasa Los Patios"
                                     fill
                                     className="object-contain"
                                     priority
                                     sizes="208px"
-                                    unoptimized
                                 />
                             </div>
                         </Link>
