@@ -16,18 +16,26 @@ const NAV_LINKS = [
     { label: "Contacto", href: "/contacto" },
 ];
 
+const getScrolled = () => typeof window !== "undefined" && window.scrollY > 80;
+
 export default function NavbarV3() {
     const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+    const [scrolled, setScrolled] = useState(getScrolled);
     const pathname = usePathname();
 
     const isHome = pathname === "/";
 
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", handleScroll);
+        const handleScroll = () => setScrolled(window.scrollY > 80);
+        handleScroll();
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    // Recalcular al cambiar de ruta (navegación SPA) para no quedarse en estado incorrecto
+    useEffect(() => {
+        setScrolled(getScrolled());
+    }, [pathname]);
 
     useEffect(() => {
         if (isOpen) {
@@ -45,7 +53,7 @@ export default function NavbarV3() {
     return (
         <>
             <nav
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+                className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow,border-color,padding] duration-500 ${
                     isLightNav
                         ? "bg-white shadow-sm py-3 border-b border-slate-200"
                         : "bg-transparent py-4 md:py-6 border-transparent"
